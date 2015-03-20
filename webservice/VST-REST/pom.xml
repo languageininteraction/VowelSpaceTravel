@@ -4,14 +4,19 @@
 
     <groupId>nl.ru.languageininteraction.vst-rest</groupId>
     <artifactId>VST-REST</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-testing-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>VST-REST</name>
-
+    <organization>
+        <name>Language In Interaction</name>
+        <url>https://www.languageininteraction.nl</url>
+    </organization>
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netbeans.hint.license>gpl20</netbeans.hint.license>
+        <plugin.license.copyrightYear>2014</plugin.license.copyrightYear>
     </properties>
     
     <dependencies>
@@ -75,7 +80,61 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>nl.mpi</groupId>
+                <artifactId>version-control-check</artifactId>
+                <version>1.0.21-testing</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <verbose>true</verbose>
+                    <vcsType>git</vcsType>
+                    <allowSnapshots>true</allowSnapshots>
+                    <majorVersion>0</majorVersion>
+                    <minorVersion>1</minorVersion>
+                    <buildType>testing</buildType>
+                    <propertiesPrefix>application</propertiesPrefix>
+                    <shortVersionModule></shortVersionModule>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.9.0</version> 
+                <configuration>
+                    <header>${project.basedir}/src/license-header.txt</header>
+                    <strictCheck>false</strictCheck>
+                    <properties>
+                        <year>${plugin.license.copyrightYear}</year>
+                        <organization>${project.organization.name}</organization>
+                    </properties>
+                    <mapping>
+                        <svg>XML_STYLE</svg>
+                    </mapping>
+                    <excludes>
+                        <exclude>**/*.txt</exclude>
+                        <exclude>**/nbactions.xml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
+    <pluginRepositories>
+        <pluginRepository>
+            <id>MPI</id>
+            <name>MPI LAT Repository</name>
+            <url>https://lux15.mpi.nl/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
