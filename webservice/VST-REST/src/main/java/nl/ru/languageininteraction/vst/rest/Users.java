@@ -5,10 +5,14 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import nl.ru.languageininteraction.vst.model.UserData;
 
 /**
  * @since Mar 20, 2015 11:54:04 AM (creation date)
@@ -18,18 +22,38 @@ import javax.ws.rs.Produces;
 public class Users {
 
     private static final Logger logger = Logger.getLogger(Users.class.getName());
-    private static final String SAMPLE_JSON_RESPONSE = "[{\"users\":[\n"
-            + "    {\"name\":\"John\", \"id\":\"1234\"}, \n"
-            + "    {\"name\":\"Anna\", \"id\":\"1235\"},\n"
-            + "    {\"name\":\"Tim\", \"id\":\"1236\"},\n"
-            + "    {\"name\":\"Tom\", \"id\":\"1237\"},\n"
-            + "    {\"name\":\"Bill the one with a very long name\", \"id\":\"1237\"}\n"
-            + "]}]";
 
     @GET
-    @Produces("text/plain")
-    public String getSubmit() {
-        logger.info("getSubmit");
-        return SAMPLE_JSON_RESPONSE;
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("list")
+    public List<UserData> getList() {
+        logger.info("getList");
+        final ArrayList<UserData> returnList = new ArrayList<>();
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        returnList.add(new UserData());
+        return returnList;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("create")
+    public UserData createUser() {
+        logger.info("createUser");
+        return new UserData();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("details")
+    public UserData getUserDetails() {
+        logger.info("getUserDetails");
+        return new UserData();
     }
 }
