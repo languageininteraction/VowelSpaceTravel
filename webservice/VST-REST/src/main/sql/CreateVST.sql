@@ -25,8 +25,8 @@ CREATE TABLE speaker (
 
 CREATE TABLE word_sample (
     word_sample_id SERIAL UNIQUE NOT NULL,
-    speaker_id text UNIQUE NOT NULL,
-    vowel_id text UNIQUE NOT NULL,
+    speaker_id integer REFERENCES speaker(speaker_id) NOT NULL,
+    vowel_id integer REFERENCES vowel(vowel_id) NOT NULL,
     word_label text,
     sound_file text
 );
