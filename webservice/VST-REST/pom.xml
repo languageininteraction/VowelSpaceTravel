@@ -16,7 +16,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl20</netbeans.hint.license>
-        <plugin.license.copyrightYear>2014</plugin.license.copyrightYear>
+        <plugin.license.copyrightYear>2015</plugin.license.copyrightYear>
     </properties>
     
     <dependencies>
@@ -105,7 +105,7 @@
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
-                <version>1.9.0</version> 
+                <version>1.10.b1</version> 
                 <configuration>
                     <header>${project.basedir}/src/license-header.txt</header>
                     <strictCheck>false</strictCheck>
@@ -119,8 +119,16 @@
                     <excludes>
                         <exclude>**/*.txt</exclude>
                         <exclude>**/nbactions.xml</exclude>
+                        <exclude>**/nb-configuration.xml</exclude>
                     </excludes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
