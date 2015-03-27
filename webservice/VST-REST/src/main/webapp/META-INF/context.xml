@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Copyright (C) 2015 Language In Interaction
 
@@ -15,5 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
-<?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/vst"/>
+<Context antiJARLocking="true" path="/vst">
+    <Resource name="jdbc/VowelSpaceTravel" auth="Container" type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              username="javauser" password="javadude" driverClassName="corg.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/VowelSpaceTravel"/>
+</Context>

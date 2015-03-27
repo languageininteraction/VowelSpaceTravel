@@ -19,12 +19,15 @@ package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import nl.ru.languageininteraction.vst.dao.UsersDao;
 import nl.ru.languageininteraction.vst.model.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @since Mar 20, 2015 11:54:04 AM (creation date)
@@ -33,7 +36,10 @@ import nl.ru.languageininteraction.vst.model.UserData;
 @Path("users")
 public class Users {
 
-    private static final Logger logger = Logger.getLogger(Users.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Users.class);
+
+    @Autowired
+    protected UsersDao usersDao;
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
@@ -59,6 +65,14 @@ public class Users {
     public UserData createUser() {
         logger.info("createUser");
         return new UserData();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    @Path("count")
+    public int countUsers() {
+        logger.info("countUsers");
+        return usersDao.getUserCount();
     }
 
     @GET
