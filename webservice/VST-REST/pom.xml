@@ -15,16 +15,17 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.license>gpl20</netbeans.hint.license>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <netbeans.hint.license>gpl20</netbeans.hint.license>      
         <plugin.license.copyrightYear>2015</plugin.license.copyrightYear>
     </properties>
     
-    <dependencies>
+    <dependencies>	
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
             <version>1.18.2</version>
-        </dependency> 
+        </dependency>
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-spring</artifactId>
@@ -166,11 +167,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>
-                <groupId>com.google.appengine</groupId>
-                <artifactId>appengine-maven-plugin</artifactId>
-                <version>1.9.18</version>
-            </plugin>-->
         </plugins>
     </build>
     <pluginRepositories>

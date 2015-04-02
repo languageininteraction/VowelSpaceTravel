@@ -19,25 +19,16 @@ package nl.ru.languageininteraction.vst.dao.impl;
 
 import java.util.List;
 import java.util.UUID;
-import nl.ru.languageininteraction.vst.dao.UsersDao;
 import nl.ru.languageininteraction.vst.model.UserData;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @since Mar 27, 2015 1:35:38 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-//@Component
-//@Resource
-//@EJB
-//@Resource(name="usersDao")
-//@Stateless
-//@LocalBean
-//@ManagedBean
-public class JdbcUsersDao /* extends NamedParameterJdbcDaoSupport */ implements UsersDao {
+public class JdbcUsersDao /* extends NamedParameterJdbcDaoSupport implements UsersDao */ {
 
-    private final Logger logger = LoggerFactory.getLogger(JdbcUsersDao.class);
+    final private org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 //    @Resource(name = "jdbc/VowelSpaceTravel")
 //    private javax.sql.DataSource vstDB;
 
@@ -45,8 +36,7 @@ public class JdbcUsersDao /* extends NamedParameterJdbcDaoSupport */ implements 
     //    public void setDs(DataSource dataSource) {
     //        setDataSource(dataSource);
     //    }
-
-    @Override
+//    @Override
     public int getUserCount() {
         return 5;
     }
@@ -68,5 +58,4 @@ public class JdbcUsersDao /* extends NamedParameterJdbcDaoSupport */ implements 
     public UserData createUser() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

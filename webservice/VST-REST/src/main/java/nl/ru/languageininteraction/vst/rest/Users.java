@@ -25,7 +25,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import nl.ru.languageininteraction.vst.dao.UsersDao;
 import nl.ru.languageininteraction.vst.model.UserData;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Path("users")
 public class Users {
 
-    private final Logger logger = LoggerFactory.getLogger(Users.class);
+    final private org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     protected UsersDao usersDao;
@@ -70,7 +69,7 @@ public class Users {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     @Path("count")
-    public int countUsers() {
+    public Integer countUsers() {
         logger.info("countUsers");
         return usersDao.getUserCount();
     }
