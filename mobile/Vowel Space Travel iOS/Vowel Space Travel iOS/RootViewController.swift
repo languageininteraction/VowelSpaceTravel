@@ -13,7 +13,6 @@ class RootViewController: UIViewController {
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        println("loaded!")
 
     }
 
@@ -21,6 +20,7 @@ class RootViewController: UIViewController {
         super.viewDidAppear(animated)
         
         var taskViewController = TaskViewController();
+        var downloadViewController = DownloadViewController();
         
         self.presentViewController(taskViewController, animated: false, completion: nil)
     }
