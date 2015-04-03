@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653B81ACE9CB400CA2803 /* AppDelegate.swift */; };
 		49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BA1ACE9CB400CA2803 /* RootViewController.swift */; };
-		49C653BD1ACE9CB400CA2803 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BC1ACE9CB400CA2803 /* DataViewController.swift */; };
-		49C653BF1ACE9CB400CA2803 /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BE1ACE9CB400CA2803 /* ModelController.swift */; };
 		49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C31ACE9CB400CA2803 /* Images.xcassets */; };
 		49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C51ACE9CB400CA2803 /* LaunchScreen.xib */; };
 		49C653D31ACE9CB400CA2803 /* Vowel_Space_Travel_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653D21ACE9CB400CA2803 /* Vowel_Space_Travel_iOSTests.swift */; };
 		49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49C653DC1ACE9FF100CA2803 /* Main.storyboard */; };
 		49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = 49C653DC1ACE9FF100CA2803 /* Main.storyboard */; };
+		49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653E01ACEA4D100CA2803 /* TaskViewController.swift */; };
+		49C653E31ACEA68A00CA2803 /* cello.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49C653E21ACEA68900CA2803 /* cello.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,14 +33,14 @@
 		49C653B71ACE9CB400CA2803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C653B81ACE9CB400CA2803 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		49C653BA1ACE9CB400CA2803 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		49C653BC1ACE9CB400CA2803 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
-		49C653BE1ACE9CB400CA2803 /* ModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
 		49C653C31ACE9CB400CA2803 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		49C653C61ACE9CB400CA2803 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		49C653CC1ACE9CB400CA2803 /* Vowel Space Travel iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Vowel Space Travel iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C653D11ACE9CB400CA2803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C653D21ACE9CB400CA2803 /* Vowel_Space_Travel_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vowel_Space_Travel_iOSTests.swift; sourceTree = "<group>"; };
 		49C653DC1ACE9FF100CA2803 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../Main.storyboard; sourceTree = "<group>"; };
+		49C653E01ACEA4D100CA2803 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		49C653E21ACEA68900CA2803 /* cello.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cello.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,11 +82,10 @@
 		49C653B51ACE9CB300CA2803 /* Vowel Space Travel iOS */ = {
 			isa = PBXGroup;
 			children = (
+				49C653E21ACEA68900CA2803 /* cello.wav */,
+				49C653DF1ACEA49E00CA2803 /* ViewControllers */,
 				49C653DC1ACE9FF100CA2803 /* Main.storyboard */,
 				49C653B81ACE9CB400CA2803 /* AppDelegate.swift */,
-				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
-				49C653BC1ACE9CB400CA2803 /* DataViewController.swift */,
-				49C653BE1ACE9CB400CA2803 /* ModelController.swift */,
 				49C653C31ACE9CB400CA2803 /* Images.xcassets */,
 				49C653C51ACE9CB400CA2803 /* LaunchScreen.xib */,
 				49C653B61ACE9CB400CA2803 /* Supporting Files */,
@@ -117,6 +116,15 @@
 				49C653D11ACE9CB400CA2803 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		49C653DF1ACEA49E00CA2803 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
+				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */,
+				49C653E31ACEA68A00CA2803 /* cello.wav in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
 			);
@@ -221,9 +230,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
+				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
-				49C653BF1ACE9CB400CA2803 /* ModelController.swift in Sources */,
-				49C653BD1ACE9CB400CA2803 /* DataViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +349,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Vowel Space Travel iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -352,6 +361,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Vowel Space Travel iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

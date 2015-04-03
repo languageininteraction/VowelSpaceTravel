@@ -17,6 +17,14 @@ class RootViewController: UIViewController {
 
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        var taskViewController = TaskViewController();
+        
+        self.presentViewController(taskViewController, animated: false, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
