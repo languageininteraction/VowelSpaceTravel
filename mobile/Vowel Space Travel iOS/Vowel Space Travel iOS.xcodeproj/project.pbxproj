@@ -11,10 +11,11 @@
 		49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BA1ACE9CB400CA2803 /* RootViewController.swift */; };
 		49C653BD1ACE9CB400CA2803 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BC1ACE9CB400CA2803 /* DataViewController.swift */; };
 		49C653BF1ACE9CB400CA2803 /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BE1ACE9CB400CA2803 /* ModelController.swift */; };
-		49C653C21ACE9CB400CA2803 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C01ACE9CB400CA2803 /* Main.storyboard */; };
 		49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C31ACE9CB400CA2803 /* Images.xcassets */; };
 		49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C51ACE9CB400CA2803 /* LaunchScreen.xib */; };
 		49C653D31ACE9CB400CA2803 /* Vowel_Space_Travel_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653D21ACE9CB400CA2803 /* Vowel_Space_Travel_iOSTests.swift */; };
+		49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49C653DC1ACE9FF100CA2803 /* Main.storyboard */; };
+		49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = 49C653DC1ACE9FF100CA2803 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,12 +35,12 @@
 		49C653BA1ACE9CB400CA2803 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		49C653BC1ACE9CB400CA2803 /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
 		49C653BE1ACE9CB400CA2803 /* ModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
-		49C653C11ACE9CB400CA2803 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		49C653C31ACE9CB400CA2803 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		49C653C61ACE9CB400CA2803 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		49C653CC1ACE9CB400CA2803 /* Vowel Space Travel iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Vowel Space Travel iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C653D11ACE9CB400CA2803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C653D21ACE9CB400CA2803 /* Vowel_Space_Travel_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vowel_Space_Travel_iOSTests.swift; sourceTree = "<group>"; };
+		49C653DC1ACE9FF100CA2803 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,11 +82,11 @@
 		49C653B51ACE9CB300CA2803 /* Vowel Space Travel iOS */ = {
 			isa = PBXGroup;
 			children = (
+				49C653DC1ACE9FF100CA2803 /* Main.storyboard */,
 				49C653B81ACE9CB400CA2803 /* AppDelegate.swift */,
 				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
 				49C653BC1ACE9CB400CA2803 /* DataViewController.swift */,
 				49C653BE1ACE9CB400CA2803 /* ModelController.swift */,
-				49C653C01ACE9CB400CA2803 /* Main.storyboard */,
 				49C653C31ACE9CB400CA2803 /* Images.xcassets */,
 				49C653C51ACE9CB400CA2803 /* LaunchScreen.xib */,
 				49C653B61ACE9CB400CA2803 /* Supporting Files */,
@@ -167,6 +168,7 @@
 				TargetAttributes = {
 					49C653B21ACE9CB300CA2803 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = H5HQ399A66;
 					};
 					49C653CB1ACE9CB400CA2803 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -198,8 +200,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49C653C21ACE9CB400CA2803 /* Main.storyboard in Resources */,
 				49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */,
+				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
 				49C653BF1ACE9CB400CA2803 /* ModelController.swift in Sources */,
 				49C653BD1ACE9CB400CA2803 /* DataViewController.swift in Sources */,
@@ -244,14 +247,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		49C653C01ACE9CB400CA2803 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				49C653C11ACE9CB400CA2803 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		49C653C51ACE9CB400CA2803 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -346,6 +341,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Vowel Space Travel iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -356,6 +352,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Vowel Space Travel iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
