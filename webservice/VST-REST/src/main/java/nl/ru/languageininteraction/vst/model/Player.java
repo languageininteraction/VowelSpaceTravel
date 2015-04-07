@@ -15,23 +15,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.ru.languageininteraction.vst.dao;
+package nl.ru.languageininteraction.vst.model;
 
-import java.util.List;
-import java.util.UUID;
-import nl.ru.languageininteraction.vst.model.UserData;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
- * @since Mar 27, 2015 1:31:39 PM (creation date)
+ * @since Apr 2, 2015 5:40:42 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-public interface UsersDao {
+@Entity
+public class Player {
 
-    public int getUserCount();
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-    public List<UserData> getUsers();
+    private String firstName;
+    private String lastName;
 
-    public UserData getUserDetails(UUID uuid);
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public UserData createUser();
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

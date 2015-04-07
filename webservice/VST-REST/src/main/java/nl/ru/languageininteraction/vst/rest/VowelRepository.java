@@ -15,21 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.ru.languageininteraction.vst.model;
+package nl.ru.languageininteraction.vst.rest;
 
-import java.util.UUID;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+import nl.ru.languageininteraction.vst.model.Vowel;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * @since Mar 20, 2015 3:27:56 PM (creation date)
+ * @since Apr 2, 2015 4:56:21 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@XmlRootElement(name = "userdata")
-public class UserData {
+@RepositoryRestResource(collectionResourceRel = "vowels", path = "vowels")
+public interface VowelRepository extends PagingAndSortingRepository<Vowel, String> {
 
-    @XmlAttribute(name = "uuid")
-    private UUID uuid = UUID.randomUUID();
-    @XmlAttribute(name = "name")
-    private String name = "bla";
+    List<Vowel> findAll();
+
+    Vowel findByIpa(@Param("ipa") String ipa);
 }
