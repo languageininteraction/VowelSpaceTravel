@@ -38,10 +38,9 @@ public class StimulusResult {
     private Player player;
 
     @ManyToOne
-    private Vowel leftVowel;
+    private Vowel targetVowel;
     @ManyToOne
-    private Vowel rightVowel;
-
+    private Vowel standardVowel;
     boolean true_positive;
     boolean false_positive;
     boolean true_negative;
@@ -49,10 +48,10 @@ public class StimulusResult {
 
     long responceTimeMs;
 
-    public StimulusResult(Player player, Vowel leftVowel, Vowel rightVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
+    public StimulusResult(Player player, Vowel targetVowel, Vowel standardVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
         this.player = player;
-        this.leftVowel = leftVowel;
-        this.rightVowel = rightVowel;
+        this.targetVowel = targetVowel;
+        this.standardVowel = standardVowel;
         this.true_positive = true_positive;
         this.false_positive = false_positive;
         this.true_negative = true_negative;
@@ -67,12 +66,12 @@ public class StimulusResult {
         return player;
     }
 
-    public Vowel getLeftVowel() {
-        return leftVowel;
+    public String getTargetDisc() {
+        return targetVowel.getDisc();
     }
 
-    public Vowel getRightVowel() {
-        return rightVowel;
+    public String getStandardDisk() {
+        return standardVowel.getDisc();
     }
 
     public boolean isTrue_positive() {

@@ -21,49 +21,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
- * @since Apr 8, 2015 11:25:42 AM (creation date)
+ * @since Apr 8, 2015 5:04:57 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class Word {
+public class Consonant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String wordString;
-    @ManyToOne
-    private Consonant initailConsonant;
-    @ManyToOne
-    private Vowel vowel;
-    @ManyToOne
-    private Consonant finalConsonant;
+    String symbol;
 
-    public Word(String wordString, Consonant initailConsonant, Vowel vowel, Consonant finalConsonant) {
-        this.wordString = wordString;
-        this.initailConsonant = initailConsonant;
-        this.vowel = vowel;
-        this.finalConsonant = finalConsonant;
+    public Consonant() {
     }
 
-    public Word() {
+    public Consonant(String symbol) {
+        this.symbol = symbol;
     }
 
-    public String getWordString() {
-        return wordString;
-    }
-
-    public Consonant getInitailConsonant() {
-        return initailConsonant;
-    }
-
-    public Vowel getVowel() {
-        return vowel;
-    }
-
-    public Consonant getFinalConsonant() {
-        return finalConsonant;
+    public String getSymbol() {
+        return symbol;
     }
 }
