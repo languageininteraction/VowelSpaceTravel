@@ -106,13 +106,13 @@
                         <exclude>**/nb-configuration.xml</exclude>
                     </excludes>
                 </configuration>
-                <executions>
+<!--                <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
         </plugins>
     </build>

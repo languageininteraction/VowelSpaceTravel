@@ -30,15 +30,42 @@ import javax.persistence.Id;
 @Entity
 public class Vowel {
 
+    public enum Place {
+
+        front, near_front, central, near_back, back
+    }
+
+    public enum Roundness {
+
+        unrounded, rounded
+    }
+
+    public enum Manner {
+
+        close, near_close, close_mid, mid, open_mid, near_open, open
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private UUID uuid = UUID.randomUUID();
     private String ipa;
     private String disc;
-    private String place;
-    private String manner;
-    private String roundness;
+    private Place place;
+    private Manner manner;
+    private Roundness roundness;
+
+    public Vowel(long id, String ipa, String disc, Place place, Manner manner, Roundness roundness) {
+        this.id = id;
+        this.ipa = ipa;
+        this.disc = disc;
+        this.place = place;
+        this.manner = manner;
+        this.roundness = roundness;
+    }
+
+    public Vowel() {
+    }
 
     public long getId() {
         return id;
@@ -72,27 +99,27 @@ public class Vowel {
         this.disc = disc;
     }
 
-    public String getPlace() {
+    public Place getPlace() {
         return place;
     }
 
-    public void setPlace(String place) {
+    public void setPlace(Place place) {
         this.place = place;
     }
 
-    public String getManner() {
+    public Manner getManner() {
         return manner;
     }
 
-    public void setManner(String manner) {
+    public void setManner(Manner manner) {
         this.manner = manner;
     }
 
-    public String getRoundness() {
+    public Roundness getRoundness() {
         return roundness;
     }
 
-    public void setRoundness(String roundness) {
+    public void setRoundness(Roundness roundness) {
         this.roundness = roundness;
     }
 }

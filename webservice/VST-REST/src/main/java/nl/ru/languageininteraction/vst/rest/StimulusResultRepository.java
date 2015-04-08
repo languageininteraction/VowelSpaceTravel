@@ -18,19 +18,17 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
-import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.StimulusResult;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * @since Apr 2, 2015 5:41:33 PM (creation date)
+ * @since Apr 8, 2015 11:29:18 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "players", path = "players")
-public interface PlayerRepository extends PagingAndSortingRepository<Player, Long> {
+@RepositoryRestResource(collectionResourceRel = "results", path = "results")
+public interface StimulusResultRepository extends PagingAndSortingRepository<StimulusResult, Long> {
 
-    List<Player> findByFirstName(@Param("firstName") String firstName);
-
-    List<Player> findAll();
+    @Override
+    List<StimulusResult> findAll();
 }

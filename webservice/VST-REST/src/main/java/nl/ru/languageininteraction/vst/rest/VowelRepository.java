@@ -29,7 +29,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @RepositoryRestResource(collectionResourceRel = "vowels", path = "vowels")
-public interface VowelRepository extends PagingAndSortingRepository<Vowel, String> {
+public interface VowelRepository extends PagingAndSortingRepository<Vowel, Long> {
 
     List<Vowel> findAll();
 

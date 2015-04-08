@@ -17,55 +17,48 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 /**
- * @since Apr 2, 2015 5:40:42 PM (creation date)
+ * @since Apr 8, 2015 11:25:42 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class Player {
+public class Word {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private String wordString;
+    @ManyToOne
+    private Vowel vowel;
 
-    private String firstName;
-    private String lastName;
-
-    public Player() {
+    public Word(String wordString, Vowel vowel) {
+        this.wordString = wordString;
+        this.vowel = vowel;
     }
 
-    public Player(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Word() {
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getWordString() {
+        return wordString;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setWordString(String wordString) {
+        this.wordString = wordString;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Vowel getVowel() {
+        return vowel;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setVowel(Vowel vowel) {
+        this.vowel = vowel;
     }
 
-    @OneToMany(mappedBy = "player")
-    private List<StimulusResult> stimulusResults;
-
-    public void addResult(StimulusResult result) {
-        stimulusResults.add(result);
-    }
 }
