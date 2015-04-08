@@ -48,15 +48,13 @@ public class Vowel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private UUID uuid = UUID.randomUUID();
     private String ipa;
     private String disc;
     private Place place;
     private Manner manner;
     private Roundness roundness;
 
-    public Vowel(long id, String ipa, String disc, Place place, Manner manner, Roundness roundness) {
-        this.id = id;
+    public Vowel(String ipa, String disc, Place place, Manner manner, Roundness roundness) {
         this.ipa = ipa;
         this.disc = disc;
         this.place = place;
@@ -73,14 +71,6 @@ public class Vowel {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 
     public String getIpa() {

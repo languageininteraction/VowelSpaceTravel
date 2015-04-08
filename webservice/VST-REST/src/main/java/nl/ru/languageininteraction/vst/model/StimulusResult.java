@@ -36,34 +36,62 @@ public class StimulusResult {
 
     @ManyToOne
     private Player player;
-    
+
     @ManyToOne
-    private Word word;
+    private Vowel leftVowel;
+    @ManyToOne
+    private Vowel rightVowel;
+
+    boolean true_positive;
+    boolean false_positive;
+    boolean true_negative;
+    boolean false_negative;
+
     long responceTimeMs;
 
-    public StimulusResult(Player player, Word word, long responceTimeMs) {
+    public StimulusResult(Player player, Vowel leftVowel, Vowel rightVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
         this.player = player;
-        this.word = word;
+        this.leftVowel = leftVowel;
+        this.rightVowel = rightVowel;
+        this.true_positive = true_positive;
+        this.false_positive = false_positive;
+        this.true_negative = true_negative;
+        this.false_negative = false_negative;
         this.responceTimeMs = responceTimeMs;
     }
 
     public StimulusResult() {
     }
 
-    public long getId() {
-        return id;
-    }
-
     public Player getPlayer() {
         return player;
     }
 
-    public Word getWord() {
-        return word;
+    public Vowel getLeftVowel() {
+        return leftVowel;
+    }
+
+    public Vowel getRightVowel() {
+        return rightVowel;
+    }
+
+    public boolean isTrue_positive() {
+        return true_positive;
+    }
+
+    public boolean isFalse_positive() {
+        return false_positive;
+    }
+
+    public boolean isTrue_negative() {
+        return true_negative;
+    }
+
+    public boolean isFalse_negative() {
+        return false_negative;
     }
 
     public long getResponceTimeMs() {
         return responceTimeMs;
     }
-    
 }
