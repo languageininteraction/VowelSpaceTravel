@@ -15,21 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.ru.languageininteraction.vst.model;
+package nl.ru.languageininteraction.vst.rest;
 
-import java.util.UUID;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+import nl.ru.languageininteraction.vst.model.StimulusResult;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * @since Mar 20, 2015 3:27:56 PM (creation date)
+ * @since Apr 8, 2015 11:29:18 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@XmlRootElement(name = "userdata")
-public class UserData {
+@RepositoryRestResource(collectionResourceRel = "results", path = "results")
+public interface StimulusResultRepository extends PagingAndSortingRepository<StimulusResult, Long> {
 
-    @XmlAttribute(name = "uuid")
-    private UUID uuid = UUID.randomUUID();
-    @XmlAttribute(name = "name")
-    private String name = "bla";
+    @Override
+    List<StimulusResult> findAll();
 }
