@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
+		4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* ProgressViewController.swift */; };
+		4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49D1AD7C9CE000437CF /* TempObjects.swift */; };
 		49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653B81ACE9CB400CA2803 /* AppDelegate.swift */; };
 		49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BA1ACE9CB400CA2803 /* RootViewController.swift */; };
 		49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C31ACE9CB400CA2803 /* Images.xcassets */; };
@@ -30,6 +33,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4996A49B1AD7BA43000437CF /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
 		49C653B31ACE9CB300CA2803 /* Vowel Space Travel iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vowel Space Travel iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C653B71ACE9CB400CA2803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C653B81ACE9CB400CA2803 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 		49C653B51ACE9CB300CA2803 /* Vowel Space Travel iOS */ = {
 			isa = PBXGroup;
 			children = (
+				4996A49D1AD7C9CE000437CF /* TempObjects.swift */,
 				49C653E21ACEA68900CA2803 /* cello.wav */,
 				49C653DF1ACEA49E00CA2803 /* ViewControllers */,
 				49C653DC1ACE9FF100CA2803 /* Main.storyboard */,
@@ -124,8 +131,10 @@
 			isa = PBXGroup;
 			children = (
 				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
-				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
+				4996A4991AD7B4D0000437CF /* LoginViewController.swift */,
+				4996A49B1AD7BA43000437CF /* ProgressViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
+				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -232,8 +241,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */,
 				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
 				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
+				4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */,
+				4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,

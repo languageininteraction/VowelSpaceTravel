@@ -21,8 +21,9 @@ class RootViewController: UIViewController {
         
         var taskViewController = TaskViewController();
         var downloadViewController = DownloadViewController();
+        var loginViewController = LoginViewController();
         
-        self.presentViewController(taskViewController, animated: false, completion: nil)
+        self.presentViewController(loginViewController, animated: false, completion: nil)
     }
     
     override func didReceiveMemoryWarning()
