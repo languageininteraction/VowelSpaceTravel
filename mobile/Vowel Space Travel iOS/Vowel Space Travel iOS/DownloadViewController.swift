@@ -17,12 +17,16 @@
 import UIKit
 import AVFoundation
 
-class DownloadViewController: UIViewController {
+class DownloadViewController: SubViewController
+{
 
     var screenWidth : CGFloat = 0
     var screenHeight : CGFloat = 0
+
     var downloadProgress : Float = 0.0
     var downloadProgressBar = UIProgressView(progressViewStyle: UIProgressViewStyle.Default)
+    
+    var tempTimer : NSTimer?
     
     override func viewDidLoad()
     {
@@ -47,19 +51,28 @@ class DownloadViewController: UIViewController {
         self.view.addSubview(label)
         
         //Style and show the progressbar
-        downloadProgressBar.center = self.view.center
-        downloadProgressBar.trackTintColor = UIColor.lightGrayColor()
-        downloadProgressBar.tintColor = UIColor.blackColor()
-        self.view.addSubview(downloadProgressBar)
+        self.downloadProgressBar.center = self.view.center
+        self.downloadProgressBar.trackTintColor = UIColor.lightGrayColor()
+        self.downloadProgressBar.tintColor = UIColor.blackColor()
+        self.view.addSubview(self.downloadProgressBar)
 
         //Start updating the progress bar
-        var timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
-        
+        self.tempTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
+     
     }
     
     func increaseProgressBarWithOnePercent()
     {
-        self.increaseProgressBar(0.01)
+        if !kSpeedUpDownload
+        {
+            self.increaseProgressBar(0.01)
+        }
+
+        //To prevent the dev having to wait all the time
+        else
+        {
+            self.increaseProgressBar(0.1)
+        }
     }
     
     func increaseProgressBar(progressToAdd: Float)
@@ -69,8 +82,7 @@ class DownloadViewController: UIViewController {
         
         if downloadProgress >= 1
         {
-            let taskViewController = TaskViewController();
-            self.presentViewController(taskViewController, animated: false, completion: nil)
+            self.downloadingCompleted()
         }
         
     }
@@ -94,10 +106,10 @@ class DownloadViewController: UIViewController {
     }
     
     
-    override func didReceiveMemoryWarning()
+    func downloadingCompleted()
     {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        self.tempTimer!.invalidate()
+        self.superController!.subControllerFinished(self)
     }
     
 }

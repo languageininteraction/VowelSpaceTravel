@@ -10,10 +10,14 @@ import Foundation
 
 import UIKit
 
-class ProgressViewController: UIViewController {
+class ProgressViewController: UIViewController, PassControlToSubControllerProtocol
+{
     
     var screenWidth : CGFloat = 0
     var screenHeight : CGFloat = 0
+    var downloadViewController : DownloadViewController?
+    var taskViewController : TaskViewController?
+    var resultViewController : ResultViewController?
     
     override func viewDidLoad()
     {
@@ -45,6 +49,16 @@ class ProgressViewController: UIViewController {
         settingsButton.addTarget(self, action: "settingsButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(settingsButton)
         
+        //Preload the views
+        self.downloadViewController = DownloadViewController();
+        self.downloadViewController!.superController = self
+        
+        self.taskViewController = TaskViewController();
+        self.taskViewController!.superController = self
+
+        self.resultViewController = ResultViewController();
+        self.resultViewController!.superController = self
+
     }
     
     override func didReceiveMemoryWarning()
@@ -70,10 +84,19 @@ class ProgressViewController: UIViewController {
     
     func goToDownloadView()
     {
-        let downloadViewController = DownloadViewController();
-        self.presentViewController(downloadViewController, animated: false, completion: nil)
+        self.presentViewController(self.downloadViewController!, animated: false, completion: nil)
     }
 
+    func goToTaskView()
+    {
+        self.presentViewController(self.taskViewController!, animated: false, completion: nil)
+    }
+    
+    func goToResultView()
+    {
+        self.presentViewController(self.resultViewController!, animated: false, completion: nil)
+    }
+    
     func goToSettingsView()
     {
 //        let settingsViewController = SettingsViewController();
@@ -86,4 +109,20 @@ class ProgressViewController: UIViewController {
 //        self.presentViewController(infoViewController, animated: false, completion: nil)
     }
     
+    func subControllerFinished(subController: SubViewController)
+    {
+
+        subController.dismissViewControllerAnimated(false, completion: nil)        
+        
+        switch subController
+        {
+            case self.downloadViewController!:
+                self.goToTaskView()
+            case self.taskViewController!:
+                self.goToResultView()
+            default:
+                println("")
+        }
+        
+    }
 }
