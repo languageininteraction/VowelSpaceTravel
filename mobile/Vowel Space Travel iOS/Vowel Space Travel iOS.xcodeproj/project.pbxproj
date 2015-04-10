@@ -10,6 +10,8 @@
 		4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
 		4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* ProgressViewController.swift */; };
 		4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49D1AD7C9CE000437CF /* TempObjects.swift */; };
+		4996A4A01AD7E480000437CF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49F1AD7E480000437CF /* Constants.swift */; };
+		4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */; };
 		49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653B81ACE9CB400CA2803 /* AppDelegate.swift */; };
 		49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BA1ACE9CB400CA2803 /* RootViewController.swift */; };
 		49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C31ACE9CB400CA2803 /* Images.xcassets */; };
@@ -20,6 +22,7 @@
 		49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653E01ACEA4D100CA2803 /* TaskViewController.swift */; };
 		49C653E31ACEA68A00CA2803 /* cello.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49C653E21ACEA68900CA2803 /* cello.wav */; };
 		49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */; };
+		49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1F5C51AD8097000457411 /* ResultViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +39,8 @@
 		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4996A49B1AD7BA43000437CF /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
+		4996A49F1AD7E480000437CF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassControlBackAndForth.swift; sourceTree = "<group>"; };
 		49C653B31ACE9CB300CA2803 /* Vowel Space Travel iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vowel Space Travel iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C653B71ACE9CB400CA2803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C653B81ACE9CB400CA2803 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +54,7 @@
 		49C653E01ACEA4D100CA2803 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		49C653E21ACEA68900CA2803 /* cello.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cello.wav; sourceTree = "<group>"; };
 		49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadViewController.swift; sourceTree = "<group>"; };
+		49F1F5C51AD8097000457411 /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +75,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4996A4A11AD7E4B1000437CF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				49C653E21ACEA68900CA2803 /* cello.wav */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		49C653AA1ACE9CB300CA2803 = {
 			isa = PBXGroup;
 			children = (
@@ -90,9 +104,11 @@
 		49C653B51ACE9CB300CA2803 /* Vowel Space Travel iOS */ = {
 			isa = PBXGroup;
 			children = (
-				4996A49D1AD7C9CE000437CF /* TempObjects.swift */,
-				49C653E21ACEA68900CA2803 /* cello.wav */,
+				4996A49F1AD7E480000437CF /* Constants.swift */,
 				49C653DF1ACEA49E00CA2803 /* ViewControllers */,
+				4996A49D1AD7C9CE000437CF /* TempObjects.swift */,
+				4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */,
+				4996A4A11AD7E4B1000437CF /* Resources */,
 				49C653DC1ACE9FF100CA2803 /* Main.storyboard */,
 				49C653B81ACE9CB400CA2803 /* AppDelegate.swift */,
 				49C653C31ACE9CB400CA2803 /* Images.xcassets */,
@@ -135,6 +151,7 @@
 				4996A49B1AD7BA43000437CF /* ProgressViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
 				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
+				49F1F5C51AD8097000457411 /* ResultViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -246,9 +263,12 @@
 				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
 				4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */,
 				4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */,
+				4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
+				4996A4A01AD7E480000437CF /* Constants.swift in Sources */,
+				49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
