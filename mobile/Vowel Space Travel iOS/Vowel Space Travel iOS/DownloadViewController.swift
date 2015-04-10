@@ -18,12 +18,60 @@ import UIKit
 import AVFoundation
 
 class DownloadViewController: UIViewController {
+
+    var screenWidth : CGFloat = 0
+    var screenHeight : CGFloat = 0
+    var downloadProgress : Float = 0.0
+    var downloadProgressBar = UIProgressView(progressViewStyle: UIProgressViewStyle.Default)
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+
+        //Remember the screen sizes
+        self.screenWidth = self.view.frame.size.width
+        self.screenHeight = self.view.frame.size.height
         
-        self.downloadFile();
+        //Make the background white
+        self.view.backgroundColor = UIColor.whiteColor()
+        
+        //Show the download label
+        var label = UILabel();
+        var labelWidth : CGFloat = 300;
+        var labelHeigth : CGFloat = 30;
+        var distanceAboveCenter : CGFloat = 100;
+        
+        label.frame = CGRectMake(0.5*(self.screenWidth-labelWidth),0.5*(self.screenHeight-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
+        label.textAlignment = NSTextAlignment.Center
+        label.text = "Downloading files"
+        self.view.addSubview(label)
+        
+        //Style and show the progressbar
+        downloadProgressBar.center = self.view.center
+        downloadProgressBar.trackTintColor = UIColor.lightGrayColor()
+        downloadProgressBar.tintColor = UIColor.blackColor()
+        self.view.addSubview(downloadProgressBar)
+
+        //Start updating the progress bar
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
+        
+    }
+    
+    func increaseProgressBarWithOnePercent()
+    {
+        self.increaseProgressBar(0.01)
+    }
+    
+    func increaseProgressBar(progressToAdd: Float)
+    {
+        self.downloadProgress += progressToAdd
+        downloadProgressBar.setProgress(self.downloadProgress, animated: true)
+        
+        if downloadProgress >= 1
+        {
+            let taskViewController = TaskViewController();
+            self.presentViewController(taskViewController, animated: false, completion: nil)
+        }
         
     }
     
