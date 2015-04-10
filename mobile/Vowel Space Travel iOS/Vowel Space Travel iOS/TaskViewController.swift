@@ -31,7 +31,7 @@ class TaskViewController: UIViewController {
         //Play audio
         audioPlayer = AVAudioPlayer(contentsOfURL: tempSound, error: nil)
         audioPlayer.prepareToPlay()
-        audioPlayer.play()
+        //audioPlayer.play()
         
         //Display a label
         var label = UILabel();
