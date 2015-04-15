@@ -67,11 +67,19 @@ public class StimulusResult {
     }
 
     public String getTargetDisc() {
-        return targetVowel.getDisc();
+        if (targetVowel != null) {
+            return targetVowel.getDisc();
+        } else {
+            return "";
+        }
     }
 
     public String getStandardDisk() {
-        return standardVowel.getDisc();
+        if (standardVowel != null) {
+            return standardVowel.getDisc();
+        } else {
+            return "";
+        }
     }
 
     public boolean isTrue_positive() {
@@ -92,5 +100,13 @@ public class StimulusResult {
 
     public long getResponceTimeMs() {
         return responceTimeMs;
+    }
+
+    public void setTargetVowel(Vowel targetVowel) {
+        this.targetVowel = targetVowel;
+    }
+
+    public void setStandardVowel(Vowel standardVowel) {
+        this.standardVowel = standardVowel;
     }
 }
