@@ -17,11 +17,13 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * @since Apr 8, 2015 11:25:42 AM (creation date)
@@ -40,8 +42,8 @@ public class Word {
     private Vowel vowel;
     @ManyToOne
     private Consonant finalConsonant;
-
-    Speaker spokenBy;
+    @OneToMany(mappedBy = "word")
+    private List<WordSample> wordSamples;
     
     public Word(String wordString, Consonant initailConsonant, Vowel vowel, Consonant finalConsonant) {
         this.wordString = wordString;

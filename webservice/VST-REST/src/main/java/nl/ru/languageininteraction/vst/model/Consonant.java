@@ -32,7 +32,7 @@ public class Consonant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    String symbol;
+    private String symbol;
 
     public Consonant() {
     }

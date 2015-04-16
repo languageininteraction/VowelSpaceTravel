@@ -32,5 +32,5 @@ public class Speaker {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
+    private String speakerName;
 }

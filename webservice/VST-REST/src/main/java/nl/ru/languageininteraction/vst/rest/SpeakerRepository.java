@@ -17,18 +17,39 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
-import java.util.List;
-import nl.ru.languageininteraction.vst.model.StimulusResponse;
+import nl.ru.languageininteraction.vst.model.Speaker;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
- * @since Apr 8, 2015 11:29:18 AM (creation date)
+ * @since Apr 8, 2015 5:12:19 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "responses", path = "responses")
-public interface StimulusResultRepository extends PagingAndSortingRepository<StimulusResponse, Long> {
+@RepositoryRestResource(collectionResourceRel = "consonants", path = "consonants")
+public interface SpeakerRepository extends PagingAndSortingRepository<Speaker, Long> {
 
     @Override
-    List<StimulusResponse> findAll();
+    @RestResource(exported = false)
+    public <S extends Speaker> Iterable<S> save(Iterable<S> entities);
+
+    @Override
+    @RestResource(exported = false)
+    public void deleteAll();
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Iterable<? extends Speaker> entities);
+
+    @Override
+    @RestResource(exported = false)
+    public <S extends Speaker> S save(S entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Speaker entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Long id);
 }

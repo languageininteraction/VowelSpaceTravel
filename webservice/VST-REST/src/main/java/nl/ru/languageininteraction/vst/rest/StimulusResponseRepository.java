@@ -15,27 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.ru.languageininteraction.vst.model;
+package nl.ru.languageininteraction.vst.rest;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.List;
+import nl.ru.languageininteraction.vst.model.StimulusResponse;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * @since Apr 16, 2015 3:30:18 PM (creation date)
+ * @since Apr 8, 2015 11:29:18 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@Entity
-public class Task {
+@RepositoryRestResource(collectionResourceRel = "responses", path = "responses")
+public interface StimulusResponseRepository extends PagingAndSortingRepository<StimulusResponse, Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    public enum TaskType {
-
-        identification, discrimination, assessment
-    }
-    private TaskType taskType;
+    @Override
+    List<StimulusResponse> findAll();
 }

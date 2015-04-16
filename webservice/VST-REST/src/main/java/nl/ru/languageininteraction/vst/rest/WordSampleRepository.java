@@ -17,25 +17,21 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
-import java.util.List;
-import nl.ru.languageininteraction.vst.model.Word;
+import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
- * @since Apr 8, 2015 1:11:36 PM (creation date)
+ * @since Apr 8, 2015 5:12:19 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "words", path = "words")
-public interface WordsRepository extends PagingAndSortingRepository<Word, Long> {
-
-    List<Word> findByWordString(@Param("word") String wordString);
+@RepositoryRestResource(collectionResourceRel = "consonants", path = "consonants")
+public interface WordSampleRepository extends PagingAndSortingRepository<WordSample, Long> {
 
     @Override
     @RestResource(exported = false)
-    public <S extends Word> Iterable<S> save(Iterable<S> entities);
+    public <S extends WordSample> Iterable<S> save(Iterable<S> entities);
 
     @Override
     @RestResource(exported = false)
@@ -43,15 +39,15 @@ public interface WordsRepository extends PagingAndSortingRepository<Word, Long> 
 
     @Override
     @RestResource(exported = false)
-    public void delete(Iterable<? extends Word> entities);
+    public void delete(Iterable<? extends WordSample> entities);
 
     @Override
     @RestResource(exported = false)
-    public <S extends Word> S save(S entity);
+    public <S extends WordSample> S save(S entity);
 
     @Override
     @RestResource(exported = false)
-    public void delete(Word entity);
+    public void delete(WordSample entity);
 
     @Override
     @RestResource(exported = false)

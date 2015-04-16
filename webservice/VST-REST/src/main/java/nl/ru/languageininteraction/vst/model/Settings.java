@@ -42,6 +42,6 @@ public class Settings {
 
         easy, medium, hard
     }
-    ArrayList<Word> excludedWords;
-    Task usersPreferedTask;
+    private ArrayList<Word> excludedWords;
+    private Task usersPreferedTask;
 }

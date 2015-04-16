@@ -17,23 +17,25 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import java.util.UUID;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * @since Mar 20, 2015 5:00:43 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@XmlRootElement(name = "wordsample")
+@Entity
 public class WordSample {
 
-    @XmlAttribute(name = "uuid")
-    private UUID uuid = UUID.randomUUID();
-    @XmlAttribute(name = "word")
-    private String word = "bla";
-    @XmlAttribute(name = "vowel")
-    private String vowel = "bla";
-    @XmlAttribute(name = "label")
-    private String label = "bla";
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @ManyToOne
+    private Speaker spokenBy;
+    @ManyToOne
+    Word word;
+    private String soundFilePath;
 }

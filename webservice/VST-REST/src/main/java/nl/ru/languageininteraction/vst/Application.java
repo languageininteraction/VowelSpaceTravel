@@ -8,9 +8,9 @@ import nl.ru.languageininteraction.vst.model.Vowel;
 import nl.ru.languageininteraction.vst.model.Word;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
-import nl.ru.languageininteraction.vst.rest.StimulusResultRepository;
+import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
 import nl.ru.languageininteraction.vst.rest.VowelRepository;
-import nl.ru.languageininteraction.vst.rest.WordsRepository;
+import nl.ru.languageininteraction.vst.rest.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -32,9 +32,9 @@ public class Application implements CommandLineRunner {
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
-    private StimulusResultRepository stimulusResultRepository;
+    private StimulusResponseRepository stimulusResultRepository;
     @Autowired
-    private WordsRepository wordsRepository;
+    private WordRepository wordsRepository;
     @Autowired
     private ConsonantRepository consonantRepository;
 

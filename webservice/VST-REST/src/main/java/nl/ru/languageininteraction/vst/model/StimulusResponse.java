@@ -41,12 +41,12 @@ public class StimulusResponse {
     private Vowel targetVowel;
     @ManyToOne
     private Vowel standardVowel;
-    boolean true_positive;
-    boolean false_positive;
-    boolean true_negative;
-    boolean false_negative;
+    private boolean true_positive;
+    private boolean false_positive;
+    private boolean true_negative;
+    private boolean false_negative;
 
-    long responceTimeMs;
+    private long responceTimeMs;
 
     public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
         this.player = player;
