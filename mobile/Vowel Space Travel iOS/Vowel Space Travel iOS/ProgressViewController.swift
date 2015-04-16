@@ -12,17 +12,18 @@ import UIKit
 
 class ProgressViewController: UIViewController, PassControlToSubControllerProtocol
 {
-    
-    var screenWidth : CGFloat = 0
-    var screenHeight : CGFloat = 0
+    var screenWidth : CGFloat?
+    var screenHeight : CGFloat?
     var downloadViewController : DownloadViewController?
     var taskViewController : TaskViewController?
     var resultViewController : ResultViewController?
+    var settingsViewController : SettingsViewController?
+    var infoViewController : InfoViewController?
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+                
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
@@ -32,22 +33,29 @@ class ProgressViewController: UIViewController, PassControlToSubControllerProtoc
         
         
         //Create start buttons        
-        let discriminateButton = TempStyledButton(frame: CGRectMake(100,100,100,100))
-        //discriminateButton.backgroundColor = UIColor.blueColor()
-        discriminateButton.setTitle("Discriminate", forState: UIControlState.Normal)
+        let buttonWidth : CGFloat = 200
+        let buttonHeight : CGFloat = 70
+        
+        let discriminateButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)-150,buttonWidth,buttonHeight))
+                discriminateButton.setTitle("Discriminate", forState: UIControlState.Normal)
         discriminateButton.addTarget(self, action: "discriminateButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(discriminateButton)
-
-        let identificateButton = TempStyledButton(frame: CGRectMake(100,300,100,100))
+        
+        let identificateButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)-50,buttonWidth,buttonHeight))
         identificateButton.setTitle("Identificate", forState: UIControlState.Normal)
         identificateButton.addTarget(self, action: "identificateButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(identificateButton)
         
-        //Create the settings button
-        let settingsButton = TempStyledButton(frame: CGRectMake(100,500,100,100))
+        //Create the settings and info button
+        let settingsButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+50,buttonWidth,buttonHeight))
         settingsButton.setTitle("Settings", forState: UIControlState.Normal)
         settingsButton.addTarget(self, action: "settingsButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(settingsButton)
+
+        let infoButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+150,buttonWidth,buttonHeight))
+        infoButton.setTitle("Info", forState: UIControlState.Normal)
+        infoButton.addTarget(self, action: "infoButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(infoButton)
         
         //Preload the views
         self.downloadViewController = DownloadViewController();
@@ -59,6 +67,12 @@ class ProgressViewController: UIViewController, PassControlToSubControllerProtoc
         self.resultViewController = ResultViewController();
         self.resultViewController!.superController = self
 
+        self.settingsViewController = SettingsViewController();
+        self.settingsViewController!.superController = self
+
+        self.infoViewController = InfoViewController();
+        self.infoViewController!.superController = self
+        
     }
     
     override func didReceiveMemoryWarning()
@@ -81,6 +95,11 @@ class ProgressViewController: UIViewController, PassControlToSubControllerProtoc
     {
         self.goToSettingsView();
     }
+
+    func infoButtonPressed()
+    {
+        self.goToInfoView();
+    }
     
     func goToDownloadView()
     {
@@ -99,14 +118,12 @@ class ProgressViewController: UIViewController, PassControlToSubControllerProtoc
     
     func goToSettingsView()
     {
-//        let settingsViewController = SettingsViewController();
-//        self.presentViewController(downloadViewController, animated: false, completion: nil)
+        self.presentViewController(settingsViewController!, animated: false, completion: nil)
     }
 
     func goToInfoView()
     {
-//        let infoViewController = InfoViewController();
-//        self.presentViewController(infoViewController, animated: false, completion: nil)
+        self.presentViewController(infoViewController!, animated: false, completion: nil)
     }
     
     func subControllerFinished(subController: SubViewController)
