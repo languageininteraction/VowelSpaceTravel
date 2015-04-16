@@ -68,9 +68,9 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "player")
-    private List<StimulusResult> stimulusResults;
+    private List<StimulusResponse> stimulusResults;
 
-    public void addResult(StimulusResult result) {
+    public void addResult(StimulusResponse result) {
         stimulusResults.add(result);
     }
 }

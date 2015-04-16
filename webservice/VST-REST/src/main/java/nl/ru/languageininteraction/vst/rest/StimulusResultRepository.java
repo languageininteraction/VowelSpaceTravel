@@ -18,7 +18,7 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
-import nl.ru.languageininteraction.vst.model.StimulusResult;
+import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -26,9 +26,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @since Apr 8, 2015 11:29:18 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "results", path = "results")
-public interface StimulusResultRepository extends PagingAndSortingRepository<StimulusResult, Long> {
+@RepositoryRestResource(collectionResourceRel = "responses", path = "responses")
+public interface StimulusResultRepository extends PagingAndSortingRepository<StimulusResponse, Long> {
 
     @Override
-    List<StimulusResult> findAll();
+    List<StimulusResponse> findAll();
 }

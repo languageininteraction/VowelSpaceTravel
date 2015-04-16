@@ -3,7 +3,7 @@ package nl.ru.languageininteraction.vst;
 import java.util.Date;
 import nl.ru.languageininteraction.vst.model.Consonant;
 import nl.ru.languageininteraction.vst.model.Player;
-import nl.ru.languageininteraction.vst.model.StimulusResult;
+import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import nl.ru.languageininteraction.vst.model.Word;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
@@ -68,11 +68,11 @@ public class Application implements CommandLineRunner {
         final Word word = new Word("woof", consonantW, vowelRepository.findByIpa("a"), consonantF);
         wordsRepository.save(word);
         playerRepository.save(player);
-//        final StimulusResult stimulusResult = new StimulusResult(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), true, false, false, false, new Date().getTime());
+//        final StimulusResponse stimulusResult = new StimulusResponse(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), true, false, false, false, new Date().getTime());
 //        stimulusResultRepository.save(stimulusResult);
-        stimulusResultRepository.save(new StimulusResult(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), true, false, false, false, new Date().getTime()));
-        stimulusResultRepository.save(new StimulusResult(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), false, true, false, false, new Date().getTime()));
-        stimulusResultRepository.save(new StimulusResult(player, vowelRepository.findByIpa("{"), vowelRepository.findByIpa("V"), false, false, false, true, new Date().getTime()));
+        stimulusResultRepository.save(new StimulusResponse(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), true, false, false, false, new Date().getTime()));
+        stimulusResultRepository.save(new StimulusResponse(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), false, true, false, false, new Date().getTime()));
+        stimulusResultRepository.save(new StimulusResponse(player, vowelRepository.findByIpa("{"), vowelRepository.findByIpa("V"), false, false, false, true, new Date().getTime()));
         System.out.println("Players");
         for (Player currentPlayer : playerRepository.findAll()) {
             System.out.println(currentPlayer);

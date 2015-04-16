@@ -28,7 +28,7 @@ import javax.persistence.ManyToOne;
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class StimulusResult {
+public class StimulusResponse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,7 +48,7 @@ public class StimulusResult {
 
     long responceTimeMs;
 
-    public StimulusResult(Player player, Vowel targetVowel, Vowel standardVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
+    public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
         this.player = player;
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
@@ -59,7 +59,7 @@ public class StimulusResult {
         this.responceTimeMs = responceTimeMs;
     }
 
-    public StimulusResult() {
+    public StimulusResponse() {
     }
 
     public Player getPlayer() {
@@ -74,7 +74,7 @@ public class StimulusResult {
         }
     }
 
-    public String getStandardDisk() {
+    public String getStandardDisc() {
         if (standardVowel != null) {
             return standardVowel.getDisc();
         } else {
