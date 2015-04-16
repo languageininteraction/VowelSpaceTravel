@@ -19,7 +19,7 @@ class TempStyledButton : UIButton
     required override init(frame CGframe: CGRect)
     {
         super.init(frame: CGframe)
-        self.backgroundColor = UIColor.grayColor()
+        self.backgroundColor = UIColor.lightGrayColor()
         self.layer.cornerRadius = 10.0;
     }
         
