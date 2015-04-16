@@ -34,7 +34,7 @@ class ResultViewController: SubViewController {
         
         label.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
         label.textAlignment = NSTextAlignment.Center
-        label.text = "Your score:"
+        label.text = "Your score: 8/10"
         
         self.view.addSubview(label)
         
