@@ -23,6 +23,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  * @since Apr 2, 2015 4:56:21 PM (creation date)
@@ -34,4 +35,28 @@ public interface VowelRepository extends PagingAndSortingRepository<Vowel, Long>
     List<Vowel> findAll();
 
     Vowel findByIpa(@Param("ipa") String ipa);
+
+    @Override
+    @RestResource(exported = false)
+    public <S extends Vowel> Iterable<S> save(Iterable<S> entities);
+
+    @Override
+    @RestResource(exported = false)
+    public void deleteAll();
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Iterable<? extends Vowel> entities);
+
+    @Override
+    @RestResource(exported = false)
+    public <S extends Vowel> S save(S entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Vowel entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Long id);
 }

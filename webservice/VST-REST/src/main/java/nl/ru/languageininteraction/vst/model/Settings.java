@@ -17,55 +17,31 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
- * @since Apr 8, 2015 11:25:42 AM (creation date)
+ * @since Apr 16, 2015 3:25:40 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class Word {
+public class Settings {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String wordString;
-    @ManyToOne
-    private Consonant initailConsonant;
-    @ManyToOne
-    private Vowel vowel;
-    @ManyToOne
-    private Consonant finalConsonant;
 
-    Speaker spokenBy;
-    
-    public Word(String wordString, Consonant initailConsonant, Vowel vowel, Consonant finalConsonant) {
-        this.wordString = wordString;
-        this.initailConsonant = initailConsonant;
-        this.vowel = vowel;
-        this.finalConsonant = finalConsonant;
-    }
+    @OneToOne(mappedBy = "settings")
+    private Player player;
 
-    public Word() {
-    }
+    enum Difficulty {
 
-    public String getWordString() {
-        return wordString;
+        easy, medium, hard
     }
-
-    public Consonant getInitailConsonant() {
-        return initailConsonant;
-    }
-
-    public Vowel getVowel() {
-        return vowel;
-    }
-
-    public Consonant getFinalConsonant() {
-        return finalConsonant;
-    }
+    ArrayList<Word> excludedWords;
+    Task usersPreferedTask;
 }

@@ -23,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * @since Apr 2, 2015 5:40:42 PM (creation date)
@@ -37,6 +38,10 @@ public class Player {
 
     private String firstName;
     private String lastName;
+    private int token; // user password that has been hashed in the mobile app
+    
+    @OneToOne
+    private Settings settings;
 
     public Player() {
     }

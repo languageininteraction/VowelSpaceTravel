@@ -20,6 +20,7 @@ package nl.ru.languageininteraction.vst.rest;
 import nl.ru.languageininteraction.vst.model.Consonant;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  * @since Apr 8, 2015 5:12:19 PM (creation date)
@@ -28,4 +29,27 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "consonants", path = "consonants")
 public interface ConsonantRepository extends PagingAndSortingRepository<Consonant, Long> {
 
+    @Override
+    @RestResource(exported = false)
+    public <S extends Consonant> Iterable<S> save(Iterable<S> entities);
+
+    @Override
+    @RestResource(exported = false)
+    public void deleteAll();
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Iterable<? extends Consonant> entities);
+
+    @Override
+    @RestResource(exported = false)
+    public <S extends Consonant> S save(S entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Consonant entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Long id);
 }
