@@ -9,4 +9,6 @@
 import Foundation
 
 let kDevelopmentMode = true
-let kSpeedUpDownload = kDevelopmentMode ? true : false
+let kSpeedUpDownload = kDevelopmentMode ? false : false
+
+let kWebserviceURL = kDevelopmentMode ? "http://localhost:8080" : ""
