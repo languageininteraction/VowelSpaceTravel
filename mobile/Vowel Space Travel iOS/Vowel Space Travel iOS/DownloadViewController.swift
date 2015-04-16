@@ -55,10 +55,16 @@ class DownloadViewController: SubViewController
         self.downloadProgressBar.trackTintColor = UIColor.lightGrayColor()
         self.downloadProgressBar.tintColor = UIColor.blackColor()
         self.view.addSubview(self.downloadProgressBar)
+    }
 
+    override func viewDidAppear(animated: Bool)
+    {
+        println("View did appear")
+        
+        setProgressBar(0.0,animated:false)
+        
         //Start updating the progress bar
         self.tempTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
-     
     }
     
     func increaseProgressBarWithOnePercent()
@@ -77,14 +83,20 @@ class DownloadViewController: SubViewController
     
     func increaseProgressBar(progressToAdd: Float)
     {
-        self.downloadProgress += progressToAdd
-        downloadProgressBar.setProgress(self.downloadProgress, animated: true)
+        var newProgress = self.downloadProgress + progressToAdd
+        setProgressBar(newProgress)
         
-        if downloadProgress >= 1
+        if self.downloadProgress >= 1
         {
             self.downloadingCompleted()
         }
         
+    }
+    
+    func setProgressBar(progress: Float,animated : Bool = true)
+    {
+        self.downloadProgress = progress
+        downloadProgressBar.setProgress(progress, animated: animated)
     }
     
     func downloadFile()
