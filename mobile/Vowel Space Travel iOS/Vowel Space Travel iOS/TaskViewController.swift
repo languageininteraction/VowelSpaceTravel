@@ -40,7 +40,7 @@ class TaskViewController: SubViewController {
         
         //Display a label
         var label = UILabel();
-        var labelWidth : CGFloat = 300;
+        var labelWidth : CGFloat = 500;
         var labelHeigth : CGFloat = 30;
         var distanceAboveCenter : CGFloat = 0;
         
