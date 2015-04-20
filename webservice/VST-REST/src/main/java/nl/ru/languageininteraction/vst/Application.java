@@ -11,6 +11,7 @@ import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
 import nl.ru.languageininteraction.vst.rest.VowelRepository;
 import nl.ru.languageininteraction.vst.rest.WordRepository;
+import nl.ru.languageininteraction.vst.util.DefaultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -50,7 +51,9 @@ public class Application implements CommandLineRunner {
         stimulusResultRepository.deleteAll();
         consonantRepository.deleteAll();
 
-        insertVowels();
+        DefaultData defaultData = new DefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
+        defaultData.insertVowels();
+        defaultData.insertConsonants();
 
         System.out.println("Vowels");
         for (Vowel vowel : vowelRepository.findAll()) {
@@ -80,29 +83,5 @@ public class Application implements CommandLineRunner {
             System.out.println(currentPlayer);
         }
         System.out.println();
-    }
-
-    private void insertVowels() {
-        vowelRepository.save(new Vowel("I", "I", Vowel.Place.near_front, Vowel.Manner.near_close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("E", "E", Vowel.Place.front, Vowel.Manner.open_mid, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("{", "{", Vowel.Place.front, Vowel.Manner.near_open, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("V", "V", Vowel.Place.back, Vowel.Manner.open_mid, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("Q", "Q", Vowel.Place.back, Vowel.Manner.open, Vowel.Roundness.rounded));
-        vowelRepository.save(new Vowel("U", "U", Vowel.Place.near_back, Vowel.Manner.near_close, Vowel.Roundness.rounded));
-        vowelRepository.save(new Vowel("i", "i", Vowel.Place.front, Vowel.Manner.close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("#", "#", Vowel.Place.back, Vowel.Manner.open, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("$", "$", Vowel.Place.back, Vowel.Manner.open_mid, Vowel.Roundness.rounded));
-        vowelRepository.save(new Vowel("u", "u", Vowel.Place.back, Vowel.Manner.close, Vowel.Roundness.rounded));
-        vowelRepository.save(new Vowel("3", "3", Vowel.Place.central, Vowel.Manner.open_mid, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("1", "1", Vowel.Place.near_front, Vowel.Manner.near_close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("2", "2", Vowel.Place.near_front, Vowel.Manner.near_close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("4", "4", Vowel.Place.near_front, Vowel.Manner.near_close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("5", "5", Vowel.Place.near_back, Vowel.Manner.near_close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("6", "6", Vowel.Place.near_back, Vowel.Manner.near_close, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("1", "1", Vowel.Place.front, Vowel.Manner.close_mid, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("2", "2", Vowel.Place.front, Vowel.Manner.open, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("4", "4", Vowel.Place.back, Vowel.Manner.open_mid, Vowel.Roundness.rounded));
-        vowelRepository.save(new Vowel("5", "5", Vowel.Place.central, Vowel.Manner.mid, Vowel.Roundness.unrounded));
-        vowelRepository.save(new Vowel("6", "6", Vowel.Place.front, Vowel.Manner.open, Vowel.Roundness.unrounded));
     }
 }
