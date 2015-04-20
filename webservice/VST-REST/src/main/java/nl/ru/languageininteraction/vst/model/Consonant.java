@@ -32,16 +32,22 @@ public class Consonant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String symbol;
+    private String ipa;
+    private String disc;
+
+    public Consonant(String ipa, String disc) {
+        this.ipa = ipa;
+        this.disc = disc;
+    }
 
     public Consonant() {
     }
 
-    public Consonant(String symbol) {
-        this.symbol = symbol;
+    public String getIpa() {
+        return ipa;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getDisc() {
+        return disc;
     }
 }

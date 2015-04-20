@@ -19,6 +19,7 @@ package nl.ru.languageininteraction.vst.rest;
 
 import nl.ru.languageininteraction.vst.model.Consonant;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -28,6 +29,10 @@ import org.springframework.data.rest.core.annotation.RestResource;
  */
 @RepositoryRestResource(collectionResourceRel = "consonants", path = "consonants")
 public interface ConsonantRepository extends PagingAndSortingRepository<Consonant, Long> {
+
+    Consonant findByIpa(@Param("ipa") String ipa);
+
+    Consonant findByDisc(@Param("disc") String disc);
 
     @Override
     @RestResource(exported = false)

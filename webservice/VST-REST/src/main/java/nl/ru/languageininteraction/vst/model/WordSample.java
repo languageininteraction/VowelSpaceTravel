@@ -38,4 +38,34 @@ public class WordSample {
     @ManyToOne
     Word word;
     private String soundFilePath;
+
+    public WordSample(Speaker spokenBy, Word word, String soundFilePath) {
+        this.spokenBy = spokenBy;
+        this.word = word;
+        this.soundFilePath = soundFilePath;
+    }
+
+    public Speaker getSpokenBy() {
+        return spokenBy;
+    }
+
+    public void setSpokenBy(Speaker spokenBy) {
+        this.spokenBy = spokenBy;
+    }
+
+    public Word getWord() {
+        return word;
+    }
+
+    public void setWord(Word word) {
+        this.word = word;
+    }
+
+    public String getSoundFilePath() {
+        return soundFilePath;
+    }
+
+    public void setSoundFilePath(String soundFilePath) {
+        this.soundFilePath = soundFilePath;
+    }
 }

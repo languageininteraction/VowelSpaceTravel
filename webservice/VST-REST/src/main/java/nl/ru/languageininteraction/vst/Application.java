@@ -1,11 +1,9 @@
 package nl.ru.languageininteraction.vst;
 
 import java.util.Date;
-import nl.ru.languageininteraction.vst.model.Consonant;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Vowel;
-import nl.ru.languageininteraction.vst.model.Word;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
@@ -54,6 +52,7 @@ public class Application implements CommandLineRunner {
         DefaultData defaultData = new DefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
         defaultData.insertVowels();
         defaultData.insertConsonants();
+        defaultData.insertWords();
 
         System.out.println("Vowels");
         for (Vowel vowel : vowelRepository.findAll()) {
@@ -66,12 +65,6 @@ public class Application implements CommandLineRunner {
         final Player player = new Player("fred@blogs.none", 1234);
         player.setFirstName("Fred");
         player.setLastName("Blogs");
-        final Consonant consonantW = new Consonant("w");
-        consonantRepository.save(consonantW);
-        final Consonant consonantF = new Consonant("f");
-        consonantRepository.save(consonantF);
-        final Word word = new Word("woof", consonantW, vowelRepository.findByIpa("a"), consonantF);
-        wordsRepository.save(word);
         playerRepository.save(player);
 //        final StimulusResponse stimulusResult = new StimulusResponse(player, vowelRepository.findByIpa("I"), vowelRepository.findByIpa("E"), true, false, false, false, new Date().getTime());
 //        stimulusResultRepository.save(stimulusResult);

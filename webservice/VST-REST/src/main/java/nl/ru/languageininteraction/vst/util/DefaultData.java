@@ -46,8 +46,19 @@ public class DefaultData {
         this.consonantRepository = consonantRepository;
     }
 
+    private Consonant getConsonant(String consonantString) {
+        Consonant consonant = consonantRepository.findByDisc(consonantString);
+        if (consonant == null) {
+            consonantRepository.save(new Consonant(null, consonantString));
+            consonant = consonantRepository.findByDisc(consonantString);
+        }
+        return consonant;
+    }
+
     private void insertWord(String wordString, String consonantString1, String vowelString, String consonantString2) {
-        wordsRepository.save(new Word(wordString, consonantRepository.findByDisc(consonantString1), vowelRepository.findByDisc(vowelString), consonantRepository.findByDisc(consonantString2)));
+        final Consonant consonant1 = getConsonant(consonantString1);
+        final Consonant consonant2 = getConsonant(consonantString2);
+        wordsRepository.save(new Word(wordString, consonant1, vowelRepository.findByDisc(vowelString), consonant2));
     }
 
     public void insertWords() {
@@ -421,8 +432,7 @@ public class DefaultData {
     }
 
     public void insertConsonants() {
-        consonantRepository.save(new Consonant("w", "w"));
-        consonantRepository.save(new Consonant("f", "f"));
+        // consonants are added by the words insert
     }
 
     public void insertVowels() {

@@ -33,4 +33,16 @@ public class Speaker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String speakerName;
+
+    public Speaker(String speakerName) {
+        this.speakerName = speakerName;
+    }
+
+    public String getSpeakerName() {
+        return speakerName;
+    }
+
+    public void setSpeakerName(String speakerName) {
+        this.speakerName = speakerName;
+    }
 }
