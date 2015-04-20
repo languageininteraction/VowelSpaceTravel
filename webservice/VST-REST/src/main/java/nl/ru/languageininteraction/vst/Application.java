@@ -60,7 +60,9 @@ public class Application implements CommandLineRunner {
 
         System.out.println("vowels with ipa 'I'");
         System.out.println(vowelRepository.findByIpa("I"));
-        final Player player = new Player("Fred", "Blogs");
+        final Player player = new Player("fred@blogs.none", 1234);
+        player.setFirstName("Fred");
+        player.setLastName("Blogs");
         final Consonant consonantW = new Consonant("w");
         consonantRepository.save(consonantW);
         final Consonant consonantF = new Consonant("f");
