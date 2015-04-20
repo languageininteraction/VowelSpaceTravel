@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,6 +39,8 @@ public class Player {
 
     private String firstName;
     private String lastName;
+    private String email;
+    @JsonIgnore
     private int token; // user password that has been hashed in the mobile app
     
     @OneToOne
@@ -46,9 +49,9 @@ public class Player {
     public Player() {
     }
 
-    public Player(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Player(String email, int token) {
+        this.email = email;
+        this.token = token;
     }
 
     public String getFirstName() {
@@ -65,6 +68,22 @@ public class Player {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getToken() {
+        return token;
+    }
+
+    public void setToken(int token) {
+        this.token = token;
     }
 
     @OneToMany(mappedBy = "player")
