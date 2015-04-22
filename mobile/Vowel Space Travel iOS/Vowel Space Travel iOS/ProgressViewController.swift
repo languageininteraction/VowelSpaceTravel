@@ -42,7 +42,7 @@ class ProgressViewController: UIViewController, PassControlToSubControllerProtoc
         self.view.addSubview(discriminateButton)
         
         let identificateButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)-50,buttonWidth,buttonHeight))
-        identificateButton.setTitle("Identificate", forState: UIControlState.Normal)
+        identificateButton.setTitle("Identify", forState: UIControlState.Normal)
         identificateButton.addTarget(self, action: "identificateButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(identificateButton)
         

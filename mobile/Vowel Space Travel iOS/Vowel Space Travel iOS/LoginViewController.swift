@@ -52,6 +52,16 @@ class LoginViewController: UIViewController {
         loginButton.addTarget(self, action: "loginButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(loginButton)
 
+        //Show account creation label
+        var createAccountLink = UILabel();
+        var labelWidth : CGFloat = 300;
+        var labelHeigth : CGFloat = 30;
+        
+        createAccountLink.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) + 200,labelWidth,labelHeigth)
+        createAccountLink.textAlignment = NSTextAlignment.Center
+        createAccountLink.text = "Create account"
+        self.view.addSubview(createAccountLink)
+        
     }
     
     override func didReceiveMemoryWarning()
