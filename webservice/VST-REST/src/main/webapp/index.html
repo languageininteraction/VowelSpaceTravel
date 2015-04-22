@@ -15,18 +15,71 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <title>Vowel Space Travel</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <a href="rest/users/count">count</a><br>
-        <a href="rest/users/create">create</a><br>
-        <a href="rest/users/list">list</a><br>
-        <a href="rest/users/details">details</a><br>
+        <a href="consonants">consonants</a><br>
+        <a href="settings">settings</a><br>
+        <a href="speakers">speakers</a><br>
+        <a href="words">words</a><br>
+        <a href="samples">samples</a><br>
+        <a href="responses">responses</a><br>
         <a href="players">players</a><br>
         <a href="vowels">vowels</a><br>
+        <!--        <form method="POST" enctype="application/json"  action="http://localhost:8080/results">
+                    true_positive<input type="checkbox" name="true_positive" checked><br>
+                    false_positive<input type="checkbox" name="false_positive" checked><br>
+                    true_negative<input type="checkbox" name="true_negative" checked><br>
+                    false_negative<input type="checkbox" name="false_negative" checked><br>
+                    responceTimeMs<input type="number" name="responceTimeMs" value="1"><br>
+                    name<input name="name" value="http://localhost:8080/players/1"><br>
+                    standardVowel<input name="standardVowel" value="http://localhost:8080/vowels/4"><br>
+                    targetVowel<input name="targetVowel" value="http://localhost:8080/vowels/4"><br>
+                    <input type="submit" value="Submit"><br>
+                </form>-->
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>        
+        <script>
+            $(document).ready(function () {
+                $("button").click(function () {
+                    $.ajax({
+                        url: "responses",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({
+                            "true_positive": true,
+                            "false_positive": false,
+                            "true_negative": false,
+                            "false_negative": false,
+                            "responceTimeMs": 1,
+                            "player": "http://localhost:8080/players/1",
+                            "standardVowel": "http://localhost:8080/vowels/2",
+                            "targetVowel": "http://localhost:8080/vowels/1"
+                    }),
+                    async: true,
+                    cache: false,
+                    processData: false,
+                    success: {}
+//                                function (data, status) {
+//                                    alert("Data: " + data + "\nStatus: " + status);
+//                                }
+                })
+            });
+            });</script>
+        <button>add result</button>   
+        <br>
+        <audio controls><source src="stimulus/audio/1" type="audio/wav" /></audio><br>
+        <audio controls><source src="stimulus/audio/2" type="audio/wav" /></audio><br>
+        <audio controls><source src="stimulus/audio/3" type="audio/wav" /></audio><br>
+        <audio controls><source src="stimulus/audio/4" type="audio/wav" /></audio><br>
+        <audio controls><source src="stimulus/audio/5" type="audio/wav" /></audio><br>
+        <audio controls><source src="stimulus/audio/6" type="audio/wav" /></audio><br>
+        <audio controls><source src="stimulus/audio/7" type="audio/wav" /></audio><br>
+        <br>
+        <!--http://localhost:8080/stimulus/audio/1-->
     </body>
 </html>
