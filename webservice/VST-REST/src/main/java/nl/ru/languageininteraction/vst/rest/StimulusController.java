@@ -20,7 +20,7 @@ package nl.ru.languageininteraction.vst.rest;
 import javax.servlet.http.HttpServletResponse;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
-import nl.ru.languageininteraction.vst.model.Stimuli;
+import nl.ru.languageininteraction.vst.model.StimulusSequence;
 import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -62,18 +62,18 @@ public class StimulusController {
     @RequestMapping(method = GET)
     @ResponseBody
 //    @RequestMapping("/next")
-    public HttpEntity<Stimuli> getStimulus() {
-        final Stimuli stimuli = new Stimuli(null);
-        stimuli.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulus()).withSelfRel());
+    public HttpEntity<StimulusSequence> getStimulusSequence() {
+        final StimulusSequence stimulusSequence = new StimulusSequence(null);
+        stimulusSequence.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusSequence()).withSelfRel());
 //        stimuli.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getFile()).withSelfRel());
-        return new ResponseEntity<>(stimuli, HttpStatus.OK);
+        return new ResponseEntity<>(stimulusSequence, HttpStatus.OK);
     }
 //    @RequestMapping(method = GET)
 //    @ResponseBody
 ////    @RequestMapping("/next")
-//    public HttpEntity<Stimuli> getStimulus(@RequestParam(value = "player", required = true) Player player) {
-//        final Stimuli stimuli = new Stimuli(player);
-//        stimuli.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulus(player)).withSelfRel());
+//    public HttpEntity<Stimuli> getStimulusSequence(@RequestParam(value = "player", required = true) Player player) {
+//        final StimulusSequence stimuli = new StimulusSequence(player);
+//        stimuli.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusSequence(player)).withSelfRel());
 //        return new ResponseEntity<>(stimuli, HttpStatus.OK);
 //    }
 }

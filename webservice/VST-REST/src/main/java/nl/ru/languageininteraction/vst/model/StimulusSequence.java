@@ -26,13 +26,13 @@ import org.springframework.hateoas.ResourceSupport;
  * @since Apr 16, 2015 1:57:15 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-public class Stimuli extends ResourceSupport {
+public class StimulusSequence extends ResourceSupport {
 
     private ArrayList<WordSample> wordSamples;
     Player player;
 
     @JsonCreator
-    public Stimuli(@JsonProperty("player") Player player) {
+    public StimulusSequence(@JsonProperty("player") Player player) {
         this.player = player;
         wordSamples = new ArrayList<>();
 //        final Word word = new Word("woof", new Consonant("w"), new Vowel("o:", "o", Vowel.Place.back, Vowel.Manner.close, Vowel.Roundness.rounded), new Consonant("f"));
