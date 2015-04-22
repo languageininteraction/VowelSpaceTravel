@@ -17,13 +17,30 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import org.springframework.hateoas.ResourceSupport;
 
 /**
  * @since Apr 16, 2015 1:57:15 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-public class Stimuli {
+public class Stimuli extends ResourceSupport {
 
-    private ArrayList<Word> words;
+    private ArrayList<WordSample> wordSamples;
+    Player player;
+
+    @JsonCreator
+    public Stimuli(@JsonProperty("player") Player player) {
+        this.player = player;
+        wordSamples = new ArrayList<>();
+//        final Word word = new Word("woof", new Consonant("w"), new Vowel("o:", "o", Vowel.Place.back, Vowel.Manner.close, Vowel.Roundness.rounded), new Consonant("f"));
+//        wordSamples.add(new WordSample(new Speaker("cat"), word, "somewherefile"));
+//        wordSamples.add(new WordSample(new Speaker("cow"), word, "greenpastures"));
+    }
+
+    public ArrayList<WordSample> getWords() {
+        return wordSamples;
+    }
 }

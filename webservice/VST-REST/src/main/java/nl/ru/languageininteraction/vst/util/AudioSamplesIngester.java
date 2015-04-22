@@ -45,6 +45,8 @@ public class AudioSamplesIngester {
     @Autowired
     private SpeakerRepository speakerRepository;
 
+    private static final String STIMULI_PATH = "stimuli/";
+
     private Speaker getSpeaker(String speakerString) {
         Speaker findByLabel = speakerRepository.findByLabel(speakerString);
         if (findByLabel == null) {
@@ -59,7 +61,7 @@ public class AudioSamplesIngester {
 
     public void processAudioResources() throws IOException {
         System.out.println("processAudioResources");
-        final Resource[] stimuliResources = resourceResolver.getResources("classpath:stimuli/*.wav");
+        final Resource[] stimuliResources = resourceResolver.getResources("classpath:" + STIMULI_PATH + "*.wav");
         for (Resource currentStimulus : stimuliResources) {
             final String stimulusFileName = currentStimulus.getFile().getName();
             final String[] splitStimulusName = stimulusFileName.split("_", 2);
@@ -69,7 +71,7 @@ public class AudioSamplesIngester {
                 System.out.println("wordString:" + wordString);
                 String speakerString = splitStimulusName[1].substring(0, splitStimulusName[1].length() - ".wav".length());
                 System.out.println("speakerString: " + speakerString);
-                insertSample(wordsRepository.findByWordString(wordString), getSpeaker(speakerString), currentStimulus.getFilename());
+                insertSample(wordsRepository.findByWordString(wordString), getSpeaker(speakerString), "/" + STIMULI_PATH + currentStimulus.getFilename());
             } else {
                 System.out.println("failed to parse: " + stimulusFileName);
             }
