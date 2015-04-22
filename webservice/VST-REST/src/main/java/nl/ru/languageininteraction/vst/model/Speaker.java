@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,17 +33,21 @@ public class Speaker {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String speakerName;
+    @Column(unique = true)
+    private String label;
 
     public Speaker(String speakerName) {
-        this.speakerName = speakerName;
+        this.label = speakerName;
     }
 
-    public String getSpeakerName() {
-        return speakerName;
+    public Speaker() {
     }
 
-    public void setSpeakerName(String speakerName) {
-        this.speakerName = speakerName;
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

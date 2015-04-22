@@ -31,7 +31,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RepositoryRestResource(collectionResourceRel = "words", path = "words")
 public interface WordRepository extends PagingAndSortingRepository<Word, Long> {
 
-    List<Word> findByWordString(@Param("word") String wordString);
+    Word findByWordString(@Param("word") String wordString);
 
     @Override
     @RestResource(exported = false)

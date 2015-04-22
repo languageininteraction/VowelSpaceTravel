@@ -18,6 +18,7 @@
 package nl.ru.languageininteraction.vst.model;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +37,7 @@ public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(unique = true)
     private String wordString;
     @ManyToOne
     private Consonant initailConsonant;

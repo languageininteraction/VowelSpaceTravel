@@ -6,9 +6,11 @@ import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
+import nl.ru.languageininteraction.vst.rest.SpeakerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
 import nl.ru.languageininteraction.vst.rest.VowelRepository;
 import nl.ru.languageininteraction.vst.rest.WordRepository;
+import nl.ru.languageininteraction.vst.util.AudioSamplesIngester;
 import nl.ru.languageininteraction.vst.util.DefaultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -35,7 +37,11 @@ public class Application implements CommandLineRunner {
     @Autowired
     private WordRepository wordsRepository;
     @Autowired
+    private SpeakerRepository speakerRepository;
+    @Autowired
     private ConsonantRepository consonantRepository;
+    @Autowired
+    private AudioSamplesIngester audioSamplesIngester;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -48,11 +54,13 @@ public class Application implements CommandLineRunner {
         wordsRepository.deleteAll();
         stimulusResultRepository.deleteAll();
         consonantRepository.deleteAll();
+        speakerRepository.deleteAll();
 
         DefaultData defaultData = new DefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
         defaultData.insertVowels();
         defaultData.insertConsonants();
         defaultData.insertWords();
+        audioSamplesIngester.processAudioResources();
 
         System.out.println("Vowels");
         for (Vowel vowel : vowelRepository.findAll()) {

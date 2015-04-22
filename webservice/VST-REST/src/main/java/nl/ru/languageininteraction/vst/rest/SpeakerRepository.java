@@ -19,6 +19,7 @@ package nl.ru.languageininteraction.vst.rest;
 
 import nl.ru.languageininteraction.vst.model.Speaker;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -28,6 +29,8 @@ import org.springframework.data.rest.core.annotation.RestResource;
  */
 @RepositoryRestResource(collectionResourceRel = "speakers", path = "speakers")
 public interface SpeakerRepository extends PagingAndSortingRepository<Speaker, Long> {
+
+    Speaker findByLabel(@Param("speaker") String speaker);
 
     @Override
     @RestResource(exported = false)

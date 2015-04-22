@@ -45,6 +45,9 @@ public class WordSample {
         this.soundFilePath = soundFilePath;
     }
 
+    public WordSample() {
+    }
+
     public Speaker getSpokenBy() {
         return spokenBy;
     }
