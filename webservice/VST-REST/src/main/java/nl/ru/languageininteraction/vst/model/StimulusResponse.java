@@ -17,18 +17,20 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 
 /**
  * @since Apr 8, 2015 11:23:48 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class StimulusResponse {
+public class StimulusResponse { //extends ResourceSupport
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,22 +43,36 @@ public class StimulusResponse {
     private Vowel targetVowel;
     @ManyToOne
     private Vowel standardVowel;
-    private boolean true_positive;
-    private boolean false_positive;
-    private boolean true_negative;
-    private boolean false_negative;
 
-    private long responceTimeMs;
+    enum ResponseRating {
 
-    public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean true_positive, boolean false_positive, boolean true_negative, boolean false_negative, long responceTimeMs) {
+        true_positive,
+        false_positive,
+        true_negative,
+        false_negative
+    }
+    private ResponseRating responseRating;
+    private long responseTimeMs;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date responseDate;
+
+    public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean isCorrect, boolean userResponse, long responseTimeMs) {
         this.player = player;
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
-        this.true_positive = true_positive;
-        this.false_positive = false_positive;
-        this.true_negative = true_negative;
-        this.false_negative = false_negative;
-        this.responceTimeMs = responceTimeMs;
+        this.responseTimeMs = responseTimeMs;
+        this.responseDate = new Date();
+        if (isCorrect) {
+            if (userResponse) {
+                responseRating = ResponseRating.true_positive;
+            } else {
+                responseRating = ResponseRating.false_negative;
+            }
+        } else if (userResponse) {
+            responseRating = ResponseRating.false_positive;
+        } else {
+            responseRating = ResponseRating.true_negative;
+        }
     }
 
     public StimulusResponse() {
@@ -82,31 +98,27 @@ public class StimulusResponse {
         }
     }
 
-    public boolean isTrue_positive() {
-        return true_positive;
+    public Vowel getTargetVowel() {
+        return targetVowel;
     }
 
-    public boolean isFalse_positive() {
-        return false_positive;
+    public Vowel getStandardVowel() {
+        return standardVowel;
     }
 
-    public boolean isTrue_negative() {
-        return true_negative;
+    public ResponseRating getResponseRating() {
+        return responseRating;
     }
 
-    public boolean isFalse_negative() {
-        return false_negative;
+    public long getResponseTimeMs() {
+        return responseTimeMs;
+    }
+
+    public Date getResponseDate() {
+        return responseDate;
     }
 
     public long getResponceTimeMs() {
-        return responceTimeMs;
-    }
-
-    public void setTargetVowel(Vowel targetVowel) {
-        this.targetVowel = targetVowel;
-    }
-
-    public void setStandardVowel(Vowel standardVowel) {
-        this.standardVowel = standardVowel;
+        return responseTimeMs;
     }
 }

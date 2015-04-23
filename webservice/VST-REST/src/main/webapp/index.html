@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         <a href="settings">settings</a><br>
         <a href="speakers">speakers</a><br>
         <a href="words">words</a><br>
-        <a href="samples">samples</a><br>
+        <a href="wordsamples">word samples</a><br>
         <a href="responses">responses</a><br>
         <a href="players">players</a><br>
         <a href="vowels">vowels</a><br>
@@ -36,14 +36,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         false_positive<input type="checkbox" id="false_positive" checked><br>
         true_negative<input type="checkbox" id="true_negative" checked><br>
         false_negative<input type="checkbox" id="false_negative" checked><br>
-        responceTimeMs<input type="number" id="responceTimeMs" value="1"><br>
+        responseTimeMs<input type="number" id="responseTimeMs" value="1"><br>
         player<input id="player" value="http://localhost:8080/players/1"><br>
         standardVowel<input id="standardVowel" value="http://localhost:8080/vowels/4"><br>
         targetVowel<input id="targetVowel" value="http://localhost:8080/vowels/4"><br>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>        
         <script>
             $(document).ready(function () {
-                $("button").click(function () {
+                $("#addresponse").click(function () {
                     $.ajax({
                         url: "responses",
                         type: "POST",
@@ -53,7 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             "false_positive": $("#false_positive").prop('checked'),
                             "true_negative": $("#true_negative").prop('checked'),
                             "false_negative": $("#false_negative").prop('checked'),
-                            "responceTimeMs": $("#responceTimeMs").prop('value'),
+                            "responseTimeMs": $("#responseTimeMs").prop('value'),
                             "player": $("#player").prop('value'),
                             "standardVowel": $("#standardVowel").prop('value'),
                             "targetVowel": $("#targetVowel").prop('value'),
@@ -62,22 +62,55 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         cache: false,
                         processData: false,
                         success: function (data, status) {
-//                                    alert("Data: " + data + "\nStatus: " + status);
-                            $("#true_positive").prop('checked', true);
+//                            $("#true_positive").prop('checked', true);
+                        }
+                    })
+                });
+                $("#getsamples").click(function () {
+                    $.ajax({
+                        url: "http://localhost:8080/stimulus/random",
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                            $("#audioArea").empty();
+                            $.each(data._embedded, function () {
+                                $.each(this, function (index, stimulus) {
+                                    var audioTag = document.createElement("AUDIO");
+                                    audioTag.controls = true;
+                                    var sourceTag = document.createElement("SOURCE");
+                                    sourceTag.src = stimulus._links.audio.href;
+                                    sourceTag.type = "audio/wav";
+                                    audioTag.appendChild(sourceTag);
+                                    $("#audioArea").append(audioTag);
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.wordString));
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.speakerLabel));
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.isCorrect));
+                                    $("#audioArea").append(document.createElement("BR"));
+                                });
+                            });
                         }
                     })
                 });
             });</script>
-        <button>add result</button>   
         <br>
-        <audio controls><source src="stimulus/audio/1" type="audio/wav" /></audio><br>
-        <audio controls><source src="stimulus/audio/2" type="audio/wav" /></audio><br>
-        <audio controls><source src="stimulus/audio/3" type="audio/wav" /></audio><br>
-        <audio controls><source src="stimulus/audio/4" type="audio/wav" /></audio><br>
-        <audio controls><source src="stimulus/audio/5" type="audio/wav" /></audio><br>
-        <audio controls><source src="stimulus/audio/6" type="audio/wav" /></audio><br>
-        <audio controls><source src="stimulus/audio/7" type="audio/wav" /></audio><br>
         <br>
-        <!--http://localhost:8080/stimulus/audio/1-->
+        <button id="addresponse">add result</button> 
+        <br>
+        <br>
+        <button id="getsamples">get samples</button>   
+        <br>
+        <div id="audioArea"></div>
+        <br>
+        <svg id="graphSvg" height="400" width="400">
+        <rect width="400" height="400" style="fill:rgb(200,200,200);stroke-width:1;stroke:rgb(0,0,0)" />
+        <circle cx="50" cy="60" r="10" stroke="black" stroke-width="1" fill="grey" />
+        </svg>
     </body>
 </html>
