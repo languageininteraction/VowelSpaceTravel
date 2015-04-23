@@ -20,6 +20,9 @@ package nl.ru.languageininteraction.vst.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.stream.IntStream;
+import nl.ru.languageininteraction.vst.rest.WordSampleRepository;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
@@ -28,19 +31,24 @@ import org.springframework.hateoas.ResourceSupport;
  */
 public class StimulusSequence extends ResourceSupport {
 
-    private ArrayList<WordSample> wordSamples;
+    private ArrayList<Stimulus> stimulusList;
     Player player;
 
     @JsonCreator
-    public StimulusSequence(@JsonProperty("player") Player player) {
+    public StimulusSequence(WordSampleRepository sampleRepository, @JsonProperty("player") Player player) {
         this.player = player;
-        wordSamples = new ArrayList<>();
-//        final Word word = new Word("woof", new Consonant("w"), new Vowel("o:", "o", Vowel.Place.back, Vowel.Manner.close, Vowel.Roundness.rounded), new Consonant("f"));
-//        wordSamples.add(new WordSample(new Speaker("cat"), word, "somewherefile"));
-//        wordSamples.add(new WordSample(new Speaker("cow"), word, "greenpastures"));
+        stimulusList = new ArrayList<>();
+        final int returnCount = 10;
+        final Random randomBool = new Random();
+        final IntStream randomInts = new Random().ints(returnCount, 1, (int) sampleRepository.count());
+        final IntStream distinctInts = randomInts.distinct();
+        distinctInts.forEach((int value) -> {
+            System.out.println("distinctInt: " + value);
+            stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), randomBool.nextBoolean()));
+        });
     }
 
-    public ArrayList<WordSample> getWords() {
-        return wordSamples;
+    public ArrayList<Stimulus> getRandomWords() {
+        return stimulusList;
     }
 }

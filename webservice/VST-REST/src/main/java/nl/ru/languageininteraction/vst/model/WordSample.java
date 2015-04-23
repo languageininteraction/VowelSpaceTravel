@@ -48,27 +48,19 @@ public class WordSample {
     public WordSample() {
     }
 
-    public Speaker getSpokenBy() {
-        return spokenBy;
+    public long getId() {
+        return id;
     }
 
-    public void setSpokenBy(Speaker spokenBy) {
-        this.spokenBy = spokenBy;
+    public Speaker getSpokenBy() {
+        return spokenBy;
     }
 
     public Word getWord() {
         return word;
     }
 
-    public void setWord(Word word) {
-        this.word = word;
-    }
-
     public String getSoundFilePath() {
         return soundFilePath;
-    }
-
-    public void setSoundFilePath(String soundFilePath) {
-        this.soundFilePath = soundFilePath;
     }
 }

@@ -26,7 +26,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
  * @since Apr 8, 2015 5:12:19 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "samples", path = "samples")
+@RepositoryRestResource(collectionResourceRel = "wordsamples", path = "wordsamples")
 public interface WordSampleRepository extends PagingAndSortingRepository<WordSample, Long> {
 
     @Override

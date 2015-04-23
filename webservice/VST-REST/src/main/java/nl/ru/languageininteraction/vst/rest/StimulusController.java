@@ -17,21 +17,20 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import nl.ru.languageininteraction.vst.model.Stimulus;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import nl.ru.languageininteraction.vst.model.StimulusSequence;
 import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,31 +48,25 @@ public class StimulusController {
     @Autowired
     WordSampleRepository wordSampleRepository;
 
-    @RequestMapping(value = "/audio/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
-    public HttpEntity<InputStreamResource> getStimulusFile(@PathVariable("id") long id, ModelMap model, HttpServletResponse response) {
+    @RequestMapping(value = "/audio/{sampleId}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    public HttpEntity<InputStreamResource> getStimulusFile(@PathVariable("sampleId") long sampleId) {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(new MediaType("audio", "wav"));
-        final WordSample wordSample = wordSampleRepository.findOne(id);
+        final WordSample wordSample = wordSampleRepository.findOne(sampleId);
         final InputStreamResource inputStreamResource = new InputStreamResource(StimulusController.class.getResourceAsStream(wordSample.getSoundFilePath()));
 //        header.setContentLength(inputStreamResource.contentLength());
         return new HttpEntity<>(inputStreamResource, header);
     }
 
-    @RequestMapping(method = GET)
+    @RequestMapping(value = "/random", method = GET)
     @ResponseBody
-//    @RequestMapping("/next")
-    public HttpEntity<StimulusSequence> getStimulusSequence() {
-        final StimulusSequence stimulusSequence = new StimulusSequence(null);
-        stimulusSequence.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusSequence()).withSelfRel());
-//        stimuli.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getFile()).withSelfRel());
-        return new ResponseEntity<>(stimulusSequence, HttpStatus.OK);
+    public HttpEntity<Resources<Stimulus>> getStimulusSequence() {
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, null);
+        final ArrayList<Stimulus> words = stimulusSequence.getRandomWords();
+        for (Stimulus stimulus : words) {
+            stimulus.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusFile(stimulus.getSampleId())).withRel("audio"));
+        }
+        Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
+        return new HttpEntity<>(wrapped);
     }
-//    @RequestMapping(method = GET)
-//    @ResponseBody
-////    @RequestMapping("/next")
-//    public HttpEntity<Stimuli> getStimulusSequence(@RequestParam(value = "player", required = true) Player player) {
-//        final StimulusSequence stimuli = new StimulusSequence(player);
-//        stimuli.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusSequence(player)).withSelfRel());
-//        return new ResponseEntity<>(stimuli, HttpStatus.OK);
-//    }
 }
