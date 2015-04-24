@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package nl.ru.languageininteraction.vst.model;
 
 import javax.persistence.ManyToOne;
@@ -26,12 +25,36 @@ import javax.persistence.ManyToOne;
  */
 public class Confidence {
 // this is the confidence that the application has in the users ability to distinguish a given vowel pair
+
     @ManyToOne
     private Vowel targetVowel;
     @ManyToOne
     private Vowel standardVowel;
-    
-    
     float value; // 0 to 1
-    
+
+    public Confidence(Vowel targetVowel, Vowel standardVowel, float value) {
+        this.targetVowel = targetVowel;
+        this.standardVowel = standardVowel;
+        this.value = value;
+    }
+
+    public Vowel getTargetVowel() {
+        return targetVowel;
+    }
+
+    public Vowel getStandardVowel() {
+        return standardVowel;
+    }
+
+    public long getTargetId() {
+        return targetVowel.getId();
+    }
+
+    public long getStandardId() {
+        return standardVowel.getId();
+    }
+
+    public float getValue() {
+        return value;
+    }
 }
