@@ -62,6 +62,14 @@ class LoginViewController: UIViewController {
         createAccountLink.text = "Create account"
         self.view.addSubview(createAccountLink)
         
+        //Create the VSTServer object
+        var vstServer : VSTServer = VSTServer(url: kWebserviceURL)
+        
+        vstServer.tryLoggingIn("wessel", password: "hunter2")
+
+        vstServer.getAllVowels()
+        vstServer.createNewUser("Wessel")
+        
     }
     
     override func didReceiveMemoryWarning()
