@@ -17,39 +17,21 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
-import nl.ru.languageininteraction.vst.model.WordSample;
+import java.util.List;
+import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.Settings;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
- * @since Apr 8, 2015 5:12:19 PM (creation date)
+ * @since Apr 2, 2015 5:41:33 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "wordsamples", path = "wordsamples")
-public interface WordSampleRepository extends PagingAndSortingRepository<WordSample, Long> {
+@RepositoryRestResource(collectionResourceRel = "settings", path = "settings")
+public interface SettingsRepository extends PagingAndSortingRepository<Settings, Long> {
 
-    @Override
-    @RestResource(exported = false)
-    public <S extends WordSample> Iterable<S> save(Iterable<S> entities);
+    List<Settings> findByPlayer(@Param("player") Player player);
 
-    @Override
-    @RestResource(exported = false)
-    public void deleteAll();
-
-    @Override
-    @RestResource(exported = false)
-    public void delete(Iterable<? extends WordSample> entities);
-
-    @Override
-    @RestResource(exported = false)
-    public <S extends WordSample> S save(S entity);
-
-    @Override
-    @RestResource(exported = false)
-    public void delete(WordSample entity);
-
-    @Override
-    @RestResource(exported = false)
-    public void delete(Long id);
+    List<Settings> findAll();
 }

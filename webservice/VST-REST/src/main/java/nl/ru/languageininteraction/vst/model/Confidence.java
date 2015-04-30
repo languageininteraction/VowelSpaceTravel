@@ -17,50 +17,44 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * @since Mar 20, 2015 5:00:43 PM (creation date)
+ * @since Apr 23, 2015 4:11:22 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@Entity
-public class WordSample {
+public class Confidence {
+// this is the confidence that the application has in the users ability to distinguish a given vowel pair
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
     @ManyToOne
-    private Speaker spokenBy;
+    private Vowel targetVowel;
     @ManyToOne
-    Word word;
-    private String soundFilePath;
+    private Vowel standardVowel;
+    float value; // 0 to 1
 
-    public WordSample(Speaker spokenBy, Word word, String soundFilePath) {
-        this.spokenBy = spokenBy;
-        this.word = word;
-        this.soundFilePath = soundFilePath;
+    public Confidence(Vowel targetVowel, Vowel standardVowel, float value) {
+        this.targetVowel = targetVowel;
+        this.standardVowel = standardVowel;
+        this.value = value;
     }
 
-    public WordSample() {
+    public Vowel getTargetVowel() {
+        return targetVowel;
     }
 
-    public long getId() {
-        return id;
+    public Vowel getStandardVowel() {
+        return standardVowel;
     }
 
-    public Speaker getSpokenBy() {
-        return spokenBy;
+    public long getTargetId() {
+        return targetVowel.getId();
     }
 
-    public Word getWord() {
-        return word;
+    public long getStandardId() {
+        return standardVowel.getId();
     }
 
-    public String getSoundFilePath() {
-        return soundFilePath;
+    public float getValue() {
+        return value;
     }
 }

@@ -15,18 +15,135 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <title>Vowel Space Travel</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <a href="rest/users/count">count</a><br>
-        <a href="rest/users/create">create</a><br>
-        <a href="rest/users/list">list</a><br>
-        <a href="rest/users/details">details</a><br>
+        <a href="consonants">consonants</a><br>
+        <a href="settings">settings</a><br>
+        <a href="speakers">speakers</a><br>
+        <a href="words">words</a><br>
+        <a href="wordsamples">word samples</a><br>
+        <a href="responses">responses</a><br>
         <a href="players">players</a><br>
         <a href="vowels">vowels</a><br>
+        <a href="confidence">confidence</a><br>
+        <br>
+        <br>
+        true_positive<input type="checkbox" id="true_positive" checked><br>
+        false_positive<input type="checkbox" id="false_positive" checked><br>
+        true_negative<input type="checkbox" id="true_negative" checked><br>
+        false_negative<input type="checkbox" id="false_negative" checked><br>
+        responseTimeMs<input type="number" id="responseTimeMs" value="1"><br>
+        player<input id="player" value="http://localhost:8080/players/1"><br>
+        standardVowel<input id="standardVowel" value="http://localhost:8080/vowels/4"><br>
+        targetVowel<input id="targetVowel" value="http://localhost:8080/vowels/4"><br>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>        
+        <script>
+            $(document).ready(function () {
+                $("#addresponse").click(function () {
+                    $.ajax({
+                        url: "responses",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({
+                            "true_positive": $("#true_positive").prop('checked'),
+                            "false_positive": $("#false_positive").prop('checked'),
+                            "true_negative": $("#true_negative").prop('checked'),
+                            "false_negative": $("#false_negative").prop('checked'),
+                            "responseTimeMs": $("#responseTimeMs").prop('value'),
+                            "player": $("#player").prop('value'),
+                            "standardVowel": $("#standardVowel").prop('value'),
+                            "targetVowel": $("#targetVowel").prop('value'),
+                        }),
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                        }
+                    })
+                });
+                $("#getsamples").click(function () {
+                    $.ajax({
+                        url: "http://localhost:8080/stimulus/random",
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                            $("#audioArea").empty();
+                            $.each(data._embedded, function () {
+                                $.each(this, function (index, stimulus) {
+                                    var audioTag = document.createElement("AUDIO");
+                                    audioTag.controls = true;
+                                    var sourceTag = document.createElement("SOURCE");
+                                    sourceTag.src = stimulus._links.audio.href;
+                                    sourceTag.type = "audio/wav";
+                                    audioTag.appendChild(sourceTag);
+                                    $("#audioArea").append(audioTag);
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.wordString));
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.speakerLabel));
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.isCorrect));
+                                    $("#audioArea").append(document.createElement("BR"));
+                                });
+                            });
+                        }
+                    })
+                });
+                $("#getconfidence").click(function () {
+                    $.ajax({
+                        url: "http://localhost:8080/confidence/random",
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                            $("#confidenceDataPoints").empty();
+                            var dataLength = data._embedded.confidences.length;
+                            var graphWidth = 400; //$("#graphRect").width;
+                            var graphHeight = 400; //$("#graphRect").width;
+                            $.each(data._embedded, function () {
+                                $.each(this, function (index, confidence) {
+                                    var dataPointTag = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                                    dataPointTag.setAttribute("cx", graphWidth / dataLength * index);
+                                    dataPointTag.setAttribute("cy", confidence.value * graphHeight);
+                                    dataPointTag.setAttribute("r", "2");
+                                    dataPointTag.setAttribute("stroke", "black");
+                                    dataPointTag.setAttribute("stroke-width", "1");
+                                    dataPointTag.setAttribute("fill", "grey");
+                                    $("#confidenceDataPoints").append(dataPointTag);
+                                });
+                            });
+                        }
+                    })
+                });
+            });</script>
+        <br>
+        <br>
+        <button id="addresponse">add result</button> 
+        <br>
+        <br>
+        <button id="getsamples">get samples</button>   
+        <br>
+        <div id="audioArea"></div>
+        <br>        
+        <button id="getconfidence">get confidence</button><br> 
+        <svg id="graphSvg" height="420" width="420">
+        <rect id="graphRect" x="10" y="10" width="400" height="400" style="fill:rgb(200,200,200);stroke-width:1;stroke:rgb(0,0,0)" />
+        <g transform="translate(10, 10)" id="confidenceDataPoints">
+        <circle cx="50" cy="60" r="10" stroke="black" stroke-width="1" fill="grey" />
+        </g>
+        </svg>
     </body>
 </html>

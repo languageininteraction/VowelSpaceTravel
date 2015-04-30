@@ -42,16 +42,19 @@ public class Player {
     private String email;
     @JsonIgnore
     private int token; // user password that has been hashed in the mobile app
-    
+
     @OneToOne
     private Settings settings;
 
     public Player() {
     }
 
-    public Player(String email, int token) {
+    public Player(String firstName, String lastName, String email, int token, Settings settings) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.token = token;
+        this.settings = settings;
     }
 
     public String getFirstName() {
@@ -91,5 +94,13 @@ public class Player {
 
     public void addResult(StimulusResponse result) {
         stimulusResults.add(result);
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public List<StimulusResponse> getStimulusResults() {
+        return stimulusResults;
     }
 }
