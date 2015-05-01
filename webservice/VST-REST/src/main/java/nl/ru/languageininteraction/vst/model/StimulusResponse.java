@@ -44,14 +44,16 @@ public class StimulusResponse { //extends ResourceSupport
     @ManyToOne
     private Vowel standardVowel;
 
-    enum ResponseRating {
+    public enum ResponseRating {
 
         true_positive,
         false_positive,
         true_negative,
         false_negative
     }
-    private ResponseRating responseRating;
+//    private ResponseRating responseRating;
+    boolean isCorrect;
+    boolean userResponse;
     private long responseTimeMs;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date responseDate;
@@ -62,17 +64,6 @@ public class StimulusResponse { //extends ResourceSupport
         this.standardVowel = standardVowel;
         this.responseTimeMs = responseTimeMs;
         this.responseDate = new Date();
-        if (isCorrect) {
-            if (userResponse) {
-                responseRating = ResponseRating.true_positive;
-            } else {
-                responseRating = ResponseRating.false_negative;
-            }
-        } else if (userResponse) {
-            responseRating = ResponseRating.false_positive;
-        } else {
-            responseRating = ResponseRating.true_negative;
-        }
     }
 
     public StimulusResponse() {
@@ -106,7 +97,27 @@ public class StimulusResponse { //extends ResourceSupport
         return standardVowel;
     }
 
+    public boolean isIsCorrect() {
+        return isCorrect;
+    }
+
+    public boolean isUserResponse() {
+        return userResponse;
+    }
+
     public ResponseRating getResponseRating() {
+        ResponseRating responseRating;
+        if (isCorrect) {
+            if (userResponse) {
+                responseRating = ResponseRating.true_positive;
+            } else {
+                responseRating = ResponseRating.false_negative;
+            }
+        } else if (userResponse) {
+            responseRating = ResponseRating.false_positive;
+        } else {
+            responseRating = ResponseRating.true_negative;
+        }
         return responseRating;
     }
 

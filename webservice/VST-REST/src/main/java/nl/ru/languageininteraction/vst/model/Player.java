@@ -19,6 +19,7 @@ package nl.ru.languageininteraction.vst.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,6 +40,7 @@ public class Player {
 
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
     @JsonIgnore
     private int token; // user password that has been hashed in the mobile app

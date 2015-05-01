@@ -31,6 +31,10 @@ import org.springframework.hateoas.ResourceSupport;
 @Entity
 public class Stimulus extends ResourceSupport {
 
+    public enum Relevance {
+
+        isTarget, isStandard, isIrelevant
+    };
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -38,13 +42,16 @@ public class Stimulus extends ResourceSupport {
     private Player player;
     @ManyToOne
     private WordSample wordSample;
-    private boolean isCorrect;
+    @ManyToOne
+    private Vowel targetVowel;
+    @ManyToOne
+    private Vowel standardVowel;
+    private Relevance relevance;
     private Boolean playerResponse = null;
 
-    public Stimulus(Player player, WordSample wordSample, boolean isCorrect) {
+    public Stimulus(Player player, WordSample wordSample, Relevance relevance) {
         this.player = player;
         this.wordSample = wordSample;
-        this.isCorrect = isCorrect;
     }
 
     public Stimulus() {
@@ -74,9 +81,9 @@ public class Stimulus extends ResourceSupport {
         }
     }
 
-    public boolean isIsCorrect() {
-        return isCorrect;
-    }
+    public Relevance getRelevance() {
+        return relevance;
+    }  
 
     public Boolean isPlayerResponse() {
         return playerResponse;
