@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		495359281AE91A88009E870A /* VSTServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495359271AE91A88009E870A /* VSTServer.swift */; };
 		4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
-		4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* ProgressViewController.swift */; };
+		4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */; };
 		4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49D1AD7C9CE000437CF /* TempObjects.swift */; };
 		4996A4A01AD7E480000437CF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49F1AD7E480000437CF /* Constants.swift */; };
 		4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */; };
@@ -25,6 +25,8 @@
 		49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653E01ACEA4D100CA2803 /* TaskViewController.swift */; };
 		49C653E31ACEA68A00CA2803 /* cello.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49C653E21ACEA68900CA2803 /* cello.wav */; };
 		49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */; };
+		49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153461AFB8FE0000101F6 /* TrialViewController.swift */; };
+		49F153491AFB93BE000101F6 /* Vowel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153481AFB93BE000101F6 /* Vowel.swift */; };
 		49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1F5C51AD8097000457411 /* ResultViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +43,7 @@
 /* Begin PBXFileReference section */
 		495359271AE91A88009E870A /* VSTServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSTServer.swift; sourceTree = "<group>"; };
 		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		4996A49B1AD7BA43000437CF /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionViewController.swift; sourceTree = "<group>"; };
 		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
 		4996A49F1AD7E480000437CF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassControlBackAndForth.swift; sourceTree = "<group>"; };
@@ -60,6 +62,8 @@
 		49C653E01ACEA4D100CA2803 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		49C653E21ACEA68900CA2803 /* cello.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cello.wav; sourceTree = "<group>"; };
 		49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadViewController.swift; sourceTree = "<group>"; };
+		49F153461AFB8FE0000101F6 /* TrialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrialViewController.swift; sourceTree = "<group>"; };
+		49F153481AFB93BE000101F6 /* Vowel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vowel.swift; sourceTree = "<group>"; };
 		49F1F5C51AD8097000457411 /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				495359271AE91A88009E870A /* VSTServer.swift */,
+				49F153481AFB93BE000101F6 /* Vowel.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -163,11 +168,12 @@
 			children = (
 				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
 				4996A4991AD7B4D0000437CF /* LoginViewController.swift */,
-				4996A49B1AD7BA43000437CF /* ProgressViewController.swift */,
+				4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */,
+				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
+				49F153461AFB8FE0000101F6 /* TrialViewController.swift */,
 				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
 				49F1F5C51AD8097000457411 /* ResultViewController.swift */,
-				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
 				49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */,
 			);
 			name = ViewControllers;
@@ -278,10 +284,12 @@
 				4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */,
 				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
 				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
-				4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */,
+				49F153491AFB93BE000101F6 /* Vowel.swift in Sources */,
+				4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */,
 				4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */,
 				4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
+				49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */,
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
 				49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */,
