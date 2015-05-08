@@ -13,6 +13,7 @@
 		4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49D1AD7C9CE000437CF /* TempObjects.swift */; };
 		4996A4A01AD7E480000437CF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49F1AD7E480000437CF /* Constants.swift */; };
 		4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */; };
+		499FAB341AFCB3CC0020A90C /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499FAB331AFCB3CC0020A90C /* Game.swift */; };
 		49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */; };
 		49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */; };
 		49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653B81ACE9CB400CA2803 /* AppDelegate.swift */; };
@@ -47,6 +48,7 @@
 		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
 		4996A49F1AD7E480000437CF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassControlBackAndForth.swift; sourceTree = "<group>"; };
+		499FAB331AFCB3CC0020A90C /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		49C653B31ACE9CB300CA2803 /* Vowel Space Travel iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vowel Space Travel iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +92,7 @@
 			children = (
 				495359271AE91A88009E870A /* VSTServer.swift */,
 				49F153481AFB93BE000101F6 /* Vowel.swift */,
+				499FAB331AFCB3CC0020A90C /* Game.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
 				49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */,
 				495359281AE91A88009E870A /* VSTServer.swift in Sources */,
+				499FAB341AFCB3CC0020A90C /* Game.swift in Sources */,
 				4996A4A01AD7E480000437CF /* Constants.swift in Sources */,
 				49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */,
 				49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */,
