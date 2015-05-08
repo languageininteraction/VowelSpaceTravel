@@ -87,7 +87,7 @@ class LoginViewController: UIViewController {
     func login(#username : String,password : String)
     {
         println("Loggin in");
-        let progressViewController = ProgressViewController();
+        let progressViewController = VowelSelectionViewController();
         self.presentViewController(progressViewController, animated: false, completion: nil)
     }
     
