@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4947A75C1B0335CE00AF5A96 /* Stimulus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75B1B0335CE00AF5A96 /* Stimulus.swift */; };
+		4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */; };
 		495359281AE91A88009E870A /* VSTServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495359271AE91A88009E870A /* VSTServer.swift */; };
 		4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
 		4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4947A75B1B0335CE00AF5A96 /* Stimulus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stimulus.swift; sourceTree = "<group>"; };
+		4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionTableViewController.swift; sourceTree = "<group>"; };
 		495359271AE91A88009E870A /* VSTServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSTServer.swift; sourceTree = "<group>"; };
 		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionViewController.swift; sourceTree = "<group>"; };
@@ -93,6 +97,7 @@
 				495359271AE91A88009E870A /* VSTServer.swift */,
 				49F153481AFB93BE000101F6 /* Vowel.swift */,
 				499FAB331AFCB3CC0020A90C /* Game.swift */,
+				4947A75B1B0335CE00AF5A96 /* Stimulus.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -173,6 +178,7 @@
 				4996A4991AD7B4D0000437CF /* LoginViewController.swift */,
 				4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */,
 				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
+				4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
 				49F153461AFB8FE0000101F6 /* TrialViewController.swift */,
 				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
@@ -287,6 +293,7 @@
 				4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */,
 				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
 				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
+				4947A75C1B0335CE00AF5A96 /* Stimulus.swift in Sources */,
 				49F153491AFB93BE000101F6 /* Vowel.swift in Sources */,
 				4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */,
 				4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */,
@@ -295,6 +302,7 @@
 				49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */,
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
+				4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */,
 				49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */,
 				495359281AE91A88009E870A /* VSTServer.swift in Sources */,
 				499FAB341AFCB3CC0020A90C /* Game.swift in Sources */,

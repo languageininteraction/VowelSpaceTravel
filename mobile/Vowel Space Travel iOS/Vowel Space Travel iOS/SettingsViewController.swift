@@ -121,6 +121,40 @@ class SettingsViewController: SubViewController {
         numberOfRoundsLabel.text = "Number of rounds"
         self.view.addSubview(numberOfRoundsLabel)
         
+        //Create the area to see and change the selected vowels
+        var chosenVowelsLabelDistanceFromTop : CGFloat = 0
+        var chosenVowelsLabelDistanceFromLeft : CGFloat = 20
+        var chosenVowelsLabelWidth : CGFloat = 150
+        
+        var chosenVowelsLabel : UILabel = UILabel();
+        chosenVowelsLabel.frame = CGRectMake(chosenVowelsLabelDistanceFromLeft,chosenVowelsLabelDistanceFromTop, chosenVowelsLabelWidth,labelHeight)
+        chosenVowelsLabel.textAlignment = NSTextAlignment.Center
+        chosenVowelsLabel.text = "Chosen vowels"
+        self.view.addSubview(chosenVowelsLabel)
+        
+        var changeVowelButton = TempStyledButton(frame: CGRect(x: chosenVowelsLabelDistanceFromLeft,y: chosenVowelsLabelDistanceFromTop+60,width: chosenVowelsLabelWidth,height: 20))
+        changeVowelButton.enabled = true
+        changeVowelButton.addTarget(self, action: "changeVowelButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(changeVowelButton)
+        
+        var vowelIndicatorText : String
+        
+        if self.currentGame!.selectedVowelsToCompareWith.count > 1
+        {
+            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs multiple"
+        }
+        else
+        {
+            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs \(self.currentGame!.selectedVowelsToCompareWith[0].exampleWord)"
+        }
+
+        var vowelIndicatorLabel : UILabel = UILabel();
+        vowelIndicatorLabel.frame = CGRectMake(chosenVowelsLabelDistanceFromLeft,chosenVowelsLabelDistanceFromTop+20, chosenVowelsLabelWidth,labelHeight)
+        vowelIndicatorLabel.textAlignment = NSTextAlignment.Center
+        vowelIndicatorLabel.text = vowelIndicatorText
+        vowelIndicatorLabel.textColor = UIColor.whiteColor()
+        self.view.addSubview(vowelIndicatorLabel)
+        
         //Create the buttons
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
@@ -146,6 +180,14 @@ class SettingsViewController: SubViewController {
         self.updateNumberOfRounds()
     }
     
+    func presentVowelChangePopover()
+    {
+        var vowelSelectionTableViewController = VowelSelectionTableViewController()
+        vowelSelectionTableViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+        var popoverController = UIPopoverController(contentViewController: vowelSelectionTableViewController)
+        popoverController.presentPopoverFromRect(CGRect(x: 100,y: 100,width: 300,height: 300), inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+    }
+    
     func anotherSuggestionButtonPressed()
     {
         
@@ -160,5 +202,10 @@ class SettingsViewController: SubViewController {
     {
         self.currentGame!.nrOfRounds = Int(self.numberOfRoundsStepper.value)
         self.numberOfRoundsIndicator.text = "\(self.currentGame!.nrOfRounds)"
+    }
+    
+    func changeVowelButtonPressed()
+    {
+        self.presentVowelChangePopover()
     }
 }
