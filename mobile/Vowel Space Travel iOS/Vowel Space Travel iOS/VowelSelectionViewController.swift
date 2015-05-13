@@ -31,7 +31,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     var vowelButtons : [String : UIButton]?
     
     var buttonsForSecondVowelSelectionStage = [UIButton]()
-    
+    var readyButton = UIButton()
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -73,10 +74,12 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         //Create the static buttons
         var distanceFromRight : CGFloat = 50
         
-        let readyButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)-150,buttonWidth,buttonHeight))
-        readyButton.setTitle("Ready", forState: UIControlState.Normal)
-        readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonsForSecondVowelSelectionStage.append(readyButton)
+        self.readyButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)-150,buttonWidth,buttonHeight))
+        self.readyButton.setTitle("Ready", forState: UIControlState.Normal)
+        self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.readyButton.enabled = false
+        self.readyButton.hidden = true
+        self.view.addSubview(readyButton)
         
         let selectAllButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)-50,buttonWidth,buttonHeight))
         selectAllButton.setTitle("Select all", forState: UIControlState.Normal)
@@ -173,6 +176,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         //Make sure the task description is not yet visible
         self.updateTaskAndTaskDescriptionLabel()
+        self.updateReadyButton()
         self.taskDescription.hidden = true
         
         //Reset all the views of all other settings by simply recreating the view controller
@@ -216,7 +220,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             
                 if !sender.selected
                 {
-                    self.currentGame.selectedVowelsToCompareWith.append(vowelCorrespondingToButtonPressed!)
+                self.currentGame.selectedVowelsToCompareWith.append(vowelCorrespondingToButtonPressed!)
                     sender.selected = true
                 }
                 else
@@ -227,10 +231,12 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                 }
             
                 self.updateTaskAndTaskDescriptionLabel();
+                self.updateReadyButton()
             default:
                 println("Warning! You got in a gamestate you can't be in right now!")
             
         }
+
     }
     
     func readyButtonPressed()
@@ -261,6 +267,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         }
         
         self.updateTaskAndTaskDescriptionLabel()
+        self.updateReadyButton()
     }
 
     func deselectAllButtonPressed()
@@ -278,6 +285,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.currentGame.selectedVowelsToCompareWith = []
         
         self.updateTaskAndTaskDescriptionLabel()
+        self.updateReadyButton()
     }
     
     func infoButtonPressed()
@@ -324,6 +332,20 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
     }
     
+    func updateReadyButton()
+    {
+        if self.currentGame.selectedVowelsToCompareWith.count > 0
+        {
+            self.readyButton.hidden = false
+            self.readyButton.enabled = true
+        }
+        else
+        {
+            self.readyButton.hidden = true
+            self.readyButton.enabled = false
+        }
+    }
+    
     func goToSettingsView()
     {
         self.currentGame.stage = GameStage.SettingOtherSettings
@@ -344,11 +366,21 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     func goToTaskView()
     {
         self.presentViewController(self.taskViewController!, animated: false, completion: nil)
+        
+        var stimulus1 : Stimulus = Stimulus(soundFileName: "cello",requiresResponse: false)
+        var stimulus2 : Stimulus = Stimulus(soundFileName: "cello",requiresResponse: true)
+        var stimulus3 : Stimulus = Stimulus(soundFileName: "cello",requiresResponse: false)
+
+        self.taskViewController!.stimuli = [stimulus1,stimulus2,stimulus3]
+        self.taskViewController!.startTask()
     }
     
-    func goToResultView()
+    func goToResultView(numberOfCorrectAnswers : Int,totalNumberOfAnswers : Int)
     {
         self.resultViewController!.currentGame = self.currentGame
+        self.resultViewController!.numberOfCorrectAnswers = numberOfCorrectAnswers
+        self.resultViewController!.totalNumberOfAnswers = totalNumberOfAnswers
+        
         self.presentViewController(self.resultViewController!, animated: false, completion: nil)
     }
     
@@ -373,8 +405,15 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                 self.currentGame.stage = GameStage.Playing
                 self.goToTaskView()
             case self.taskViewController!:
+                
+                //Show the result of the task
                 self.currentGame.stage = GameStage.ShowingResult
-                self.goToResultView()
+                self.goToResultView(self.taskViewController!.countNumberOfCorrectResponses(),totalNumberOfAnswers: self.taskViewController!.correctResponses.count)
+            
+                //Reset the task view for later use
+                self.taskViewController = TaskViewController()
+                self.taskViewController!.superController = self
+            
             case self.resultViewController!:
                 if self.currentGame.stage == GameStage.Finished
                 {
