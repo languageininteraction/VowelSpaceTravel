@@ -16,6 +16,10 @@ class ResultViewController: SubViewController {
     var screenHeight: CGFloat?
     var currentGame : Game?
     
+    //Results
+    var numberOfCorrectAnswers : Int = 0
+    var totalNumberOfAnswers : Int = 0
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -36,7 +40,7 @@ class ResultViewController: SubViewController {
         label.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
         label.textAlignment = NSTextAlignment.Center
         label.font = UIFont(name: "Helvetica",size: 30)
-        label.text = "Results: 9/10 correct"
+        label.text = "Results: \(self.numberOfCorrectAnswers)/\(self.totalNumberOfAnswers) correct"
         
         self.view.addSubview(label)
         
