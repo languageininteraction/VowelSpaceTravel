@@ -29,6 +29,10 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     var availableVowels : [String : VowelDefinition]?
     var vowelButtons : [String : UIButton]?
+
+    var suggestedInitialVowel : VowelDefinition?
+    var suggestedComparingVowel : VowelDefinition?
+    var suggestionView : SuggestionView?
     
     var buttonsForSecondVowelSelectionStage = [UIButton]()
     var readyButton = UIButton()
@@ -44,11 +48,18 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         //Make the background white
         self.view.backgroundColor = UIColor.whiteColor()
         
+        //Temporarily set the suggested vowel
+        availableVowels = self.loadAvailableVowels()
+        self.suggestedInitialVowel = self.availableVowels!["pet"]
+        self.suggestedComparingVowel = self.availableVowels!["pit"]
+        
+        //Prepare the suggestion view
+        self.suggestionView = SuggestionView(frame: CGRect(x: 0,y: 0,width: 200,height: 40), text: "Why not this one?")
+        self.view.addSubview(self.suggestionView!)
+        
         //Show the vowelbuttons
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
-
-        availableVowels = self.loadAvailableVowels()
         
         vowelButtons = [String: UIButton]()
         var currentButton : UIButton
@@ -68,8 +79,14 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             
             self.view.addSubview(currentButton)
             vowelButtons![vowel.exampleWord] = currentButton
+            
+            //If this is the suggested vowel, move the suggestion view to here
+            if suggestedInitialVowel == vowel
+            {
+                self.moveSuggestionViewToVowelButton(currentButton)
+            }
+            
         }
-        
         
         //Create the static buttons
         var distanceFromRight : CGFloat = 50
@@ -290,7 +307,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     func infoButtonPressed()
     {
-        
+        self.goToInfoView()
     }
         
     func goToSelectingVowelsToCompareWithStage()
@@ -303,6 +320,10 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             button.enabled = true
             button.hidden = false
         }
+        
+        //Move the suggestion view
+        var suggestedButton : UIButton = self.vowelButtons![self.suggestedComparingVowel!.exampleWord]!
+        self.moveSuggestionViewToVowelButton(suggestedButton)
         
         //Make title change
         self.instructionTitle.text = "Select one or more vowels to compare with"
@@ -346,10 +367,16 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         }
     }
     
+    func moveSuggestionViewToVowelButton(vowelButton : UIButton)
+    {
+        self.suggestionView!.frame = CGRect(x: vowelButton.frame.minX+20,y: vowelButton.frame.minY-15, width: self.suggestionView!.frame.width,height: self.suggestionView!.frame.height)
+    }
+    
     func goToSettingsView()
     {
         self.currentGame.stage = GameStage.SettingOtherSettings
         self.settingsViewController!.currentGame = self.currentGame
+        self.settingsViewController!.availableVowels = self.availableVowels
         self.presentViewController(self.settingsViewController!, animated: false, completion: nil)
     }
     
@@ -367,9 +394,9 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     {
         self.presentViewController(self.taskViewController!, animated: false, completion: nil)
         
-        var stimulus1 : Stimulus = Stimulus(soundFileName: "cello",requiresResponse: false)
-        var stimulus2 : Stimulus = Stimulus(soundFileName: "cello",requiresResponse: true)
-        var stimulus3 : Stimulus = Stimulus(soundFileName: "cello",requiresResponse: false)
+        var stimulus1 : Stimulus = Stimulus(soundFileName: "bag_sp_1",requiresResponse: false)
+        var stimulus2 : Stimulus = Stimulus(soundFileName: "babe_sp_1",requiresResponse: true)
+        var stimulus3 : Stimulus = Stimulus(soundFileName: "bag_sp_1",requiresResponse: false)
 
         self.taskViewController!.stimuli = [stimulus1,stimulus2,stimulus3]
         self.taskViewController!.startTask()
