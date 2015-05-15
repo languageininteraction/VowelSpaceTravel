@@ -19,15 +19,20 @@ import Foundation
 import Foundation
 import UIKit
 
-class SettingsViewController: SubViewController {
+class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
     
     var currentGame : Game?
+    var availableVowels : [String : VowelDefinition]?
     
     var singleOrMultipleSpeakerSegmentedControl = UISegmentedControl()
     var sameOrDifferentStartingSoundSegmentedControl = UISegmentedControl()
+    
+    var vowelIndicatorLabel = UILabel()
+    var vowelSelectionTableViewController : VowelSelectionTableViewController?
+    var popoverController : UIPopoverController?
     
     var numberOfRoundsStepper = UIStepper()
     var numberOfRoundsIndicator = UILabel()
@@ -134,26 +139,16 @@ class SettingsViewController: SubViewController {
         
         var changeVowelButton = TempStyledButton(frame: CGRect(x: chosenVowelsLabelDistanceFromLeft,y: chosenVowelsLabelDistanceFromTop+60,width: chosenVowelsLabelWidth,height: 20))
         changeVowelButton.enabled = true
-        changeVowelButton.addTarget(self, action: "changeVowelButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        changeVowelButton.addTarget(self, action: "changeVowelButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(changeVowelButton)
         
-        var vowelIndicatorText : String
+        self.vowelIndicatorLabel = UILabel();
+        self.vowelIndicatorLabel.frame = CGRectMake(chosenVowelsLabelDistanceFromLeft,chosenVowelsLabelDistanceFromTop+20, chosenVowelsLabelWidth,labelHeight)
+        self.vowelIndicatorLabel.textAlignment = NSTextAlignment.Center
+        self.vowelIndicatorLabel.textColor = UIColor.whiteColor()
         
-        if self.currentGame!.selectedVowelsToCompareWith.count > 1
-        {
-            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs multiple"
-        }
-        else
-        {
-            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs \(self.currentGame!.selectedVowelsToCompareWith[0].exampleWord)"
-        }
-
-        var vowelIndicatorLabel : UILabel = UILabel();
-        vowelIndicatorLabel.frame = CGRectMake(chosenVowelsLabelDistanceFromLeft,chosenVowelsLabelDistanceFromTop+20, chosenVowelsLabelWidth,labelHeight)
-        vowelIndicatorLabel.textAlignment = NSTextAlignment.Center
-        vowelIndicatorLabel.text = vowelIndicatorText
-        vowelIndicatorLabel.textColor = UIColor.whiteColor()
-        self.view.addSubview(vowelIndicatorLabel)
+        self.updateVowelIndicatorLabel()
+        self.view.addSubview(self.vowelIndicatorLabel)
         
         //Create the buttons
         let buttonWidth : CGFloat = 200
@@ -180,12 +175,56 @@ class SettingsViewController: SubViewController {
         self.updateNumberOfRounds()
     }
     
-    func presentVowelChangePopover()
+    func presentVowelChangePopoverFromRect(rect: CGRect)
     {
-        var vowelSelectionTableViewController = VowelSelectionTableViewController()
-        vowelSelectionTableViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
-        var popoverController = UIPopoverController(contentViewController: vowelSelectionTableViewController)
-        popoverController.presentPopoverFromRect(CGRect(x: 100,y: 100,width: 300,height: 300), inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        self.vowelSelectionTableViewController = VowelSelectionTableViewController()
+        self.vowelSelectionTableViewController!.modalPresentationStyle = UIModalPresentationStyle.Popover
+        self.vowelSelectionTableViewController!.vowelExampleWords = Array(self.availableVowels!.keys)
+        
+        for selectedVowelToCompareWith in self.currentGame!.selectedVowelsToCompareWith
+        {
+            self.vowelSelectionTableViewController!.selectedWords.append(selectedVowelToCompareWith.exampleWord)
+        }
+            
+        self.popoverController = UIPopoverController(contentViewController: vowelSelectionTableViewController!)
+        self.popoverController!.delegate = self
+        self.popoverController!.presentPopoverFromRect(rect, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        
+    }
+    
+
+    func popoverControllerDidDismissPopover(popoverController: UIPopoverController)
+    {
+        //Rebuild the list of selected vowels
+        self.currentGame!.selectedVowelsToCompareWith = []
+        
+        var contentViewController = popoverController.contentViewController as VowelSelectionTableViewController
+        
+        var exampleWord : String
+        
+        for indexPath in contentViewController.tableView.indexPathsForSelectedRows()!
+        {
+            exampleWord = contentViewController.vowelExampleWords[indexPath.row]
+            self.currentGame!.selectedVowelsToCompareWith.append(self.availableVowels![exampleWord]!)
+        }
+        
+        updateVowelIndicatorLabel()
+    }
+    
+    func updateVowelIndicatorLabel()
+    {
+        var vowelIndicatorText : String
+        
+        if self.currentGame!.selectedVowelsToCompareWith.count > 1
+        {
+            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs multiple"
+        }
+        else
+        {
+            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs \(self.currentGame!.selectedVowelsToCompareWith[0].exampleWord)"
+        }
+
+        self.vowelIndicatorLabel.text = vowelIndicatorText
     }
     
     func anotherSuggestionButtonPressed()
@@ -204,8 +243,8 @@ class SettingsViewController: SubViewController {
         self.numberOfRoundsIndicator.text = "\(self.currentGame!.nrOfRounds)"
     }
     
-    func changeVowelButtonPressed()
+    func changeVowelButtonPressed(sender : UIButton)
     {
-        self.presentVowelChangePopover()
+        self.presentVowelChangePopoverFromRect(sender.frame)
     }
 }
