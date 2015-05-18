@@ -63,7 +63,7 @@ public class AudioSamplesIngester {
         System.out.println("processAudioResources");
         final Resource[] stimuliResources = resourceResolver.getResources("classpath:" + STIMULI_PATH + "*.wav");
         for (Resource currentStimulus : stimuliResources) {
-            final String stimulusFileName = currentStimulus.getFile().getName();
+            final String stimulusFileName = currentStimulus.getFilename();
             final String[] splitStimulusName = stimulusFileName.split("_", 2);
             if (splitStimulusName.length > 1) {
                 System.out.println(stimulusFileName);
