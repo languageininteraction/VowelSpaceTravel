@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Confidence;
-import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
@@ -42,9 +40,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ConfidenceController {
 
     @Autowired
+    StimulusResponseRepository responseRepository;
+    @Autowired
     private VowelRepository vowelRepository;
 
-    @RequestMapping(value = "/random", method = GET)
+    @RequestMapping(value = "/values", method = GET)
     @ResponseBody
     public HttpEntity<Resources<Confidence>> getConfidenceSequence() {
 //        final ConfidenceSequence confidenceSequence = new ConfidenceSequence(wordSampleRepository, null);
@@ -53,7 +53,7 @@ public class ConfidenceController {
         final Random random = new Random();
         for (Vowel targetVowel : allVowels) {
             for (Vowel standarVowel : allVowels) {
-                confidenceList.add(new Confidence(targetVowel, standarVowel, random.nextFloat()));
+                confidenceList.add(new Confidence(responseRepository, targetVowel, standarVowel));
             }
         }
 //        for (Confidence confidence : confidenceList) {
