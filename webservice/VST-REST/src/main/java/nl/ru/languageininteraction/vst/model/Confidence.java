@@ -33,13 +33,11 @@ public class Confidence {
     private Vowel targetVowel;
     @ManyToOne
     private Vowel standardVowel;
-    float value; // 0 to 1
     final ConfidenceInterval confidenceInterval;
 
-    public Confidence(StimulusResponseRepository responseRepository, Vowel targetVowel, Vowel standardVowel, float value) {
+    public Confidence(StimulusResponseRepository responseRepository, Vowel targetVowel, Vowel standardVowel) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
-        this.value = value;
         final int truePositiveCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(targetVowel, standardVowel);
         final int falsePositiveCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(targetVowel, standardVowel);
         final int trueNegativeCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(targetVowel, standardVowel);
