@@ -30,6 +30,16 @@ public class ConfidenceTest {
     }
 
     /**
+     * Test of getting confidence via the CRUD DB with inserted user results.
+     */
+    @org.junit.Test
+    public void testViaCrudDb() {
+        System.out.println("testViaCrudDb");
+        // todo: add a unit test that inserts into the database and gets the confidence from the query results
+        fail("The test case is a prototype.");
+    }
+
+    /**
      * Test of getLowerBound method, of class Confidence.
      */
     @Test
