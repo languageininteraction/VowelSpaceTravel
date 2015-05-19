@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4947A75C1B0335CE00AF5A96 /* Stimulus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75B1B0335CE00AF5A96 /* Stimulus.swift */; };
+		4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */; };
 		495359281AE91A88009E870A /* VSTServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495359271AE91A88009E870A /* VSTServer.swift */; };
 		4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
-		4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* ProgressViewController.swift */; };
+		4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */; };
 		4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49D1AD7C9CE000437CF /* TempObjects.swift */; };
 		4996A4A01AD7E480000437CF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49F1AD7E480000437CF /* Constants.swift */; };
 		4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */; };
+		499FAB341AFCB3CC0020A90C /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499FAB331AFCB3CC0020A90C /* Game.swift */; };
 		49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */; };
 		49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */; };
 		49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653B81ACE9CB400CA2803 /* AppDelegate.swift */; };
@@ -25,6 +28,11 @@
 		49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653E01ACEA4D100CA2803 /* TaskViewController.swift */; };
 		49C653E31ACEA68A00CA2803 /* cello.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49C653E21ACEA68900CA2803 /* cello.wav */; };
 		49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */; };
+		49E8B7111B05DDAE006CD1BE /* SuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8B7101B05DDAE006CD1BE /* SuggestionView.swift */; };
+		49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */; };
+		49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */; };
+		49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153461AFB8FE0000101F6 /* TrialViewController.swift */; };
+		49F153491AFB93BE000101F6 /* Vowel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153481AFB93BE000101F6 /* Vowel.swift */; };
 		49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1F5C51AD8097000457411 /* ResultViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,12 +47,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4947A75B1B0335CE00AF5A96 /* Stimulus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stimulus.swift; sourceTree = "<group>"; };
+		4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionTableViewController.swift; sourceTree = "<group>"; };
 		495359271AE91A88009E870A /* VSTServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSTServer.swift; sourceTree = "<group>"; };
 		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		4996A49B1AD7BA43000437CF /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
+		4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionViewController.swift; sourceTree = "<group>"; };
 		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
 		4996A49F1AD7E480000437CF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassControlBackAndForth.swift; sourceTree = "<group>"; };
+		499FAB331AFCB3CC0020A90C /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		49C653B31ACE9CB300CA2803 /* Vowel Space Travel iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vowel Space Travel iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +71,11 @@
 		49C653E01ACEA4D100CA2803 /* TaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		49C653E21ACEA68900CA2803 /* cello.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cello.wav; sourceTree = "<group>"; };
 		49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadViewController.swift; sourceTree = "<group>"; };
+		49E8B7101B05DDAE006CD1BE /* SuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestionView.swift; sourceTree = "<group>"; };
+		49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = babe_sp_1.wav; sourceTree = "<group>"; };
+		49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bag_sp_1.wav; sourceTree = "<group>"; };
+		49F153461AFB8FE0000101F6 /* TrialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrialViewController.swift; sourceTree = "<group>"; };
+		49F153481AFB93BE000101F6 /* Vowel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vowel.swift; sourceTree = "<group>"; };
 		49F1F5C51AD8097000457411 /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +101,9 @@
 			isa = PBXGroup;
 			children = (
 				495359271AE91A88009E870A /* VSTServer.swift */,
+				49F153481AFB93BE000101F6 /* Vowel.swift */,
+				499FAB331AFCB3CC0020A90C /* Game.swift */,
+				4947A75B1B0335CE00AF5A96 /* Stimulus.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -92,6 +111,8 @@
 		4996A4A11AD7E4B1000437CF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */,
+				49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */,
 				49C653E21ACEA68900CA2803 /* cello.wav */,
 			);
 			name = Resources;
@@ -120,6 +141,7 @@
 			children = (
 				4996A49F1AD7E480000437CF /* Constants.swift */,
 				49C653DF1ACEA49E00CA2803 /* ViewControllers */,
+				49E8B70F1B05DD84006CD1BE /* Views */,
 				495359291AE91AA1009E870A /* Models */,
 				4996A49D1AD7C9CE000437CF /* TempObjects.swift */,
 				4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */,
@@ -163,14 +185,24 @@
 			children = (
 				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
 				4996A4991AD7B4D0000437CF /* LoginViewController.swift */,
-				4996A49B1AD7BA43000437CF /* ProgressViewController.swift */,
+				4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */,
+				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
+				4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
+				49F153461AFB8FE0000101F6 /* TrialViewController.swift */,
 				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
 				49F1F5C51AD8097000457411 /* ResultViewController.swift */,
-				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
 				49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		49E8B70F1B05DD84006CD1BE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				49E8B7101B05DDAE006CD1BE /* SuggestionView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,6 +290,8 @@
 				49C653E31ACEA68A00CA2803 /* cello.wav in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
+				49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */,
+				49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,14 +312,20 @@
 				4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */,
 				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
 				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
-				4996A49C1AD7BA43000437CF /* ProgressViewController.swift in Sources */,
+				4947A75C1B0335CE00AF5A96 /* Stimulus.swift in Sources */,
+				49F153491AFB93BE000101F6 /* Vowel.swift in Sources */,
+				4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */,
 				4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */,
 				4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
+				49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */,
+				49E8B7111B05DDAE006CD1BE /* SuggestionView.swift in Sources */,
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
+				4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */,
 				49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */,
 				495359281AE91A88009E870A /* VSTServer.swift in Sources */,
+				499FAB341AFCB3CC0020A90C /* Game.swift in Sources */,
 				4996A4A01AD7E480000437CF /* Constants.swift in Sources */,
 				49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */,
 				49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */,

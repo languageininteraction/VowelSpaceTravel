@@ -51,12 +51,12 @@ class InfoViewController: SubViewController {
         
         let finishButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight),buttonWidth,buttonHeight))
         finishButton.setTitle("Back", forState: UIControlState.Normal)
-        finishButton.addTarget(self, action: "finishButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        finishButton.addTarget(self, action: "backButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(finishButton)
         
     }
     
-    func finishButtonPressed()
+    func backButtonPressed()
     {
         self.superController!.subControllerFinished(self)
         self.dismissViewControllerAnimated(false, completion: nil)

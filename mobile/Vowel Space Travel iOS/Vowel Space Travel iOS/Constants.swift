@@ -12,3 +12,5 @@ let kDevelopmentMode = true
 let kSpeedUpDownload = kDevelopmentMode ? true : false
 
 let kWebserviceURL = kDevelopmentMode ? "http://applejack.science.ru.nl:8080/" : ""
+
+let kTimeBetweenStimuli : Double = 2

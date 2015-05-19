@@ -19,8 +19,6 @@ class RootViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        var taskViewController = TaskViewController();
-        var downloadViewController = DownloadViewController();
         var loginViewController = LoginViewController();
         
         self.presentViewController(loginViewController, animated: false, completion: nil)
