@@ -18,6 +18,9 @@
 package nl.ru.languageininteraction.vst.model;
 
 import javax.persistence.ManyToOne;
+import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
+import org.apache.commons.math3.stat.interval.ConfidenceInterval;
+import org.apache.commons.math3.stat.interval.WilsonScoreInterval;
 
 /**
  * @since Apr 23, 2015 4:11:22 PM (creation date)
@@ -31,11 +34,26 @@ public class Confidence {
     @ManyToOne
     private Vowel standardVowel;
     float value; // 0 to 1
+    final ConfidenceInterval confidenceInterval;
 
-    public Confidence(Vowel targetVowel, Vowel standardVowel, float value) {
+    public Confidence(StimulusResponseRepository responseRepository, Vowel targetVowel, Vowel standardVowel, float value) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
         this.value = value;
+        final int truePositiveCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(targetVowel, standardVowel);
+        final int falsePositiveCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(targetVowel, standardVowel);
+        final int trueNegativeCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(targetVowel, standardVowel);
+        final int falseNegativeCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(targetVowel, standardVowel);
+        confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
+    }
+
+    public Confidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+        confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
+    }
+
+    private ConfidenceInterval calculateConfidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+        final WilsonScoreInterval wilsonScoreInterval = new WilsonScoreInterval();
+        return wilsonScoreInterval.createInterval(truePositiveCount + falsePositiveCount + trueNegativeCount + falseNegativeCount, truePositiveCount + trueNegativeCount, 0.95);
     }
 
     public Vowel getTargetVowel() {
@@ -54,7 +72,15 @@ public class Confidence {
         return standardVowel.getId();
     }
 
-    public float getValue() {
-        return value;
+    public double getConfidenceLevel() {
+        return confidenceInterval.getConfidenceLevel();
+    }
+
+    public double getLowerBound() {
+        return confidenceInterval.getLowerBound();
+    }
+
+    public double getUpperBound() {
+        return confidenceInterval.getUpperBound();
     }
 }
