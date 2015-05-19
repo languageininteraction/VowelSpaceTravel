@@ -19,7 +19,9 @@ package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
+import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
@@ -31,4 +33,18 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
 
     @Override
     List<StimulusResponse> findAll();
+
+    List<StimulusResponse> findByTargetVowel(@Param("targetVowel") Vowel targetVowel);
+
+    List<StimulusResponse> findByStandardVowel(@Param("standardVowel") Vowel standardVowel);
+
+    List<StimulusResponse> findByTargetVowelAndStandardVowel(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+
+    int countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+
+    int countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+
+    int countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+
+    int countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 }
