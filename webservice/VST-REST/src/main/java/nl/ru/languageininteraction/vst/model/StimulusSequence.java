@@ -39,12 +39,12 @@ public class StimulusSequence extends ResourceSupport {
         this.player = player;
         stimulusList = new ArrayList<>();
         final int returnCount = 10;
-        final Random randomBool = new Random();
         final IntStream randomInts = new Random().ints(returnCount, 1, (int) sampleRepository.count());
         final IntStream distinctInts = randomInts.distinct();
         distinctInts.forEach((int value) -> {
             System.out.println("distinctInt: " + value);
-            stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), randomBool.nextBoolean()));
+            // todo: select relevant Stimuli and set the Stimulus.Relevance correctly
+            stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
         });
     }
 
