@@ -36,6 +36,7 @@ public class StimulusSequence extends ResourceSupport {
 
     @JsonCreator
     public StimulusSequence(WordSampleRepository sampleRepository, @JsonProperty("player") Player player) {
+        // todo: prehaps the settings object could also be sent rather than using a previously stored values?
         this.player = player;
         stimulusList = new ArrayList<>();
         final int returnCount = 10;
