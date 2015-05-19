@@ -36,15 +36,32 @@ public class Settings {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne(mappedBy = "settings")
-    private Player player;
-
     enum Difficulty {
 
-        easy, medium, hard
+        // while this might be stored for the user, the mobile app will probably send this data on each request even if it overrides the stored values
+        easy(false, false), medium(true, false), hard(false, true), veryhard(true, true);
+        final boolean allowMultipleSpeaker;
+        final boolean allowMultipleStartConsonant;
+
+        Difficulty(boolean allowMultipleSpeaker, boolean allowMultipleStartConsonant) {
+            this.allowMultipleSpeaker = allowMultipleSpeaker;
+            this.allowMultipleStartConsonant = allowMultipleStartConsonant;
+        }
     }
+    Difficulty difficulty;
     @OneToMany
+    // todo: determine if this is required
+    private ArrayList<Speaker> excludedSpeakers;
+    @OneToMany
+    // todo: determine if this is required
     private ArrayList<Word> excludedWords;
+    @OneToMany
+    // todo: determine if this is required
+    private ArrayList<Consonant> excludedConsonants;
+    @OneToMany
+    // todo: determine if this is required
+    private ArrayList<Vowel> excludedVowels;
     @OneToOne
+    // todo: determine if this is required
     private Task usersPreferedTask;
 }
