@@ -18,6 +18,7 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
+import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -40,11 +41,11 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
 
     List<StimulusResponse> findByTargetVowelAndStandardVowel(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 }

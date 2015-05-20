@@ -35,13 +35,13 @@ public class Confidence {
     private Vowel standardVowel;
     final ConfidenceInterval confidenceInterval;
 
-    public Confidence(StimulusResponseRepository responseRepository, Vowel targetVowel, Vowel standardVowel) {
+    public Confidence(StimulusResponseRepository responseRepository, Player player, Vowel targetVowel, Vowel standardVowel) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
-        final int truePositiveCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(targetVowel, standardVowel);
-        final int falsePositiveCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(targetVowel, standardVowel);
-        final int trueNegativeCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(targetVowel, standardVowel);
-        final int falseNegativeCount = responseRepository.countByTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(targetVowel, standardVowel);
+        final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(player, targetVowel, standardVowel);
+        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(player, targetVowel, standardVowel);
+        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(player, targetVowel, standardVowel);
+        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(player, targetVowel, standardVowel);
         confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 

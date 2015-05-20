@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Confidence;
+import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.hateoas.Resources;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpEntity;
@@ -46,14 +48,14 @@ public class ConfidenceController {
 
     @RequestMapping(value = "/values", method = GET)
     @ResponseBody
-    public HttpEntity<Resources<Confidence>> getConfidenceSequence() {
+    public HttpEntity<Resources<Confidence>> getConfidenceSequence(@Param("player") Player player) {
 //        final ConfidenceSequence confidenceSequence = new ConfidenceSequence(wordSampleRepository, null);
         final ArrayList<Confidence> confidenceList = new ArrayList<>();
         final List<Vowel> allVowels = vowelRepository.findAll();
         final Random random = new Random();
         for (Vowel targetVowel : allVowels) {
             for (Vowel standarVowel : allVowels) {
-                confidenceList.add(new Confidence(responseRepository, targetVowel, standarVowel));
+                confidenceList.add(new Confidence(responseRepository, player, targetVowel, standarVowel));
             }
         }
 //        for (Confidence confidence : confidenceList) {
