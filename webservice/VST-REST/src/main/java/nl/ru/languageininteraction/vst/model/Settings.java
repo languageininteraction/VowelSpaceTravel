@@ -17,7 +17,6 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,16 +50,16 @@ public class Settings {
     Difficulty difficulty;
     @OneToMany
     // todo: determine if this is required
-    private ArrayList<Speaker> excludedSpeakers;
+    private List<Speaker> excludedSpeakers;
     @OneToMany
     // todo: determine if this is required
-    private ArrayList<Word> excludedWords;
+    private List<Word> excludedWords;
     @OneToMany
     // todo: determine if this is required
-    private ArrayList<Consonant> excludedConsonants;
+    private List<Consonant> excludedConsonants;
     @OneToMany
     // todo: determine if this is required
-    private ArrayList<Vowel> excludedVowels;
+    private List<Vowel> excludedVowels;
     @OneToOne
     // todo: determine if this is required
     private Task usersPreferedTask;
