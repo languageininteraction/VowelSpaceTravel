@@ -66,10 +66,12 @@ public class ConfidenceTest {
     }
 
     private void insertTestData(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+        stimulusResultRepository.deleteAll();
+        vowelRepository.deleteAll();
+        playerRepository.deleteAll();
         playerRepository.save(player);
         vowelRepository.save(targetVowel);
         vowelRepository.save(standardVowel);
-        stimulusResultRepository.deleteAll();
         for (int truePositiveCounter = 0; truePositiveCounter < truePositiveCount; truePositiveCounter++) {
             stimulusResultRepository.save(new StimulusResponse(player, targetVowel, standardVowel, true, true, 1));
         }

@@ -62,6 +62,8 @@ public class StimulusResponse { //extends ResourceSupport
         this.player = player;
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
+        this.isCorrect = isCorrect;
+        this.userResponse = userResponse;
         this.responseTimeMs = responseTimeMs;
         this.responseDate = new Date();
     }
