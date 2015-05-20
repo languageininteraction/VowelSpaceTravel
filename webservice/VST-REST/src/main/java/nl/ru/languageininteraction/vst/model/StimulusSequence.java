@@ -49,7 +49,41 @@ public class StimulusSequence extends ResourceSupport {
         });
     }
 
-    public ArrayList<Stimulus> getRandomWords() {
+    public ArrayList<Stimulus> getRandomWords(int maxSize) {
+        return stimulusList;
+    }
+
+    /**
+     * discrimination
+     *
+     * // todo: this should take input of a vowel pair (because the selection
+     * of this vowel pair is yet to be defined)
+     *
+     * // todo: add parameters of difficulty level, number of speakers in
+     * stimuli selection and requireSameStartingConsonent
+     *
+     * @param maxSize
+     * @return {sequence of samples with a single target vowel and single
+     * standard vowel} a, a, a, e, a, e, e
+     */
+    public ArrayList<Stimulus> getDiscriminationWords(int maxSize) {
+        return stimulusList;
+    }
+
+    /**
+     * identification
+     *
+     * // todo: this should take input of a vowel pair (because the selection
+     * of this vowel pair is yet to be defined)
+     *
+     * // todo: add parameters of difficulty level, number of speakers in
+     * stimuli selection and requireSameStartingConsonent
+     *
+     * @param maxSize
+     * @return {sequence of samples each with a single target vowel and multiple
+     * distinct standard vowels} a, e, a, u, a, i
+     */
+    public ArrayList<Stimulus> getIdentificationWords(int maxSize) {
         return stimulusList;
     }
 }
