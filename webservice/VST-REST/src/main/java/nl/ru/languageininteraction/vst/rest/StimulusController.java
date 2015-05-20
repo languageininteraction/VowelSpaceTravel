@@ -18,13 +18,18 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
+import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import nl.ru.languageininteraction.vst.model.StimulusSequence;
+import nl.ru.languageininteraction.vst.model.Task.TaskType;
+import static nl.ru.languageininteraction.vst.model.Task.TaskType.discrimination;
+import static nl.ru.languageininteraction.vst.model.Task.TaskType.identification;
 import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpEntity;
@@ -58,11 +63,22 @@ public class StimulusController {
         return new HttpEntity<>(inputStreamResource, header);
     }
 
-    @RequestMapping(value = "/random", method = GET)
+    @RequestMapping(value = "/sequence/{taskType}", method = GET)
     @ResponseBody
-    public HttpEntity<Resources<Stimulus>> getStimulusSequence() {
-        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, null);
-        final ArrayList<Stimulus> words = stimulusSequence.getRandomWords();
+    public HttpEntity<Resources<Stimulus>> getStimulusSequence(@PathVariable("taskType") TaskType taskType, @Param("player") Player player, @Param("size") int size) {
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, player);
+        final ArrayList<Stimulus> words;
+        switch (taskType) {
+            case discrimination:
+                words = stimulusSequence.getDiscriminationWords(size);
+                break;
+            case identification:
+                words = stimulusSequence.getIdentificationWords(size);
+                break;
+            default:
+                words = stimulusSequence.getRandomWords(size);
+                break;
+        }
         for (Stimulus stimulus : words) {
             stimulus.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusFile(stimulus.getSampleId())).withRel("audio"));
         }
