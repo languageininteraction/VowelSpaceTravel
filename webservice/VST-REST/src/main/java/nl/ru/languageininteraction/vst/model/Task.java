@@ -35,7 +35,10 @@ public class Task {
 
     public enum TaskType {
 
-        identification, discrimination, assessment
+        identification,
+        discrimination,
+        @Deprecated
+        assessment
     }
     private TaskType taskType;
 }

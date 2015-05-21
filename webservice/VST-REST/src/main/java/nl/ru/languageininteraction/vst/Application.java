@@ -18,6 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.config.EnableEntityLinks;
 
 /**
  * @since Apr 2, 2015 4:58:19 PM (creation date)
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
+@EnableEntityLinks
 public class Application implements CommandLineRunner {
 
     @Autowired

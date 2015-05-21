@@ -31,25 +31,25 @@ import org.springframework.hateoas.ResourceSupport;
  */
 public class StimulusSequence extends ResourceSupport {
 
-    private ArrayList<Stimulus> stimulusList;
-    Player player;
+    private final WordSampleRepository sampleRepository;
+    private final Player player;
 
     @JsonCreator
     public StimulusSequence(WordSampleRepository sampleRepository, @JsonProperty("player") Player player) {
         // todo: prehaps the settings object could also be sent rather than using a previously stored values?
+        this.sampleRepository = sampleRepository;
         this.player = player;
-        stimulusList = new ArrayList<>();
-        final int returnCount = 10;
-        final IntStream randomInts = new Random().ints(returnCount, 1, (int) sampleRepository.count());
+    }
+
+    public ArrayList<Stimulus> getRandomWords(int maxSize) {
+        final ArrayList<Stimulus> stimulusList = new ArrayList<>();
+        final IntStream randomInts = new Random().ints(0, (int) sampleRepository.count());
         final IntStream distinctInts = randomInts.distinct();
-        distinctInts.forEach((int value) -> {
+        distinctInts.limit(maxSize).forEach((int value) -> {
             System.out.println("distinctInt: " + value);
             // todo: select relevant Stimuli and set the Stimulus.Relevance correctly
             stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
         });
-    }
-
-    public ArrayList<Stimulus> getRandomWords(int maxSize) {
         return stimulusList;
     }
 
@@ -67,7 +67,7 @@ public class StimulusSequence extends ResourceSupport {
      * standard vowel} a, a, a, e, a, e, e
      */
     public ArrayList<Stimulus> getDiscriminationWords(int maxSize) {
-        return stimulusList;
+        return getRandomWords(maxSize);
     }
 
     /**
@@ -84,6 +84,6 @@ public class StimulusSequence extends ResourceSupport {
      * distinct standard vowels} a, e, a, u, a, i
      */
     public ArrayList<Stimulus> getIdentificationWords(int maxSize) {
-        return stimulusList;
+        return getRandomWords(maxSize);
     }
 }
