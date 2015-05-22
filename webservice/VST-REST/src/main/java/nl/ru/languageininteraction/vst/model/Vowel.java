@@ -17,10 +17,13 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * @since Mar 20, 2015 5:08:24 PM (creation date)
@@ -29,36 +32,19 @@ import javax.persistence.Id;
 @Entity
 public class Vowel {
 
-    public enum Place {
-
-        front, near_front, central, near_back, back
-    }
-
-    public enum Roundness {
-
-        unrounded, rounded
-    }
-
-    public enum Manner {
-
-        close, near_close, close_mid, mid, open_mid, near_open, open
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(unique = true)
     private String ipa;
+    @Column(unique = true)
     private String disc;
-    private Place place;
-    private Manner manner;
-    private Roundness roundness;
+    @OneToMany(mappedBy = "vowel")
+    private List<VowelQuality> vowelQualitys;
 
-    public Vowel(String ipa, String disc, Place place, Manner manner, Roundness roundness) {
+    public Vowel(String ipa, String disc) {
         this.ipa = ipa;
         this.disc = disc;
-        this.place = place;
-        this.manner = manner;
-        this.roundness = roundness;
     }
 
     public Vowel() {
@@ -86,29 +72,5 @@ public class Vowel {
 
     public void setDisc(String disc) {
         this.disc = disc;
-    }
-
-    public Place getPlace() {
-        return place;
-    }
-
-    public void setPlace(Place place) {
-        this.place = place;
-    }
-
-    public Manner getManner() {
-        return manner;
-    }
-
-    public void setManner(Manner manner) {
-        this.manner = manner;
-    }
-
-    public Roundness getRoundness() {
-        return roundness;
-    }
-
-    public void setRoundness(Roundness roundness) {
-        this.roundness = roundness;
     }
 }

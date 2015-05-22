@@ -17,59 +17,74 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
- * @since Apr 8, 2015 11:25:42 AM (creation date)
+ * @since May 21, 2015 5:49:21 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class Word {
+public class VowelQuality {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @Column(unique = true)
-    private String wordString;
-    @ManyToOne
-    private Consonant initailConsonant;
+    private Long id;
+
+    public enum Place {
+
+        front, near_front, central, near_back, back
+    }
+
+    public enum Roundness {
+
+        unrounded, rounded
+    }
+
+    public enum Manner {
+
+        close, near_close, close_mid, mid, open_mid, near_open, open
+    }
     @ManyToOne
     private Vowel vowel;
-    @ManyToOne
-    private Consonant finalConsonant;
-    @OneToMany(mappedBy = "word")
-    private List<WordSample> wordSamples;
+    private Place place;
+    private Manner manner;
+    private Roundness roundness;
 
-    public Word(String wordString, Consonant initailConsonant, Vowel vowel, Consonant finalConsonant) {
-        this.wordString = wordString;
-        this.initailConsonant = initailConsonant;
+    public VowelQuality(Vowel vowel, Place place, Manner manner, Roundness roundness) {
         this.vowel = vowel;
-        this.finalConsonant = finalConsonant;
+        this.place = place;
+        this.manner = manner;
+        this.roundness = roundness;
     }
 
-    public Word() {
+    public VowelQuality() {
     }
 
-    public String getWordString() {
-        return wordString;
+    public Long getId() {
+        return id;
     }
 
-    public Consonant getInitailConsonant() {
-        return initailConsonant;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Vowel getVowel() {
         return vowel;
     }
 
-    public Consonant getFinalConsonant() {
-        return finalConsonant;
+    public Place getPlace() {
+        return place;
+    }
+
+    public Manner getManner() {
+        return manner;
+    }
+
+    public Roundness getRoundness() {
+        return roundness;
     }
 }

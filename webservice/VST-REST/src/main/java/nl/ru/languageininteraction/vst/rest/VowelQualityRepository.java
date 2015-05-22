@@ -15,42 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.ru.languageininteraction.vst.model;
+package nl.ru.languageininteraction.vst.rest;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import nl.ru.languageininteraction.vst.model.VowelQuality;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * @since Apr 8, 2015 5:04:57 PM (creation date)
+ * @since Apr 2, 2015 4:56:21 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@Entity
-public class Consonant {
+@RepositoryRestResource(collectionResourceRel = "qualities", path = "qualities")
+public interface VowelQualityRepository extends PagingAndSortingRepository<VowelQuality, Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @Column(unique = true)
-    private String ipa;
-    @Column(unique = true)
-    private String disc;
-
-    public Consonant(String ipa, String disc) {
-        this.ipa = ipa;
-        this.disc = disc;
-    }
-
-    public Consonant() {
-    }
-
-    public String getIpa() {
-        return ipa;
-    }
-
-    public String getDisc() {
-        return disc;
-    }
 }

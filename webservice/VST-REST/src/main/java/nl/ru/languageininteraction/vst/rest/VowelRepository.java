@@ -36,7 +36,7 @@ public interface VowelRepository extends PagingAndSortingRepository<Vowel, Long>
 
     Vowel findByIpa(@Param("ipa") String ipa);
 
-    List<Vowel> findByDisc(@Param("disc") String disc);
+    Vowel findByDisc(@Param("disc") String disc);
 
     @Override
     @RestResource(exported = false)

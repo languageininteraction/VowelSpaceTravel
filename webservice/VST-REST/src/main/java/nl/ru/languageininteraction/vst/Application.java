@@ -6,6 +6,7 @@ import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.SettingsRepository;
 import nl.ru.languageininteraction.vst.rest.SpeakerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
+import nl.ru.languageininteraction.vst.rest.VowelQualityRepository;
 import nl.ru.languageininteraction.vst.rest.VowelRepository;
 import nl.ru.languageininteraction.vst.rest.WordRepository;
 import nl.ru.languageininteraction.vst.util.AudioSamplesIngester;
@@ -32,6 +33,8 @@ public class Application implements CommandLineRunner {
 
     @Autowired
     private VowelRepository vowelRepository;
+    @Autowired
+    private VowelQualityRepository vowelQualityRepository;
     @Autowired
     private PlayerRepository playerRepository;
     @Autowired
@@ -60,7 +63,7 @@ public class Application implements CommandLineRunner {
         consonantRepository.deleteAll();
         speakerRepository.deleteAll();
 
-        DefaultData defaultData = new DefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
+        DefaultData defaultData = new DefaultData(vowelRepository, vowelQualityRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
         defaultData.insertVowels();
         defaultData.insertConsonants();
         defaultData.insertWords();
