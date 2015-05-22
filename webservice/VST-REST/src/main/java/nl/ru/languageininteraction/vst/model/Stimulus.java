@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -91,5 +92,31 @@ public class Stimulus extends ResourceSupport {
 
     public void setPlayerResponse(boolean playerResponse) {
         this.playerResponse = playerResponse;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.player);
+        hash = 23 * hash + Objects.hashCode(this.wordSample);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Stimulus other = (Stimulus) obj;
+        if (!Objects.equals(this.player, other.player)) {
+            return false;
+        }
+        if (!Objects.equals(this.wordSample, other.wordSample)) {
+            return false;
+        }
+        return true;
     }
 }

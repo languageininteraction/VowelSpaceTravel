@@ -43,9 +43,10 @@ public class StimulusSequence extends ResourceSupport {
 
     public ArrayList<Stimulus> getRandomWords(int maxSize) {
         final ArrayList<Stimulus> stimulusList = new ArrayList<>();
-        final IntStream randomInts = new Random().ints(0, (int) sampleRepository.count());
+        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
+        final IntStream randomInts = new Random().ints(0, availableCount);
         final IntStream distinctInts = randomInts.distinct();
-        distinctInts.limit(maxSize).forEach((int value) -> {
+        distinctInts.limit(availableCount).forEach((int value) -> {
             System.out.println("distinctInt: " + value);
             // todo: select relevant Stimuli and set the Stimulus.Relevance correctly
             stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));

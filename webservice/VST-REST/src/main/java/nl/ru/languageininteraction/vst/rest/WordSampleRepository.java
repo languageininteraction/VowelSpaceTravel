@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
+import java.util.List;
 import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -28,6 +29,8 @@ import org.springframework.data.rest.core.annotation.RestResource;
  */
 @RepositoryRestResource(collectionResourceRel = "wordsamples", path = "wordsamples")
 public interface WordSampleRepository extends PagingAndSortingRepository<WordSample, Long> {
+
+    List<WordSample> findByIdIn(List<Integer> idList);
 
     @Override
     @RestResource(exported = false)

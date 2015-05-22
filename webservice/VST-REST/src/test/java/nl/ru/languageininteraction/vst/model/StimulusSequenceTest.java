@@ -61,6 +61,38 @@ public class StimulusSequenceTest {
         wordSampleRepository.save(new WordSample());
         wordSampleRepository.save(new WordSample());
         wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
+        wordSampleRepository.save(new WordSample());
     }
 
     /**
