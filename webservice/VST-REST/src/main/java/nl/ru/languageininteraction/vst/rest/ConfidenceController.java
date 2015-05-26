@@ -19,18 +19,19 @@ package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import org.springframework.http.HttpEntity;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -38,30 +39,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Controller
-@RequestMapping("/confidence")
+@ExposesResourceFor(Player.class)
 public class ConfidenceController {
 
+    @Autowired
+    private PlayerRepository playerRepository;
     @Autowired
     StimulusResponseRepository responseRepository;
     @Autowired
     private VowelRepository vowelRepository;
 
-    @RequestMapping(value = "/values", method = GET)
+    @RequestMapping(value = "/confidence", produces = "application/json", method = GET)
     @ResponseBody
-    public HttpEntity<Resources<Confidence>> getConfidenceSequence(@Param("player") Player player) {
-//        final ConfidenceSequence confidenceSequence = new ConfidenceSequence(wordSampleRepository, null);
+    public ResponseEntity<Resources<Confidence>> getConfidenceSequence(@RequestParam(value = "player", required = true) long playerId) {
+        final Player player = playerRepository.findById(playerId);
         final ArrayList<Confidence> confidenceList = new ArrayList<>();
         final List<Vowel> allVowels = vowelRepository.findAll();
-        final Random random = new Random();
         for (Vowel targetVowel : allVowels) {
             for (Vowel standarVowel : allVowels) {
-                confidenceList.add(new Confidence(responseRepository, player, targetVowel, standarVowel));
+                final Confidence confidence = new Confidence(responseRepository, player, targetVowel, standarVowel);
+                if (confidence.hasValidConfidence()) {
+                    confidenceList.add(confidence);
+                }
             }
         }
-//        for (Confidence confidence : confidenceList) {
-//            confidence.add(linkTo(ControllerLinkBuilder.methodOn(ConfidenceController.class).getConfidenceFile(confidence.getSampleId())).withRel("audio"));
-//        }
-        Resources<Confidence> wrapped = new Resources<>(confidenceList, linkTo(ConfidenceController.class).withSelfRel());
-        return new HttpEntity<>(wrapped);
+        Resources<Confidence> resource = new Resources<>(confidenceList);
+        resource.add(linkTo(methodOn(ConfidenceController.class).getConfidenceSequence(playerId)).withSelfRel());
+        return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 }
