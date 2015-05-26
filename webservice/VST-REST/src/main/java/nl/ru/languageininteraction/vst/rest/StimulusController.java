@@ -26,15 +26,19 @@ import nl.ru.languageininteraction.vst.model.StimulusSequence;
 import nl.ru.languageininteraction.vst.model.Task.TaskType;
 import static nl.ru.languageininteraction.vst.model.Task.TaskType.discrimination;
 import static nl.ru.languageininteraction.vst.model.Task.TaskType.identification;
+import nl.ru.languageininteraction.vst.model.Vowel;
 import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.repository.query.Param;
+import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,13 +51,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Controller
-@RequestMapping("/stimulus")
+@ExposesResourceFor(WordSample.class)
+//@RepositoryRestResource(collectionResourceRel = "stimulus", path = "stimulus")
+//@EnableEntityLinks
+@RequestMapping(value = "/stimulus", produces = "application/json")
+//@ExposesResourceFor(StimulusController.class)
 public class StimulusController {
 
     @Autowired
     WordSampleRepository wordSampleRepository;
 
+//    @RequestMapping(method = RequestMethod.GET)
+//    @ResponseBody
+//    public ResponseEntity getLinks() {
+//        Resources<Stimulus> wrapped = new Resources<>(null, linkTo(StimulusController.class).withSelfRel());
+//        wrapped.add(linkTo(methodOn(StimulusController.class).getStimulusSequence(null, null, null, null, null,null)).withSelfRel());
+//        return new ResponseEntity<>(wrapped, HttpStatus.OK);
+//    }
+//    public StimulusController(EntityLinks entityLinks) {
+////        this.entityLinks = entityLinks;
+//        entityLinks.linkFor(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusSequence(discrimination, null, size).withRel("stimulus"));
+//    }
+//    @RequestMapping(value = "/", method = GET)
+//    @ResponseBody
+//    public ResponseEntity getStimulusSequence() {
+//    Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
+//        return new ResponseEntity<>(wrapped, HttpStatus.OK);
+//    }
+
     @RequestMapping(value = "/audio/{sampleId}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    @ResponseBody
     public HttpEntity<InputStreamResource> getStimulusFile(@PathVariable("sampleId") long sampleId) {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(new MediaType("audio", "wav"));
@@ -65,24 +92,25 @@ public class StimulusController {
 
     @RequestMapping(value = "/sequence/{taskType}", method = GET)
     @ResponseBody
-    public HttpEntity<Resources<Stimulus>> getStimulusSequence(@PathVariable("taskType") TaskType taskType, @Param("player") Player player, @Param("size") int size) {
+    public ResponseEntity<Resources<Stimulus>> getStimulusSequence(@PathVariable("taskType") TaskType taskType, @Param("player") Player player,
+            @Param("maxSize") Integer maxSize, @Param("maxTargetCount") Integer maxTargetCount, @Param("target") Vowel targetVowel, @Param("standard") Vowel standardVowel) {
         final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, player);
         final ArrayList<Stimulus> words;
         switch (taskType) {
             case discrimination:
-                words = stimulusSequence.getDiscriminationWords(size);
+                words = stimulusSequence.getDiscriminationWords(maxSize, maxTargetCount, targetVowel, standardVowel);
                 break;
             case identification:
-                words = stimulusSequence.getIdentificationWords(size);
+                words = stimulusSequence.getIdentificationWords(maxSize);
                 break;
             default:
-                words = stimulusSequence.getRandomWords(size);
+                words = stimulusSequence.getRandomWords(maxSize);
                 break;
         }
         for (Stimulus stimulus : words) {
             stimulus.add(linkTo(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusFile(stimulus.getSampleId())).withRel("audio"));
         }
         Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
-        return new HttpEntity<>(wrapped);
+        return new ResponseEntity<>(wrapped, HttpStatus.OK);
     }
 }
