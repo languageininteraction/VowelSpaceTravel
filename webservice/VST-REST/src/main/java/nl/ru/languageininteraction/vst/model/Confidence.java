@@ -49,9 +49,20 @@ public class Confidence {
         confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 
+    public boolean hasValidConfidence() {
+        return confidenceInterval != null;
+    }
+
     private ConfidenceInterval calculateConfidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
         final WilsonScoreInterval wilsonScoreInterval = new WilsonScoreInterval();
-        return wilsonScoreInterval.createInterval(truePositiveCount + falsePositiveCount + trueNegativeCount + falseNegativeCount, truePositiveCount + trueNegativeCount, 0.95);
+        final int numberOfTrials = truePositiveCount + falsePositiveCount + trueNegativeCount + falseNegativeCount;
+        final int numberOfSuccesses = truePositiveCount + trueNegativeCount;
+        final double confidenceLevel = 0.95;
+        if (numberOfTrials > 0) {
+            return wilsonScoreInterval.createInterval(numberOfTrials, numberOfSuccesses, confidenceLevel);
+        } else {
+            return null;
+        }
     }
 
     public Vowel getTargetVowel() {
