@@ -59,6 +59,10 @@ public class Player {
         this.settings = settings;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
