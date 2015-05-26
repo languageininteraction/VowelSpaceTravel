@@ -17,10 +17,19 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import nl.ru.languageininteraction.vst.Application;
+import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
+import nl.ru.languageininteraction.vst.rest.PlayerRepository;
+import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
+import nl.ru.languageininteraction.vst.rest.VowelQualityRepository;
+import nl.ru.languageininteraction.vst.rest.VowelRepository;
+import nl.ru.languageininteraction.vst.rest.WordRepository;
 import nl.ru.languageininteraction.vst.rest.WordSampleRepository;
+import nl.ru.languageininteraction.vst.util.AudioSamplesIngester;
+import nl.ru.languageininteraction.vst.util.DefaultData;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -39,60 +48,33 @@ public class StimulusSequenceTest {
 
     @Autowired
     WordSampleRepository wordSampleRepository;
+    @Autowired
+    VowelRepository vowelRepository;
+    @Autowired
+    VowelQualityRepository vowelQualityRepository;
+    @Autowired
+    PlayerRepository playerRepository;
+    @Autowired
+    StimulusResponseRepository stimulusResultRepository;
+    @Autowired
+    WordRepository wordsRepository;
+    @Autowired
+    ConsonantRepository consonantRepository;
+    @Autowired
+    private AudioSamplesIngester audioSamplesIngester;
 
     public StimulusSequenceTest() {
     }
 
     @Before
-    public void insertData() {
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
-        wordSampleRepository.save(new WordSample());
+    public void insertData() throws IOException {
+        if (wordSampleRepository.count() == 0) {
+            final DefaultData defaultData = new DefaultData(vowelRepository, vowelQualityRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
+            defaultData.insertVowels();
+            defaultData.insertConsonants();
+            defaultData.insertWords();
+            audioSamplesIngester.processAudioResources();
+        }
     }
 
     /**
@@ -124,13 +106,38 @@ public class StimulusSequenceTest {
     @Test
     public void testGetDiscriminationWords() {
         System.out.println("getDiscriminationWords");
-        int maxSize = 0;
-        StimulusSequence instance = null;
-        ArrayList<Stimulus> expResult = null;
-//        ArrayList<Stimulus> result = instance.getDiscriminationWords(maxSize);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player());
+        int expResultCount = 23;
+        int stimulusIndex = 0;
+        boolean lastWasTarget = false;
+        int targetCount = 0;
+        int expTargetCount = 10;
+        Vowel targetVowel = vowelRepository.findByDisc("U"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
+        Vowel standardVowel = vowelRepository.findByDisc("{"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
+        ArrayList<Stimulus> result1 = stimulusSequence.getDiscriminationWords((int) wordSampleRepository.count() + expResultCount, expTargetCount, targetVowel, standardVowel);
+        assertEquals(wordSampleRepository.count() + expResultCount, result1.size());
+        // test that the first three words contain the target vowel
+        // and that each subsequent pair of words sequentially contain the standard then target vowels
+
+        for (Stimulus stimulus : result1) {
+            if (stimulusIndex < 3) {
+                assertEquals(standardVowel.getDisc(), stimulus.getWordSample().getWord().getVowel().getDisc());
+            } else {
+                if (targetVowel.getDisc().equals(stimulus.getWordSample().getWord().getVowel().getDisc())) {
+                    targetCount++;
+                }
+                if (lastWasTarget) { 
+                   // there cannot be two targets in a row
+                    assertEquals(standardVowel.getDisc(), stimulus.getWordSample().getWord().getVowel().getDisc());
+                }
+                lastWasTarget = targetVowel.getDisc().equals(stimulus.getWordSample().getWord().getVowel().getDisc());
+            }
+            stimulusIndex++;
+        }
+        assertEquals(expTargetCount, targetCount);
+//        ArrayList<Stimulus> result2 = stimulusSequence.getDiscriminationWords(expResultCount, targetVowel, standardVowel);
+//        assertEquals(expResultCount, result2.size());
+//        assertEquals(expResultCount, new HashSet<Stimulus>(result2).size());
     }
 
     /**

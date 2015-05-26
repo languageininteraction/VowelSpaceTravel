@@ -43,10 +43,10 @@ public class Stimulus extends ResourceSupport {
     private Player player;
     @ManyToOne
     private WordSample wordSample;
-    @ManyToOne
-    private Vowel targetVowel;
-    @ManyToOne
-    private Vowel standardVowel;
+//    @ManyToOne
+//    private Vowel targetVowel;
+//    @ManyToOne
+//    private Vowel standardVowel;
     private Relevance relevance;
     private Boolean playerResponse = null;
 
@@ -64,6 +64,10 @@ public class Stimulus extends ResourceSupport {
         } else {
             return null;
         }
+    }
+
+    public WordSample getWordSample() {
+        return wordSample;
     }
 
     public String getWordString() {

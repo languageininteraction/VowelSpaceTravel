@@ -20,6 +20,8 @@ package nl.ru.languageininteraction.vst.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.PrimitiveIterator;
 import java.util.Random;
 import java.util.stream.IntStream;
 import nl.ru.languageininteraction.vst.rest.WordSampleRepository;
@@ -64,11 +66,52 @@ public class StimulusSequence extends ResourceSupport {
      * stimuli selection and requireSameStartingConsonent
      *
      * @param maxSize
+     * @param targetVowel
+     * @param standardVowel
      * @return {sequence of samples with a single target vowel and single
      * standard vowel} a, a, a, e, a, e, e
      */
-    public ArrayList<Stimulus> getDiscriminationWords(int maxSize) {
-        return getRandomWords(maxSize);
+    public ArrayList<Stimulus> getDiscriminationWords(int maxSize, int maxTargetCount, Vowel targetVowel, Vowel standardVowel) {
+        if (targetVowel == null) {
+            throw new UnsupportedOperationException();
+        }
+        if (standardVowel == null) {
+            throw new UnsupportedOperationException();
+        }
+        final List<WordSample> foundByTarget = sampleRepository.findByVowelId(targetVowel.getId());
+        final List<WordSample> foundByStandard = sampleRepository.findByVowelId(standardVowel.getId());
+        final ArrayList<Stimulus> stimulusList = new ArrayList<>();
+//        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
+        final IntStream randomTargetInts = new Random().ints(0, foundByTarget.size());
+        final PrimitiveIterator.OfInt targetRandomIterator = randomTargetInts.iterator();
+        final IntStream randomStandardInts = new Random().ints(0, foundByStandard.size());
+        final PrimitiveIterator.OfInt standardRandomIterator = randomStandardInts.iterator();
+        boolean lastWasTarget = false;
+        int targetCounter = 0;
+        for (int index = 0; index < maxSize; index++) {
+            if (index < 3) {
+                stimulusList.add(new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
+            } else {
+                if (maxTargetCount > targetCounter) {
+                    if (!lastWasTarget) {
+                        if (new Random().nextBoolean()) {
+                            stimulusList.add(new Stimulus(player, foundByTarget.get(targetRandomIterator.nextInt()), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
+                            targetCounter++;
+                            lastWasTarget = true;
+                        } else {
+                            stimulusList.add(new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
+                            lastWasTarget = false;
+                        }
+                    } else {
+                        stimulusList.add(new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
+                        lastWasTarget = false;
+                    }
+                } else {
+                    stimulusList.add(new Random().nextInt(stimulusList.size() - 3) + 3, new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.values()[new Random().nextInt(Stimulus.Relevance.values().length)]));
+                }
+            }
+        }
+        return stimulusList;
     }
 
     /**

@@ -30,7 +30,9 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RepositoryRestResource(collectionResourceRel = "wordsamples", path = "wordsamples")
 public interface WordSampleRepository extends PagingAndSortingRepository<WordSample, Long> {
 
-    List<WordSample> findByIdIn(List<Integer> idList);
+    List<WordSample> findByIdIn(List<Long> idList);
+
+    List<WordSample> findByVowelId(Long vowelId);
 
     @Override
     @RestResource(exported = false)
