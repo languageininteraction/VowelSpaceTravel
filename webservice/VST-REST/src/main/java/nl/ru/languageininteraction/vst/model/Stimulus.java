@@ -40,8 +40,6 @@ public class Stimulus extends ResourceSupport {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @ManyToOne
-    private Player player;
-    @ManyToOne
     private WordSample wordSample;
 //    @ManyToOne
 //    private Vowel targetVowel;
@@ -51,8 +49,11 @@ public class Stimulus extends ResourceSupport {
     private Boolean playerResponse = null;
 
     public Stimulus(Player player, WordSample wordSample, Relevance relevance) {
-        this.player = player;
+        if (wordSample == null) {
+            throw new UnsupportedOperationException("wordSample is null");
+        }
         this.wordSample = wordSample;
+        this.relevance = relevance;
     }
 
     public Stimulus() {
@@ -88,9 +89,9 @@ public class Stimulus extends ResourceSupport {
 
     public Relevance getRelevance() {
         return relevance;
-    }  
+    }
 
-    public Boolean isPlayerResponse() {
+    public Boolean getPlayerResponse() {
         return playerResponse;
     }
 
@@ -101,7 +102,6 @@ public class Stimulus extends ResourceSupport {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 23 * hash + Objects.hashCode(this.player);
         hash = 23 * hash + Objects.hashCode(this.wordSample);
         return hash;
     }
@@ -115,9 +115,6 @@ public class Stimulus extends ResourceSupport {
             return false;
         }
         final Stimulus other = (Stimulus) obj;
-        if (!Objects.equals(this.player, other.player)) {
-            return false;
-        }
         if (!Objects.equals(this.wordSample, other.wordSample)) {
             return false;
         }

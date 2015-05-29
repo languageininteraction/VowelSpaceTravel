@@ -38,9 +38,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         true_negative<input type="checkbox" id="true_negative" checked><br>
         false_negative<input type="checkbox" id="false_negative" checked><br>
         responseTimeMs<input type="number" id="responseTimeMs" value="1"><br>
-        player<input id="player" value="http://localhost:8080/players/1"><br>
-        standardVowel<input id="standardVowel" value="http://localhost:8080/vowels/4"><br>
-        targetVowel<input id="targetVowel" value="http://localhost:8080/vowels/4"><br>
+        player<input id="player" value="2"><br>
+        standardVowel<input id="standardVowel" value="4"><br>
+        targetVowel<input id="targetVowel" value="4"><br>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>        
         <script>
             $(document).ready(function () {
@@ -69,7 +69,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 });
                 $("#getsamples").click(function () {
                     $.ajax({
-                        url: "http://localhost:8080/stimulus/random",
+                        url: "http://localhost:8080/stimulus/sequence/discrimination?maxSize=10&maxTargetCount=3&player=1&target=3&difficulty=easy&standard=6",
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
                         async: true,
@@ -92,7 +92,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                     $("#audioArea").append(document.createTextNode(" "));
                                     $("#audioArea").append(document.createTextNode(stimulus.speakerLabel));
                                     $("#audioArea").append(document.createTextNode(" "));
-                                    $("#audioArea").append(document.createTextNode(stimulus.isCorrect));
+                                    $("#audioArea").append(document.createTextNode(stimulus.relevance));
+                                    $("#audioArea").append(document.createTextNode(" sample_"));
+                                    $("#audioArea").append(document.createTextNode(stimulus.sampleId));
                                     $("#audioArea").append(document.createElement("BR"));
                                 });
                             });
@@ -101,7 +103,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 });
                 $("#getconfidence").click(function () {
                     $.ajax({
-                        url: "http://localhost:8080/confidence/values",
+                        url: "confidence?player=" + $("#player").prop('value'),
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
                         async: true,
@@ -116,8 +118,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             $.each(data._embedded, function () {
                                 $.each(this, function (index, confidence) {
                                     var dataPointTag = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                                    dataPointTag.setAttribute("x1", graphWidth / dataLength * index);
-                                    dataPointTag.setAttribute("x2", graphWidth / dataLength * index);
+                                    dataPointTag.setAttribute("x1", graphWidth / (dataLength+1) * (index+1));
+                                    dataPointTag.setAttribute("x2", graphWidth / (dataLength+1) * (index+1));
                                     dataPointTag.setAttribute("y1", (1.0 - confidence.lowerBound) * graphHeight);
                                     dataPointTag.setAttribute("y2", (1.0 - confidence.upperBound) * graphHeight);
                                     dataPointTag.setAttribute("style", "stroke:rgb(255,0,0);stroke-width:1");

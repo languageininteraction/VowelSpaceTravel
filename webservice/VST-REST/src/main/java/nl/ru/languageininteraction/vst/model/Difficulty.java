@@ -17,39 +17,26 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import java.util.List;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
- * @since Apr 16, 2015 3:25:40 PM (creation date)
+ * @since May 29, 2015 1:52:24 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@Entity
-public class Settings {
+public enum Difficulty {
 
+    // while this might be stored for the user, the mobile app will probably send this data on each request even if it overrides the stored values
+    easy(false, false), medium(true, false), hard(false, true), veryhard(true, true);
+    final boolean allowMultipleSpeaker;
+    final boolean allowMultipleStartConsonant;
+
+    Difficulty(boolean allowMultipleSpeaker, boolean allowMultipleStartConsonant) {
+        this.allowMultipleSpeaker = allowMultipleSpeaker;
+        this.allowMultipleStartConsonant = allowMultipleStartConsonant;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    Difficulty difficulty;
-    @OneToMany
-    // todo: determine if this is required
-    private List<Speaker> excludedSpeakers;
-    @OneToMany
-    // todo: determine if this is required
-    private List<Word> excludedWords;
-    @OneToMany
-    // todo: determine if this is required
-    private List<Consonant> excludedConsonants;
-    @OneToMany
-    // todo: determine if this is required
-    private List<Vowel> excludedVowels;
-    @OneToOne
-    // todo: determine if this is required
-    private Task usersPreferedTask;
 }

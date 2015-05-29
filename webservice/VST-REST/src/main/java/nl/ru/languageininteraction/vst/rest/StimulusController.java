@@ -18,19 +18,19 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
+import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import nl.ru.languageininteraction.vst.model.StimulusSequence;
-import nl.ru.languageininteraction.vst.model.Task.TaskType;
-import static nl.ru.languageininteraction.vst.model.Task.TaskType.discrimination;
-import static nl.ru.languageininteraction.vst.model.Task.TaskType.identification;
+import nl.ru.languageininteraction.vst.model.Task;
+import static nl.ru.languageininteraction.vst.model.Task.discrimination;
+import static nl.ru.languageininteraction.vst.model.Task.identification;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import nl.ru.languageininteraction.vst.model.WordSample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.repository.query.Param;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -78,7 +79,6 @@ public class StimulusController {
 //    Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
 //        return new ResponseEntity<>(wrapped, HttpStatus.OK);
 //    }
-
     @RequestMapping(value = "/audio/{sampleId}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     @ResponseBody
     public HttpEntity<InputStreamResource> getStimulusFile(@PathVariable("sampleId") long sampleId) {
@@ -92,8 +92,13 @@ public class StimulusController {
 
     @RequestMapping(value = "/sequence/{taskType}", method = GET)
     @ResponseBody
-    public ResponseEntity<Resources<Stimulus>> getStimulusSequence(@PathVariable("taskType") TaskType taskType, @Param("player") Player player,
-            @Param("maxSize") Integer maxSize, @Param("maxTargetCount") Integer maxTargetCount, @Param("target") Vowel targetVowel, @Param("standard") Vowel standardVowel) {
+    public ResponseEntity<Resources<Stimulus>> getStimulusSequence(@PathVariable("taskType") Task taskType,
+            @RequestParam(value = "player", required = true) Player player,
+            @RequestParam(value = "difficulty", required = true) Difficulty difficulty,
+            @RequestParam(value = "maxSize", required = true) Integer maxSize,
+            @RequestParam(value = "maxTargetCount", required = true) Integer maxTargetCount,
+            @RequestParam(value = "target", required = true) Vowel targetVowel,
+            @RequestParam(value = "standard", required = true) Vowel standardVowel) {
         final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, player);
         final ArrayList<Stimulus> words;
         switch (taskType) {

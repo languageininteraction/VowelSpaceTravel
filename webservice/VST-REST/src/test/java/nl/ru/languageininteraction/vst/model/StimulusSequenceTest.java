@@ -120,14 +120,16 @@ public class StimulusSequenceTest {
         // and that each subsequent pair of words sequentially contain the standard then target vowels
 
         for (Stimulus stimulus : result1) {
-            if (stimulusIndex < 3) {
+            if (stimulusIndex == 0) {
+                assertEquals(targetVowel.getDisc(), stimulus.getWordSample().getWord().getVowel().getDisc());
+            } else if (stimulusIndex < 4) {
                 assertEquals(standardVowel.getDisc(), stimulus.getWordSample().getWord().getVowel().getDisc());
             } else {
                 if (targetVowel.getDisc().equals(stimulus.getWordSample().getWord().getVowel().getDisc())) {
                     targetCount++;
                 }
-                if (lastWasTarget) { 
-                   // there cannot be two targets in a row
+                if (lastWasTarget) {
+                    // there cannot be two targets in a row
                     assertEquals(standardVowel.getDisc(), stimulus.getWordSample().getWord().getVowel().getDisc());
                 }
                 lastWasTarget = targetVowel.getDisc().equals(stimulus.getWordSample().getWord().getVowel().getDisc());
