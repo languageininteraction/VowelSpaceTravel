@@ -33,32 +33,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         <a href="confidence/values">confidence</a><br>
         <br>
         <br>
-        true_positive<input type="checkbox" id="true_positive" checked><br>
-        false_positive<input type="checkbox" id="false_positive" checked><br>
-        true_negative<input type="checkbox" id="true_negative" checked><br>
-        false_negative<input type="checkbox" id="false_negative" checked><br>
         responseTimeMs<input type="number" id="responseTimeMs" value="1"><br>
         player<input id="player" value="2"><br>
-        standardVowel<input id="standardVowel" value="4"><br>
-        targetVowel<input id="targetVowel" value="4"><br>
+        maxSize<input id="maxSize" value="10"><br>
+        maxTargetCount<input id="maxTargetCount" value="3"><br>
+        difficulty<select id="difficulty">  
+            <option value="easy">easy</option>
+            <option value="medium">medium</option>
+            <option value="hard">hard</option>
+            <option value="veryhard">veryhard</option>
+        </select><br>
+        standardVowel<input id="standard" value="6"><br>
+        targetVowel<input id="target" value="3"><br>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>        
         <script>
             $(document).ready(function () {
-                $("#addresponse").click(function () {
+                addresponse = function (postData) {
                     $.ajax({
                         url: "responses",
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({
-                            "true_positive": $("#true_positive").prop('checked'),
-                            "false_positive": $("#false_positive").prop('checked'),
-                            "true_negative": $("#true_negative").prop('checked'),
-                            "false_negative": $("#false_negative").prop('checked'),
-                            "responseTimeMs": $("#responseTimeMs").prop('value'),
-                            "player": $("#player").prop('value'),
-                            "standardVowel": $("#standardVowel").prop('value'),
-                            "targetVowel": $("#targetVowel").prop('value'),
-                        }),
+                        data: postData,
                         async: true,
                         cache: false,
                         processData: false,
@@ -66,10 +61,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //                            $("#true_positive").prop('checked', true);
                         }
                     })
-                });
+                };
                 $("#getsamples").click(function () {
                     $.ajax({
-                        url: "http://localhost:8080/stimulus/sequence/discrimination?maxSize=10&maxTargetCount=3&player=1&target=3&difficulty=easy&standard=6",
+                        url: "http://localhost:8080/stimulus/sequence/discrimination?maxSize=" + $("#maxSize").prop('value') + "&maxTargetCount=" + $("#maxTargetCount").prop('value') + "&player=" + $("#player").prop('value') + "&target=" + $("#target").prop('value') + "&difficulty=" + $("#difficulty").prop('value') + "&standard=" + $("#standard").prop('value'),
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
                         async: true,
@@ -78,8 +73,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         success: function (data, status) {
 //                            $("#true_positive").prop('checked', true);
                             $("#audioArea").empty();
+                            var textArea = document.createElement("TEXTAREA");
+                            textArea.value = "[";
                             $.each(data._embedded, function () {
                                 $.each(this, function (index, stimulus) {
+                                    if (stimulus.relevance === "isTarget") {
+                                        textArea.value += JSON.stringify(stimulus);
+                                    }
                                     var audioTag = document.createElement("AUDIO");
                                     audioTag.controls = true;
                                     var sourceTag = document.createElement("SOURCE");
@@ -98,6 +98,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                     $("#audioArea").append(document.createElement("BR"));
                                 });
                             });
+                            textArea.value += "]";
+                            $("#audioArea").append(textArea);
+                            var correctButton = document.createElement("BUTTON");
+                            var correctButtonLabel = document.createTextNode("submit correct");
+                            correctButton.appendChild(correctButtonLabel);
+                            correctButton.onclick = function () {
+                                addresponse(textArea.value.replace(/null/g, "true"));
+                            };
+                            $("#audioArea").append(correctButton);
+
+                            var wrongButton = document.createElement("BUTTON");
+                            var wrongButtonLabel = document.createTextNode("submit wrong");
+                            wrongButton.appendChild(wrongButtonLabel);
+                            wrongButton.onclick = function () {
+                                addresponse(textArea.value.replace(/null/g, "false"));
+                            };
+                            $("#audioArea").append(wrongButton);
                         }
                     })
                 });
@@ -118,8 +135,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             $.each(data._embedded, function () {
                                 $.each(this, function (index, confidence) {
                                     var dataPointTag = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                                    dataPointTag.setAttribute("x1", graphWidth / (dataLength+1) * (index+1));
-                                    dataPointTag.setAttribute("x2", graphWidth / (dataLength+1) * (index+1));
+                                    dataPointTag.setAttribute("x1", graphWidth / (dataLength + 1) * (index + 1));
+                                    dataPointTag.setAttribute("x2", graphWidth / (dataLength + 1) * (index + 1));
                                     dataPointTag.setAttribute("y1", (1.0 - confidence.lowerBound) * graphHeight);
                                     dataPointTag.setAttribute("y2", (1.0 - confidence.upperBound) * graphHeight);
                                     dataPointTag.setAttribute("style", "stroke:rgb(255,0,0);stroke-width:1");
@@ -135,9 +152,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
             });</script>
         <br>
         <br>
-        <button id="addresponse">add result</button> 
-        <br>
-        <br>
         <button id="getsamples">get samples</button>   
         <br>
         <div id="audioArea"></div>
@@ -146,7 +160,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         <svg id="graphSvg" height="420" width="1220">
         <rect id="graphRect" x="10" y="10" width="1200" height="400" style="fill:rgb(200,200,200);stroke-width:1;stroke:rgb(0,0,0)" />
         <g transform="translate(10, 10)" id="confidenceDataPoints">
-        <circle cx="50" cy="60" r="10" stroke="black" stroke-width="1" fill="grey" />
+        <!--<circle cx="50" cy="60" r="10" stroke="black" stroke-width="1" fill="grey" />-->
         </g>
         </svg>
     </body>
