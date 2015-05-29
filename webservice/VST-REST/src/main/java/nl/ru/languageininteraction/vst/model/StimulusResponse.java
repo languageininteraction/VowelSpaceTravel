@@ -44,6 +44,8 @@ public class StimulusResponse { //extends ResourceSupport
     @ManyToOne
     private Vowel standardVowel;
 
+    private Task.TaskType taskType;
+
     public enum ResponseRating {
 
         true_positive,
@@ -131,7 +133,15 @@ public class StimulusResponse { //extends ResourceSupport
         return responseDate;
     }
 
-    public long getResponceTimeMs() {
+    public long getResponseTimeMs() {
         return responseTimeMs;
+    }
+
+    public Task.TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(Task.TaskType taskType) {
+        this.taskType = taskType;
     }
 }
