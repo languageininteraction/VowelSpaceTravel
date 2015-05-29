@@ -133,10 +133,6 @@ public class StimulusResponse { //extends ResourceSupport
         return responseDate;
     }
 
-    public long getResponseTimeMs() {
-        return responseTimeMs;
-    }
-
     public Task.TaskType getTaskType() {
         return taskType;
     }
