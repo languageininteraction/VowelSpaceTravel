@@ -42,9 +42,12 @@ public class StimulusResponse { //extends ResourceSupport
     @ManyToOne
     private Vowel targetVowel;
     @ManyToOne
-    private Vowel standardVowel;
+    // todo: this must be a many to many
+    private List<Vowel> standardVowel;
+//    private Vowel standardVowel;
 
     private Task taskType;
+    private Difficulty difficulty;
 
     public enum ResponseRating {
 
@@ -55,17 +58,17 @@ public class StimulusResponse { //extends ResourceSupport
     }
 //    private ResponseRating responseRating;
     boolean isCorrect;
-    boolean userResponse;
+    boolean playerResponse;
     private long responseTimeMs;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date responseDate;
 
-    public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean isCorrect, boolean userResponse, long responseTimeMs) {
+    public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean isCorrect, boolean playerResponse, long responseTimeMs) {
         this.player = player;
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
         this.isCorrect = isCorrect;
-        this.userResponse = userResponse;
+        this.playerResponse = playerResponse;
         this.responseTimeMs = responseTimeMs;
         this.responseDate = new Date();
     }
@@ -105,19 +108,19 @@ public class StimulusResponse { //extends ResourceSupport
         return isCorrect;
     }
 
-    public boolean isUserResponse() {
-        return userResponse;
+    public boolean isPlayerResponse() {
+        return playerResponse;
     }
 
     public ResponseRating getResponseRating() {
         ResponseRating responseRating;
         if (isCorrect) {
-            if (userResponse) {
+            if (playerResponse) {
                 responseRating = ResponseRating.true_positive;
             } else {
                 responseRating = ResponseRating.false_negative;
             }
-        } else if (userResponse) {
+        } else if (playerResponse) {
             responseRating = ResponseRating.false_positive;
         } else {
             responseRating = ResponseRating.true_negative;
@@ -139,5 +142,13 @@ public class StimulusResponse { //extends ResourceSupport
 
     public void setTaskType(Task taskType) {
         this.taskType = taskType;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 }

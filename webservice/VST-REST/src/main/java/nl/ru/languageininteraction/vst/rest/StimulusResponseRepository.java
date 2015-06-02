@@ -41,11 +41,11 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
 
     List<StimulusResponse> findByTargetVowelAndStandardVowel(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 }

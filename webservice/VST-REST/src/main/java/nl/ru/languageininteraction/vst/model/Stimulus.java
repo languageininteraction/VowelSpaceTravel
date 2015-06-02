@@ -17,12 +17,14 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
@@ -39,16 +41,15 @@ public class Stimulus extends ResourceSupport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private long responseTimeMs;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date responseDate = null;
     @ManyToOne
     private WordSample wordSample;
-//    @ManyToOne
-//    private Vowel targetVowel;
-//    @ManyToOne
-//    private Vowel standardVowel;
     private Relevance relevance;
     private Boolean playerResponse = null;
 
-    public Stimulus(Player player, WordSample wordSample, Relevance relevance) {
+    public Stimulus(WordSample wordSample, Relevance relevance) {
         if (wordSample == null) {
             throw new UnsupportedOperationException("wordSample is null");
         }
@@ -97,6 +98,22 @@ public class Stimulus extends ResourceSupport {
 
     public void setPlayerResponse(boolean playerResponse) {
         this.playerResponse = playerResponse;
+    }
+
+    public long getResponseTimeMs() {
+        return responseTimeMs;
+    }
+
+    public void setResponseTimeMs(long responseTimeMs) {
+        this.responseTimeMs = responseTimeMs;
+    }
+
+    public Date getResponseDate() {
+        return responseDate;
+    }
+
+    public void setResponseDate(Date responseDate) {
+        this.responseDate = responseDate;
     }
 
     @Override

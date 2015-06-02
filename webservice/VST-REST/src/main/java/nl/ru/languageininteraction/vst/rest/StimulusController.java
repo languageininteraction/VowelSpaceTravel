@@ -93,11 +93,12 @@ public class StimulusController {
         return new HttpEntity<>(inputStreamResource, header);
     }
 
-    @RequestMapping(value = "/sequence/{taskType}", method = GET)
+    @RequestMapping(value = "/sequence/{taskType}/{difficulty}/{player}", method = GET)
     @ResponseBody
-    public ResponseEntity<Resources<Stimulus>> getStimulusSequence(@PathVariable("taskType") Task taskType,
-            @RequestParam(value = "player", required = true) Player player,
-            @RequestParam(value = "difficulty", required = true) Difficulty difficulty,
+    public ResponseEntity<Resources<Stimulus>> getStimulusSequence(
+            @PathVariable("taskType") Task taskType,
+            @PathVariable("player") Player player,
+            @PathVariable("difficulty") Difficulty difficulty,
             @RequestParam(value = "maxSize", required = true) Integer maxSize,
             @RequestParam(value = "maxTargetCount", required = true) Integer maxTargetCount,
             @RequestParam(value = "target", required = true) Vowel targetVowel,
@@ -122,18 +123,27 @@ public class StimulusController {
         return new ResponseEntity<>(wrapped, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/response", method = POST)
+    @RequestMapping(value = "/response/{taskType}/{difficulty}/{player}", method = POST)
     @ResponseBody
 //    public ResponseEntity<Resources<Confidence>> postStimulusSequence(
     public ResponseEntity postStimulusSequence(
-            //            @RequestParam(value = "player", required = true) Player player,
-            //            Player player,
+            @PathVariable("taskType") Task taskType,
+            @PathVariable("player") Player player,
+            @PathVariable("difficulty") Difficulty difficulty,
             @RequestBody List<Stimulus> results) {
-//        System.out.println("player:" + player.getEmail());
+        System.out.println("difficulty:" + difficulty);
+        System.out.println("taskType:" + taskType);
+        System.out.println("player:" + player.getEmail());
         System.out.println("stimulus: " + results.size());
 //        Resources<Confidence> wrapped = new Resources<>());
         for (Stimulus stimulus : results) {
             System.out.println(stimulus.getPlayerResponse());
+            System.out.println(stimulus.getResponseDate());
+            System.out.println(stimulus.getResponseTimeMs());
+            System.out.println(stimulus.getWordSample());
+            System.out.println(stimulus.getRelevance());
+            System.out.println(stimulus.getSampleId());
+//            System.out.println(stimulus.getWordSample().getWord().getVowel().getDisc());
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

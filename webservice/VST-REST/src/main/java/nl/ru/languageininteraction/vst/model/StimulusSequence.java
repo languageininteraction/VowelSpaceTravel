@@ -51,7 +51,7 @@ public class StimulusSequence extends ResourceSupport {
         distinctInts.limit(availableCount).forEach((int value) -> {
             System.out.println("distinctInt: " + value);
             // todo: select relevant Stimuli and set the Stimulus.Relevance correctly
-            stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), Stimulus.Relevance.isIrelevant));
+            stimulusList.add(new Stimulus(sampleRepository.findOne((long) value), Stimulus.Relevance.isIrelevant));
         });
         return stimulusList;
     }
@@ -90,27 +90,27 @@ public class StimulusSequence extends ResourceSupport {
         int targetCounter = 0;
         for (int index = 0; index < maxSize; index++) {
             if (index == 0) {
-                stimulusList.add(new Stimulus(player, foundByTarget.get(targetRandomIterator.nextInt()), Stimulus.Relevance.isIrelevant));
+                stimulusList.add(new Stimulus(foundByTarget.get(targetRandomIterator.nextInt()), Stimulus.Relevance.isIrelevant));
             } else if (index < 4) {
-                stimulusList.add(new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isIrelevant));
+                stimulusList.add(new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isIrelevant));
             } else {
                 if (maxTargetCount > targetCounter) {
                     if (!lastWasTarget) {
                         if (new Random().nextBoolean()) {
                             final WordSample targetStimulus = foundByTarget.get(targetRandomIterator.nextInt());
-                            stimulusList.add(new Stimulus(player, targetStimulus, Stimulus.Relevance.isTarget));
+                            stimulusList.add(new Stimulus(targetStimulus, Stimulus.Relevance.isTarget));
                             targetCounter++;
                             lastWasTarget = true;
                         } else {
-                            stimulusList.add(new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                            stimulusList.add(new Stimulus( foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
                             lastWasTarget = false;
                         }
                     } else {
-                        stimulusList.add(new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                        stimulusList.add(new Stimulus( foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
                         lastWasTarget = false;
                     }
                 } else {
-                    stimulusList.add(new Random().nextInt(stimulusList.size() - 3) + 3, new Stimulus(player, foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                    stimulusList.add(new Random().nextInt(stimulusList.size() - 3) + 3, new Stimulus( foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
                 }
             }
         }

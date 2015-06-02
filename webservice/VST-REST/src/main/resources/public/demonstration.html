@@ -34,9 +34,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         <br>
         <br>
         responseTimeMs<input type="number" id="responseTimeMs" value="1"><br>
+        responseDate<input type="text" id="responseDate" value="2015-06-02T12:35:43.684+0000"><br>
         player<input id="player" value="2"><br>
         maxSize<input id="maxSize" value="10"><br>
         maxTargetCount<input id="maxTargetCount" value="3"><br>
+        task<select id="task">
+            <option value="discrimination">discrimination</option>
+            <option value="identification">identification</option>
+        </select><br>
         difficulty<select id="difficulty">  
             <option value="easy">easy</option>
             <option value="medium">medium</option>
@@ -50,7 +55,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
             $(document).ready(function () {
                 addresponse = function (postData) {
                     $.ajax({
-                        url: "stimulus/response",//?player=" + $("#player").prop('value'),
+                        url: "stimulus/response/" + $("#task").prop('value') + "/" + $("#difficulty").prop('value') + "/" + $("#player").prop('value'), //?player=" + $("#player").prop('value'),
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
                         data: postData,
@@ -64,7 +69,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 };
                 $("#getsamples").click(function () {
                     $.ajax({
-                        url: "http://localhost:8080/stimulus/sequence/discrimination?maxSize=" + $("#maxSize").prop('value') + "&maxTargetCount=" + $("#maxTargetCount").prop('value') + "&player=" + $("#player").prop('value') + "&target=" + $("#target").prop('value') + "&difficulty=" + $("#difficulty").prop('value') + "&standard=" + $("#standard").prop('value'),
+                        url: "http://localhost:8080/stimulus/sequence/" + $("#task").prop('value') + "/" + $("#difficulty").prop('value') + "/" + $("#player").prop('value') + "?maxSize=" + $("#maxSize").prop('value') + "&maxTargetCount=" + $("#maxTargetCount").prop('value') + "&target=" + $("#target").prop('value') + "&standard=" + $("#standard").prop('value'),
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
                         async: true,
@@ -104,7 +109,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             var correctButtonLabel = document.createTextNode("submit correct");
                             correctButton.appendChild(correctButtonLabel);
                             correctButton.onclick = function () {
-                                addresponse(textArea.value.replace(/null/g, "true"));
+                                addresponse(textArea.value
+                                        .replace(/"responseDate":null/g, "\"responseDate\": \"" + $("#responseDate").prop('value') + "\"")
+                                        .replace(/"responseTimeMs":0/g, "\"responseTimeMs\": \"" + $("#responseTimeMs").prop('value') + "\"")
+                                        .replace(/"playerResponse":null/g, "\"playerResponse\":true")
+                                        );
                             };
                             $("#audioArea").append(correctButton);
 

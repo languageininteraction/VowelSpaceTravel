@@ -34,14 +34,16 @@ public class Confidence {
     @ManyToOne
     private Vowel standardVowel;
     final ConfidenceInterval confidenceInterval;
+    Task task;
+    Difficulty difficulty;
 
     public Confidence(StimulusResponseRepository responseRepository, Player player, Vowel targetVowel, Vowel standardVowel) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
-        final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseTrue(player, targetVowel, standardVowel);
-        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseTrue(player, targetVowel, standardVowel);
-        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndUserResponseFalse(player, targetVowel, standardVowel);
-        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndUserResponseFalse(player, targetVowel, standardVowel);
+        final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseTrue(player, targetVowel, standardVowel);
+        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseTrue(player, targetVowel, standardVowel);
+        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseFalse(player, targetVowel, standardVowel);
+        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseFalse(player, targetVowel, standardVowel);
         confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 
