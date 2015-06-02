@@ -50,7 +50,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
             $(document).ready(function () {
                 addresponse = function (postData) {
                     $.ajax({
-                        url: "responses",
+                        url: "stimulus/response",//?player=" + $("#player").prop('value'),
                         type: "POST",
                         contentType: "application/json; charset=utf-8",
                         data: postData,
@@ -74,11 +74,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //                            $("#true_positive").prop('checked', true);
                             $("#audioArea").empty();
                             var textArea = document.createElement("TEXTAREA");
-                            textArea.value = "[";
+                            textArea.value = /*"{ \"results\": */"[";
                             $.each(data._embedded, function () {
                                 $.each(this, function (index, stimulus) {
-                                    if (stimulus.relevance === "isTarget") {
-                                        textArea.value += JSON.stringify(stimulus);
+                                    if (stimulus.relevance !== "isIrelevant") {
+                                        textArea.value += JSON.stringify(stimulus) + ",";
                                     }
                                     var audioTag = document.createElement("AUDIO");
                                     audioTag.controls = true;
@@ -98,7 +98,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                     $("#audioArea").append(document.createElement("BR"));
                                 });
                             });
-                            textArea.value += "]";
+                            textArea.value += "{}]"; //, \"player\":\"" + $("#player").prop('value') +"\"}";
                             $("#audioArea").append(textArea);
                             var correctButton = document.createElement("BUTTON");
                             var correctButtonLabel = document.createTextNode("submit correct");

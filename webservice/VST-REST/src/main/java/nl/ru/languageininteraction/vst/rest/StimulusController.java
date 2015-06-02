@@ -18,6 +18,7 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
+import java.util.List;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
@@ -41,9 +42,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -117,5 +120,21 @@ public class StimulusController {
         }
         Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
         return new ResponseEntity<>(wrapped, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/response", method = POST)
+    @ResponseBody
+//    public ResponseEntity<Resources<Confidence>> postStimulusSequence(
+    public ResponseEntity postStimulusSequence(
+            //            @RequestParam(value = "player", required = true) Player player,
+            //            Player player,
+            @RequestBody List<Stimulus> results) {
+//        System.out.println("player:" + player.getEmail());
+        System.out.println("stimulus: " + results.size());
+//        Resources<Confidence> wrapped = new Resources<>());
+        for (Stimulus stimulus : results) {
+            System.out.println(stimulus.getPlayerResponse());
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
