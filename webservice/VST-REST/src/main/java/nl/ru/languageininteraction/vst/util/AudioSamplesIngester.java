@@ -18,6 +18,8 @@
 package nl.ru.languageininteraction.vst.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import nl.ru.languageininteraction.vst.model.Speaker;
 import nl.ru.languageininteraction.vst.model.Word;
 import nl.ru.languageininteraction.vst.model.WordSample;
@@ -61,6 +63,15 @@ public class AudioSamplesIngester {
 
     public void processAudioResources() throws IOException {
         System.out.println("processAudioResources");
+        List<String> excludedWords = new ArrayList<>();
+        excludedWords.add("beard");
+        excludedWords.add("bourse");
+        excludedWords.add("cairn");
+        excludedWords.add("cheers");
+        excludedWords.add("fierce");
+        excludedWords.add("kirsch");
+        excludedWords.add("pierce");
+        excludedWords.add("real");
         final Resource[] stimuliResources = resourceResolver.getResources("classpath:" + STIMULI_PATH + "*.wav");
         for (Resource currentStimulus : stimuliResources) {
             final String stimulusFileName = currentStimulus.getFilename();
@@ -71,7 +82,11 @@ public class AudioSamplesIngester {
                 System.out.println("wordString:" + wordString);
                 String speakerString = splitStimulusName[1].substring(0, splitStimulusName[1].length() - ".wav".length());
                 System.out.println("speakerString: " + speakerString);
-                insertSample(wordsRepository.findByWordString(wordString), getSpeaker(speakerString), "/" + STIMULI_PATH + currentStimulus.getFilename());
+                if (excludedWords.contains(wordString)) {
+                    System.out.println("excluding: " + wordString);
+                } else {
+                    insertSample(wordsRepository.findByWordString(wordString), getSpeaker(speakerString), "/" + STIMULI_PATH + currentStimulus.getFilename());
+                }
             } else {
                 System.out.println("failed to parse: " + stimulusFileName);
             }
