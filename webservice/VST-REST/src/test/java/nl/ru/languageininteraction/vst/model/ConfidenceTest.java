@@ -72,16 +72,24 @@ public class ConfidenceTest {
         vowelRepository.save(targetVowel);
         vowelRepository.save(standardVowel);
         for (int truePositiveCounter = 0; truePositiveCounter < truePositiveCount; truePositiveCounter++) {
-            stimulusResultRepository.save(new StimulusResponse(player, targetVowel, standardVowel, true, true, 1));
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isTarget, true, 1);
+            stimulusResponse.addStandardVowel(standardVowel);
+            stimulusResultRepository.save(stimulusResponse);
         }
         for (int falsePositiveCounter = 0; falsePositiveCounter < falsePositiveCount; falsePositiveCounter++) {
-            stimulusResultRepository.save(new StimulusResponse(player, targetVowel, standardVowel, false, true, 1));
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isStandard, true, 1);
+            stimulusResponse.addStandardVowel(standardVowel);
+            stimulusResultRepository.save(stimulusResponse);
         }
         for (int trueNegativeCounter = 0; trueNegativeCounter < trueNegativeCount; trueNegativeCounter++) {
-            stimulusResultRepository.save(new StimulusResponse(player, targetVowel, standardVowel, false, false, 1));
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isStandard, false, 1);
+            stimulusResponse.addStandardVowel(standardVowel);
+            stimulusResultRepository.save(stimulusResponse);
         }
         for (int falseNegativeCounter = 0; falseNegativeCounter < falseNegativeCount; falseNegativeCounter++) {
-            stimulusResultRepository.save(new StimulusResponse(player, targetVowel, standardVowel, true, false, 1));
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isTarget, false, 1);
+            stimulusResponse.addStandardVowel(standardVowel);
+            stimulusResultRepository.save(stimulusResponse);
         }
     }
 

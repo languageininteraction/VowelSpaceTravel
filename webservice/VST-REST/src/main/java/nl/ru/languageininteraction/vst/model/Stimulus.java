@@ -48,6 +48,7 @@ public class Stimulus extends ResourceSupport {
     private WordSample wordSample;
     private Relevance relevance;
     private Boolean playerResponse = null;
+    private long vowelId;
 
     public Stimulus(WordSample wordSample, Relevance relevance) {
         if (wordSample == null) {
@@ -55,6 +56,7 @@ public class Stimulus extends ResourceSupport {
         }
         this.wordSample = wordSample;
         this.relevance = relevance;
+        this.vowelId = wordSample.getVowelId();
     }
 
     public Stimulus() {
@@ -114,6 +116,10 @@ public class Stimulus extends ResourceSupport {
 
     public void setResponseDate(Date responseDate) {
         this.responseDate = responseDate;
+    }
+
+    public long getVowelId() {
+        return vowelId;
     }
 
     @Override

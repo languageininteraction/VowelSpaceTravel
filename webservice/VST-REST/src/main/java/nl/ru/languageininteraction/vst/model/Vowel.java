@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -41,6 +42,8 @@ public class Vowel {
     private String disc;
     @OneToMany(mappedBy = "vowel")
     private List<VowelQuality> vowelQualitys;
+    @ManyToMany(mappedBy = "standardVowels")
+    private List<StimulusResponse> stimulusResponses;
 
     public Vowel(String ipa, String disc) {
         this.ipa = ipa;

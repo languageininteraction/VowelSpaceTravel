@@ -22,6 +22,7 @@ import java.util.List;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
+import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import nl.ru.languageininteraction.vst.model.StimulusSequence;
@@ -64,7 +65,10 @@ public class StimulusController {
 
     @Autowired
     WordSampleRepository wordSampleRepository;
-
+    @Autowired
+    StimulusResponseRepository responseRepository;
+    @Autowired
+    VowelRepository vowelRepository;
 //    @RequestMapping(method = RequestMethod.GET)
 //    @ResponseBody
 //    public ResponseEntity getLinks() {
@@ -82,6 +86,7 @@ public class StimulusController {
 //    Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
 //        return new ResponseEntity<>(wrapped, HttpStatus.OK);
 //    }
+
     @RequestMapping(value = "/audio/{sampleId}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     @ResponseBody
     public HttpEntity<InputStreamResource> getStimulusFile(@PathVariable("sampleId") long sampleId) {
@@ -143,7 +148,15 @@ public class StimulusController {
             System.out.println(stimulus.getWordSample());
             System.out.println(stimulus.getRelevance());
             System.out.println(stimulus.getSampleId());
+            System.out.println(stimulus.getVowelId());
 //            System.out.println(stimulus.getWordSample().getWord().getVowel().getDisc());
+            if (stimulus.getPlayerResponse() != null) {
+                final StimulusResponse stimulusResponse = new StimulusResponse(player, vowelRepository.findOne(stimulus.getVowelId()), stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
+                //todo: add all standardVowels
+                responseRepository.save(stimulusResponse);
+            }
+            // todo: update and save all confidence values
+            // todo: add confidence table and repository
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

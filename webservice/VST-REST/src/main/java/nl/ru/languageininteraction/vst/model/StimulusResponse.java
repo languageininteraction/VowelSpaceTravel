@@ -17,11 +17,16 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
@@ -41,11 +46,9 @@ public class StimulusResponse { //extends ResourceSupport
 
     @ManyToOne
     private Vowel targetVowel;
-    @ManyToOne
-    // todo: this must be a many to many
-    private List<Vowel> standardVowel;
-//    private Vowel standardVowel;
 
+    @ManyToMany
+    private List<Vowel> standardVowels = new ArrayList<>();
     private Task taskType;
     private Difficulty difficulty;
 
@@ -57,17 +60,18 @@ public class StimulusResponse { //extends ResourceSupport
         false_negative
     }
 //    private ResponseRating responseRating;
-    boolean isCorrect;
+    
+    @Enumerated(EnumType.STRING)
+    Stimulus.Relevance relevance;
     boolean playerResponse;
     private long responseTimeMs;
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date responseDate;
 
-    public StimulusResponse(Player player, Vowel targetVowel, Vowel standardVowel, boolean isCorrect, boolean playerResponse, long responseTimeMs) {
+    public StimulusResponse(Player player, Vowel targetVowel, Stimulus.Relevance relevance, boolean playerResponse, long responseTimeMs) {
         this.player = player;
         this.targetVowel = targetVowel;
-        this.standardVowel = standardVowel;
-        this.isCorrect = isCorrect;
+        this.relevance = relevance;
         this.playerResponse = playerResponse;
         this.responseTimeMs = responseTimeMs;
         this.responseDate = new Date();
@@ -80,32 +84,20 @@ public class StimulusResponse { //extends ResourceSupport
         return player;
     }
 
-    public String getTargetDisc() {
-        if (targetVowel != null) {
-            return targetVowel.getDisc();
-        } else {
-            return "";
-        }
-    }
-
-    public String getStandardDisc() {
-        if (standardVowel != null) {
-            return standardVowel.getDisc();
-        } else {
-            return "";
-        }
-    }
-
     public Vowel getTargetVowel() {
         return targetVowel;
     }
 
-    public Vowel getStandardVowel() {
-        return standardVowel;
+    public List<Vowel> getStandardVowels() {
+        return standardVowels;
     }
 
-    public boolean isIsCorrect() {
-        return isCorrect;
+    public void addStandardVowel(Vowel standardVowel) {
+        standardVowels.add(standardVowel);
+    }
+
+    public Stimulus.Relevance getRelevance() {
+        return relevance;
     }
 
     public boolean isPlayerResponse() {
@@ -114,7 +106,7 @@ public class StimulusResponse { //extends ResourceSupport
 
     public ResponseRating getResponseRating() {
         ResponseRating responseRating;
-        if (isCorrect) {
+        if (relevance.equals(Stimulus.Relevance.isTarget)) {
             if (playerResponse) {
                 responseRating = ResponseRating.true_positive;
             } else {

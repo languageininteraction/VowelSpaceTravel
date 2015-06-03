@@ -19,6 +19,7 @@ package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -37,15 +38,11 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
 
     List<StimulusResponse> findByTargetVowel(@Param("targetVowel") Vowel targetVowel);
 
-    List<StimulusResponse> findByStandardVowel(@Param("standardVowel") Vowel standardVowel);
+    List<StimulusResponse> findByStandardVowels(@Param("standardVowel") Vowel standardVowel);
 
-    List<StimulusResponse> findByTargetVowelAndStandardVowel(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    List<StimulusResponse> findByTargetVowelAndStandardVowels(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel, @Param("relevance") Stimulus.Relevance relevance);
 
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
-
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
-
-    int countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
+    int countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel, @Param("relevance") Stimulus.Relevance relevance);
 }

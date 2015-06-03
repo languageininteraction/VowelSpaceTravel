@@ -34,16 +34,17 @@ public class Confidence {
     @ManyToOne
     private Vowel standardVowel;
     final ConfidenceInterval confidenceInterval;
+    // todo: start using this Task and Difficulty
     Task task;
     Difficulty difficulty;
 
     public Confidence(StimulusResponseRepository responseRepository, Player player, Vowel targetVowel, Vowel standardVowel) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
-        final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseTrue(player, targetVowel, standardVowel);
-        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseTrue(player, targetVowel, standardVowel);
-        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectFalseAndPlayerResponseFalse(player, targetVowel, standardVowel);
-        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelAndIsCorrectTrueAndPlayerResponseFalse(player, targetVowel, standardVowel);
+        final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel,Stimulus.Relevance.isStandard);
+        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel,Stimulus.Relevance.isStandard);
+        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel,Stimulus.Relevance.isTarget);
         confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 
