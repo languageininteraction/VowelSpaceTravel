@@ -38,11 +38,16 @@ public class WordSample {
     @ManyToOne
     Word word;
     private String soundFilePath;
+    private long vowelId;
 
     public WordSample(Speaker spokenBy, Word word, String soundFilePath) {
+        if (word == null) {
+            throw new UnsupportedOperationException(soundFilePath);
+        }
         this.spokenBy = spokenBy;
         this.word = word;
         this.soundFilePath = soundFilePath;
+        this.vowelId = word.getVowel().getId();
     }
 
     public WordSample() {
@@ -58,6 +63,10 @@ public class WordSample {
 
     public Word getWord() {
         return word;
+    }
+
+    public long getVowelId() {
+        return vowelId;
     }
 
     public String getSoundFilePath() {

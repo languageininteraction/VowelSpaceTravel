@@ -31,6 +31,8 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Settings {
+    @OneToOne(mappedBy = "settings")
+    private Player player;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

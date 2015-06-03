@@ -56,7 +56,7 @@ public class Stimulus extends ResourceSupport {
         }
         this.wordSample = wordSample;
         this.relevance = relevance;
-        this.vowelId = wordSample.getVowelId();
+        this.vowelId = wordSample.getWord().getVowel().getId();
     }
 
     public Stimulus() {
