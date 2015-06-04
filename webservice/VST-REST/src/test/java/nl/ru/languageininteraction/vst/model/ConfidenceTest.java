@@ -103,10 +103,10 @@ public class ConfidenceTest {
         final Vowel targetVowel = new Vowel();
         final Vowel standardVowel = new Vowel();
         insertTestData(player1, targetVowel, standardVowel, 8, 8, 8, 8);
-        assertEquals(0.3315, new Confidence(stimulusResultRepository, player1, targetVowel, standardVowel).getLowerBound(), 0.01);
+        assertEquals(0.3315, new Confidence(stimulusResultRepository, player1, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getLowerBound(), 0.01);
         final Player player2 = new Player("a2", "b2", "c2", 1, null);
         insertTestData(player2, targetVowel, standardVowel, 0, 8, 8, 8);
-        assertEquals(0.1797, new Confidence(stimulusResultRepository, player2, targetVowel, standardVowel).getLowerBound(), 0.01);
+        assertEquals(0.1797, new Confidence(stimulusResultRepository, player2, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getLowerBound(), 0.01);
     }
 
     /**
@@ -119,10 +119,10 @@ public class ConfidenceTest {
         final Vowel targetVowel = new Vowel();
         final Vowel standardVowel = new Vowel();
         insertTestData(player1, targetVowel, standardVowel, 8, 8, 8, 8);
-        assertEquals(0.66, new Confidence(stimulusResultRepository, player1, targetVowel, standardVowel).getUpperBound(), 0.01);
+        assertEquals(0.66, new Confidence(stimulusResultRepository, player1, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getUpperBound(), 0.01);
         final Player player2 = new Player("a4", "b4", "c4", 1, null);
         insertTestData(player2, targetVowel, standardVowel, 0, 8, 8, 8);
-        assertEquals(0.5329, new Confidence(stimulusResultRepository, player2, targetVowel, standardVowel).getUpperBound(), 0.01);
+        assertEquals(0.5329, new Confidence(stimulusResultRepository, player2, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getUpperBound(), 0.01);
     }
 
     /**

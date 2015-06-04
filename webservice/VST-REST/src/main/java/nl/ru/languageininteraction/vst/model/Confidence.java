@@ -17,6 +17,10 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
 import org.apache.commons.math3.stat.interval.ConfidenceInterval;
@@ -26,45 +30,62 @@ import org.apache.commons.math3.stat.interval.WilsonScoreInterval;
  * @since Apr 23, 2015 4:11:22 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
+@Entity
 public class Confidence {
 // this is the confidence that the application has in the users ability to distinguish a given vowel pair
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+//    @Column(unique = true)
+    @ManyToOne
+    private Player player;
     @ManyToOne
     private Vowel targetVowel;
     @ManyToOne
     private Vowel standardVowel;
-    final ConfidenceInterval confidenceInterval;
-    // todo: start using this Task and Difficulty
-    Task task;
-    Difficulty difficulty;
+    private double confidenceLevel;
+    private double lowerBound;
+    private double upperBound;
+    private boolean hasValidConfidence = false;
+    private Task task;
+    private Difficulty difficulty;
 
-    public Confidence(StimulusResponseRepository responseRepository, Player player, Vowel targetVowel, Vowel standardVowel) {
+    public Confidence() {
+    }
+
+    public Confidence(StimulusResponseRepository responseRepository, Player player, Task task, Difficulty difficulty, Vowel targetVowel, Vowel standardVowel) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
+        this.task = task;
+        this.difficulty = difficulty;
+        this.player = player;
         final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
-        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel,Stimulus.Relevance.isStandard);
-        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel,Stimulus.Relevance.isStandard);
-        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel,Stimulus.Relevance.isTarget);
-        confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
+        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 
     public Confidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
-        confidenceInterval = calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
+        calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 
     public boolean hasValidConfidence() {
-        return confidenceInterval != null;
+        return hasValidConfidence;
     }
 
-    private ConfidenceInterval calculateConfidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+    private void calculateConfidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
         final WilsonScoreInterval wilsonScoreInterval = new WilsonScoreInterval();
         final int numberOfTrials = truePositiveCount + falsePositiveCount + trueNegativeCount + falseNegativeCount;
         final int numberOfSuccesses = truePositiveCount + trueNegativeCount;
-        final double confidenceLevel = 0.95;
+        final double confidenceInputLevel = 0.95;
         if (numberOfTrials > 0) {
-            return wilsonScoreInterval.createInterval(numberOfTrials, numberOfSuccesses, confidenceLevel);
-        } else {
-            return null;
+            final ConfidenceInterval currentInterval = wilsonScoreInterval.createInterval(numberOfTrials, numberOfSuccesses, confidenceInputLevel);
+            confidenceLevel = currentInterval.getConfidenceLevel();
+            lowerBound = currentInterval.getLowerBound();
+            upperBound = currentInterval.getUpperBound();
+            hasValidConfidence = true;
         }
     }
 
@@ -85,14 +106,14 @@ public class Confidence {
     }
 
     public double getConfidenceLevel() {
-        return confidenceInterval.getConfidenceLevel();
+        return confidenceLevel;
     }
 
     public double getLowerBound() {
-        return confidenceInterval.getLowerBound();
+        return lowerBound;
     }
 
     public double getUpperBound() {
-        return confidenceInterval.getUpperBound();
+        return upperBound;
     }
 }

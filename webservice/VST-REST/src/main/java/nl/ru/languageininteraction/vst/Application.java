@@ -1,6 +1,7 @@
 package nl.ru.languageininteraction.vst;
 
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.SettingsRepository;
@@ -40,6 +41,8 @@ public class Application implements CommandLineRunner {
     @Autowired
     private StimulusResponseRepository stimulusResultRepository;
     @Autowired
+    private ConfidenceRepository confidenceRepository;
+    @Autowired
     private WordRepository wordsRepository;
     @Autowired
     private SpeakerRepository speakerRepository;
@@ -74,6 +77,6 @@ public class Application implements CommandLineRunner {
             System.out.println(currentPlayer);
         }
         System.out.println();
-        new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository).insertDummyData();
+        new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, confidenceRepository).insertDummyData();
     }
 }

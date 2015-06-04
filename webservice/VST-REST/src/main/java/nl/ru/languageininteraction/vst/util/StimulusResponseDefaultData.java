@@ -18,10 +18,14 @@
 package nl.ru.languageininteraction.vst.util;
 
 import java.util.List;
+import nl.ru.languageininteraction.vst.model.Confidence;
+import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
+import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.Vowel;
+import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
@@ -39,13 +43,15 @@ public class StimulusResponseDefaultData {
     private final StimulusResponseRepository stimulusResultRepository;
     private final WordRepository wordsRepository;
     private final ConsonantRepository consonantRepository;
+    private final ConfidenceRepository confidenceRepository;
 
-    public StimulusResponseDefaultData(VowelRepository vowelRepository, PlayerRepository playerRepository, StimulusResponseRepository stimulusResultRepository, WordRepository wordsRepository, ConsonantRepository consonantRepository) {
+    public StimulusResponseDefaultData(VowelRepository vowelRepository, PlayerRepository playerRepository, StimulusResponseRepository stimulusResultRepository, WordRepository wordsRepository, ConsonantRepository consonantRepository, ConfidenceRepository confidenceRepository) {
         this.vowelRepository = vowelRepository;
         this.playerRepository = playerRepository;
         this.stimulusResultRepository = stimulusResultRepository;
         this.wordsRepository = wordsRepository;
         this.consonantRepository = consonantRepository;
+        this.confidenceRepository = confidenceRepository;
     }
 
     public void insertDummyData() {
@@ -117,6 +123,7 @@ public class StimulusResponseDefaultData {
         insertValues(allVowels, player, Stimulus.Relevance.isTarget, false);
         insertValues(allVowels, player, Stimulus.Relevance.isStandard, true);
         insertValues(allVowels, player, Stimulus.Relevance.isStandard, false);
+        insertConfidence(allVowels, player, Task.discrimination, Difficulty.veryhard);
     }
 
     private void insertValues(final List<Vowel> allVowels, final Player player, final Stimulus.Relevance relevance, final boolean playerResponse) {
@@ -128,4 +135,14 @@ public class StimulusResponseDefaultData {
             }
         }
     }
+
+    private void insertConfidence(final List<Vowel> allVowels, final Player player, final Task task, final Difficulty difficulty) {
+        for (Vowel targetVowel : allVowels) {
+            for (Vowel standarVowel : allVowels) {
+                Confidence confidence = new Confidence(stimulusResultRepository, player, task, difficulty, targetVowel, standarVowel);
+                confidenceRepository.save(confidence);
+            }
+        }
+    }
+
 }
