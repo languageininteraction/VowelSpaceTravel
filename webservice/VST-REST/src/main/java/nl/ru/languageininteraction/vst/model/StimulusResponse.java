@@ -49,7 +49,9 @@ public class StimulusResponse { //extends ResourceSupport
 
     @ManyToMany
     private List<Vowel> standardVowels = new ArrayList<>();
-    private Task taskType;
+
+    private Task task;
+
     private Difficulty difficulty;
 
     public enum ResponseRating {
@@ -60,7 +62,7 @@ public class StimulusResponse { //extends ResourceSupport
         false_negative
     }
 //    private ResponseRating responseRating;
-    
+
     @Enumerated(EnumType.STRING)
     Stimulus.Relevance relevance;
     boolean playerResponse;
@@ -68,12 +70,14 @@ public class StimulusResponse { //extends ResourceSupport
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date responseDate;
 
-    public StimulusResponse(Player player, Vowel targetVowel, Stimulus.Relevance relevance, boolean playerResponse, long responseTimeMs) {
+    public StimulusResponse(Player player, Task taskType, Difficulty difficulty, Vowel targetVowel, Stimulus.Relevance relevance, boolean playerResponse, long responseTimeMs) {
         this.player = player;
         this.targetVowel = targetVowel;
         this.relevance = relevance;
         this.playerResponse = playerResponse;
         this.responseTimeMs = responseTimeMs;
+        this.task = taskType;
+        this.difficulty = difficulty;
         this.responseDate = new Date();
     }
 
@@ -128,19 +132,11 @@ public class StimulusResponse { //extends ResourceSupport
         return responseDate;
     }
 
-    public Task getTaskType() {
-        return taskType;
-    }
-
-    public void setTaskType(Task taskType) {
-        this.taskType = taskType;
+    public Task getTask() {
+        return task;
     }
 
     public Difficulty getDifficulty() {
         return difficulty;
-    }
-
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
     }
 }

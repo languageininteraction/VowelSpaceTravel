@@ -151,7 +151,7 @@ public class StimulusController {
             System.out.println(stimulus.getVowelId());
 //            System.out.println(stimulus.getWordSample().getWord().getVowel().getDisc());
             if (stimulus.getPlayerResponse() != null) {
-                final StimulusResponse stimulusResponse = new StimulusResponse(player, vowelRepository.findOne(stimulus.getVowelId()), stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
+                final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, vowelRepository.findOne(stimulus.getVowelId()), stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
                 //todo: add all standardVowels
                 responseRepository.save(stimulusResponse);
             }

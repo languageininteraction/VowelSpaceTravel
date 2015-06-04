@@ -66,28 +66,28 @@ public class ConfidenceTest {
     public void instertData() {
     }
 
-    private void insertTestData(final Player player, final Vowel targetVowel, final Vowel standardVowel, final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+    private void insertTestData(final Player player, final Task taskType, final Difficulty difficulty, final Vowel targetVowel, final Vowel standardVowel, final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
 //        stimulusResultRepository.deleteAll();        
         playerRepository.save(player);
         vowelRepository.save(targetVowel);
         vowelRepository.save(standardVowel);
         for (int truePositiveCounter = 0; truePositiveCounter < truePositiveCount; truePositiveCounter++) {
-            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isTarget, true, 1);
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, Stimulus.Relevance.isTarget, true, 1);
             stimulusResponse.addStandardVowel(standardVowel);
             stimulusResultRepository.save(stimulusResponse);
         }
         for (int falsePositiveCounter = 0; falsePositiveCounter < falsePositiveCount; falsePositiveCounter++) {
-            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isStandard, true, 1);
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, Stimulus.Relevance.isStandard, true, 1);
             stimulusResponse.addStandardVowel(standardVowel);
             stimulusResultRepository.save(stimulusResponse);
         }
         for (int trueNegativeCounter = 0; trueNegativeCounter < trueNegativeCount; trueNegativeCounter++) {
-            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isStandard, false, 1);
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, Stimulus.Relevance.isStandard, false, 1);
             stimulusResponse.addStandardVowel(standardVowel);
             stimulusResultRepository.save(stimulusResponse);
         }
         for (int falseNegativeCounter = 0; falseNegativeCounter < falseNegativeCount; falseNegativeCounter++) {
-            final StimulusResponse stimulusResponse = new StimulusResponse(player, targetVowel, Stimulus.Relevance.isTarget, false, 1);
+            final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, Stimulus.Relevance.isTarget, false, 1);
             stimulusResponse.addStandardVowel(standardVowel);
             stimulusResultRepository.save(stimulusResponse);
         }
@@ -102,10 +102,12 @@ public class ConfidenceTest {
         final Player player1 = new Player("a1", "b1", "c1", 1, null);
         final Vowel targetVowel = new Vowel();
         final Vowel standardVowel = new Vowel();
-        insertTestData(player1, targetVowel, standardVowel, 8, 8, 8, 8);
+        final Task task = Task.discrimination;
+        final Difficulty difficulty = Difficulty.veryhard;
+        insertTestData(player1, task, difficulty, targetVowel, standardVowel, 8, 8, 8, 8);
         assertEquals(0.3315, new Confidence(stimulusResultRepository, player1, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getLowerBound(), 0.01);
         final Player player2 = new Player("a2", "b2", "c2", 1, null);
-        insertTestData(player2, targetVowel, standardVowel, 0, 8, 8, 8);
+        insertTestData(player2, task, difficulty, targetVowel, standardVowel, 0, 8, 8, 8);
         assertEquals(0.1797, new Confidence(stimulusResultRepository, player2, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getLowerBound(), 0.01);
     }
 
@@ -118,10 +120,12 @@ public class ConfidenceTest {
         final Player player1 = new Player("a3", "b3", "c3", 1, null);
         final Vowel targetVowel = new Vowel();
         final Vowel standardVowel = new Vowel();
-        insertTestData(player1, targetVowel, standardVowel, 8, 8, 8, 8);
+        final Task task = Task.discrimination;
+        final Difficulty difficulty = Difficulty.veryhard;
+        insertTestData(player1, task, difficulty, targetVowel, standardVowel, 8, 8, 8, 8);
         assertEquals(0.66, new Confidence(stimulusResultRepository, player1, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getUpperBound(), 0.01);
         final Player player2 = new Player("a4", "b4", "c4", 1, null);
-        insertTestData(player2, targetVowel, standardVowel, 0, 8, 8, 8);
+        insertTestData(player2, task, difficulty, targetVowel, standardVowel, 0, 8, 8, 8);
         assertEquals(0.5329, new Confidence(stimulusResultRepository, player2, Task.discrimination, Difficulty.veryhard, targetVowel, standardVowel).getUpperBound(), 0.01);
     }
 

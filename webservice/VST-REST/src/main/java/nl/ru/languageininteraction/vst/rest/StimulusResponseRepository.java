@@ -18,9 +18,11 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
+import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
+import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -42,7 +44,19 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
 
     List<StimulusResponse> findByTargetVowelAndStandardVowels(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
 
-    int countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel, @Param("relevance") Stimulus.Relevance relevance);
+    int countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel,
+            @Param("standardVowel") Vowel standardVowel,
+            @Param("relevance") Stimulus.Relevance relevance);
 
-    int countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(@Param("player") Player player, @Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel, @Param("relevance") Stimulus.Relevance relevance);
+    int countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel,
+            @Param("standardVowel") Vowel standardVowel,
+            @Param("relevance") Stimulus.Relevance relevance);
 }

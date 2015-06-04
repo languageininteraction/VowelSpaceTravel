@@ -60,10 +60,10 @@ public class Confidence {
         this.task = task;
         this.difficulty = difficulty;
         this.player = player;
-        final int truePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
-        final int falsePositiveCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
-        final int trueNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
-        final int falseNegativeCount = responseRepository.countByPlayerAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        final int truePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        final int falsePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        final int trueNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        final int falseNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
         calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 
