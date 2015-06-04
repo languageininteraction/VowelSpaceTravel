@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,5 +53,31 @@ public class Consonant {
 
     public String getDisc() {
         return disc;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.ipa);
+        hash = 97 * hash + Objects.hashCode(this.disc);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Consonant other = (Consonant) obj;
+        if (!Objects.equals(this.ipa, other.ipa)) {
+            return false;
+        }
+        if (!Objects.equals(this.disc, other.disc)) {
+            return false;
+        }
+        return true;
     }
 }

@@ -33,7 +33,6 @@ import nl.ru.languageininteraction.vst.util.DefaultData;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -144,7 +143,6 @@ public class StimulusSequenceTest {
 //        assertEquals(expResultCount, new HashSet<Stimulus>(result2).size());
     }
 
-    @Ignore
     @Test
     public void testGetDiscriminationWordsDifficulty() {
         System.out.println("getDiscriminationWords");
@@ -172,16 +170,16 @@ public class StimulusSequenceTest {
                     assertEquals(1, consonants.size());
                     break;
                 case medium:
-                    assertEquals(1, speakers.size());
+                    assertFalse(1 == speakers.size());
                     assertEquals(1, consonants.size());
                     break;
                 case hard:
                     assertEquals(1, speakers.size());
-                    assertEquals(1, consonants.size());
+                    assertFalse(1 == consonants.size());
                     break;
                 case veryhard:
-                    assertEquals(1, speakers.size());
-                    assertEquals(1, consonants.size());
+                    assertFalse(1 == speakers.size());
+                    assertFalse(1 == consonants.size());
                     break;
                 default:
                     fail("Unexpected Difficulty level:" + difficulty);

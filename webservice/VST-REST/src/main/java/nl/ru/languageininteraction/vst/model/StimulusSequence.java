@@ -56,9 +56,8 @@ public class StimulusSequence extends ResourceSupport {
         return stimulusList;
     }
 
-    private List<WordSample> filterByDifficulty(List<WordSample> wordSamples, Difficulty difficulty) {
+    private List<WordSample> filterByDifficulty(WordSample givenSample, List<WordSample> wordSamples, Difficulty difficulty) {
         List<WordSample> returnSamples = new ArrayList<>();
-        final WordSample givenSample = wordSamples.get(new Random().nextInt(wordSamples.size()));
         for (WordSample wordSample : wordSamples) {
             if (difficulty.allowMultipleSpeaker && difficulty.allowMultipleStartConsonant) {
                 returnSamples.add(wordSample);
@@ -102,8 +101,10 @@ public class StimulusSequence extends ResourceSupport {
         if (standardVowel == null) {
             throw new UnsupportedOperationException();
         }
-        final List<WordSample> foundByTarget = filterByDifficulty(sampleRepository.findByVowelId(targetVowel.getId()), difficulty);
-        final List<WordSample> foundByStandard = filterByDifficulty(sampleRepository.findByVowelId(standardVowel.getId()), difficulty);
+        final List<WordSample> foundByVowelId = sampleRepository.findByVowelId(targetVowel.getId());
+        final WordSample givenSample = foundByVowelId.get(new Random().nextInt(foundByVowelId.size()));
+        final List<WordSample> foundByTarget = filterByDifficulty(givenSample, foundByVowelId, difficulty);
+        final List<WordSample> foundByStandard = filterByDifficulty(givenSample, sampleRepository.findByVowelId(standardVowel.getId()), difficulty);
         final ArrayList<Stimulus> stimulusList = new ArrayList<>();
 //        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
         final IntStream randomTargetInts = new Random().ints(0, foundByTarget.size());
