@@ -27,6 +27,7 @@ import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  * @since Apr 8, 2015 11:29:18 AM (creation date)
@@ -59,4 +60,28 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
             @Param("targetVowel") Vowel targetVowel,
             @Param("standardVowel") Vowel standardVowel,
             @Param("relevance") Stimulus.Relevance relevance);
+
+    @Override
+    @RestResource(exported = false)
+    public void deleteAll();
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Iterable<? extends StimulusResponse> itrbl);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(StimulusResponse t);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Long id);
+
+    @Override
+    @RestResource(exported = false)
+    public <S extends StimulusResponse> Iterable<S> save(Iterable<S> itrbl);
+
+    @Override
+    @RestResource(exported = false)
+    public <S extends StimulusResponse> S save(S s);
 }

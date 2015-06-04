@@ -18,7 +18,9 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
@@ -67,6 +69,8 @@ public class StimulusController {
     WordSampleRepository wordSampleRepository;
     @Autowired
     StimulusResponseRepository responseRepository;
+    @Autowired
+    ConfidenceRepository confidenceRepository;
     @Autowired
     VowelRepository vowelRepository;
 //    @RequestMapping(method = RequestMethod.GET)
@@ -141,6 +145,15 @@ public class StimulusController {
         System.out.println("player:" + player.getEmail());
         System.out.println("stimulus: " + results.size());
 //        Resources<Confidence> wrapped = new Resources<>());
+        HashSet<Vowel> standardVowels = new HashSet<>();
+        Vowel targetVowel = null;
+        for (Stimulus stimulus : results) {
+            if (Stimulus.Relevance.isStandard.equals(stimulus.getRelevance())  {
+                standardVowels.add(vowelRepository.findOne(stimulus.getVowelId()));
+            } else if (targetVowel == null && Stimulus.Relevance.isTarget.equals(stimulus.getRelevance())) {
+                targetVowel = vowelRepository.findOne(stimulus.getVowelId());
+            }
+        }
         for (Stimulus stimulus : results) {
             System.out.println(stimulus.getPlayerResponse());
             System.out.println(stimulus.getResponseDate());
@@ -151,12 +164,20 @@ public class StimulusController {
             System.out.println(stimulus.getVowelId());
 //            System.out.println(stimulus.getWordSample().getWord().getVowel().getDisc());
             if (stimulus.getPlayerResponse() != null) {
-                final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, vowelRepository.findOne(stimulus.getVowelId()), stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
-                //todo: add all standardVowels
+                final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
+                if (stimulus.getRelevance().equals(Stimulus.Relevance.isStandard)) {
+                    stimulusResponse.addStandardVowel(vowelRepository.findOne(stimulus.getVowelId()));
+                } else if (stimulus.getRelevance().equals(Stimulus.Relevance.isTarget)) {
+                    stimulusResponse.addStandardVowels(standardVowels);
+                }
                 responseRepository.save(stimulusResponse);
             }
-            // todo: update and save all confidence values
-            // todo: add confidence table and repository
+        }
+        // todo: update and save all confidence values
+        // todo: add confidence table and repository
+        for (Vowel standardVowel : standardVowels) {
+            confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, targetVowel, standardVowel);
+            confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, targetVowel, standardVowel));
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

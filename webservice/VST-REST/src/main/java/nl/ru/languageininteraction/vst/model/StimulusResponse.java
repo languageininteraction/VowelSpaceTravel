@@ -20,6 +20,7 @@ package nl.ru.languageininteraction.vst.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -98,6 +99,10 @@ public class StimulusResponse { //extends ResourceSupport
 
     public void addStandardVowel(Vowel standardVowel) {
         standardVowels.add(standardVowel);
+    }
+
+    public void addStandardVowels(Set<Vowel> standardVowels) {
+        standardVowels.addAll(standardVowels);
     }
 
     public Stimulus.Relevance getRelevance() {

@@ -22,6 +22,7 @@ import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Task;
+import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -34,20 +35,26 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RepositoryRestResource(collectionResourceRel = "confidence", path = "confidence")
 public interface ConfidenceRepository extends PagingAndSortingRepository<Confidence, Long> {
 
-    List<Confidence> findAll();
+    public List<Confidence> findAll();
 
-    List<Confidence> findByPlayerAndTaskAndDifficulty(
+    public List<Confidence> findByPlayerAndTaskAndDifficulty(
             @Param("player") Player player,
             @Param("task") Task task,
             @Param("difficulty") Difficulty difficulty);
 
-    List<Confidence> findByPlayer(@Param("player") Player player);
+    @RestResource(exported = false)
+    public void deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel,
+            @Param("standardVowel") Vowel standardVowel);
 
-    List<Confidence> findByTask(@Param("task") Task task);
+    public List<Confidence> findByPlayer(@Param("player") Player player);
 
-    List<Confidence> findByDifficulty(@Param("difficulty") Difficulty difficulty);
-//
-//    Confidence findByDisc(@Param("disc") String disc);
+    public List<Confidence> findByTask(@Param("task") Task task);
+
+    public List<Confidence> findByDifficulty(@Param("difficulty") Difficulty difficulty);
 
     @Override
     @RestResource(exported = false)
