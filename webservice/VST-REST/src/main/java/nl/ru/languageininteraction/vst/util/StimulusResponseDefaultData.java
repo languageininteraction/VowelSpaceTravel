@@ -55,7 +55,7 @@ public class StimulusResponseDefaultData {
     }
 
     public void insertDummyData() {
-        final Player player = playerRepository.findOne(0L);
+        final Player player = playerRepository.findOne(2L);
         final List<Vowel> allVowels = vowelRepository.findAll();
         insertValues(allVowels, player, Stimulus.Relevance.isTarget, true);
         insertValues(allVowels, player, Stimulus.Relevance.isTarget, false);

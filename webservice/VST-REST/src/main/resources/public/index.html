@@ -39,14 +39,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         maxSize<input id="maxSize" value="10"><br>
         maxTargetCount<input id="maxTargetCount" value="3"><br>
         task<select id="task">
-            <option value="discrimination">discrimination</option>
+            <option value="discrimination" selected="true">discrimination</option>
             <option value="identification">identification</option>
         </select><br>
         difficulty<select id="difficulty">  
             <option value="easy">easy</option>
             <option value="medium">medium</option>
             <option value="hard">hard</option>
-            <option value="veryhard">veryhard</option>
+            <option value="veryhard" selected="true">veryhard</option>
         </select><br>
         standardVowel<input id="standard" value="6"><br>
         targetVowel<input id="target" value="3"><br>
@@ -129,7 +129,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 });
                 $("#getconfidence").click(function () {
                     $.ajax({
-                        url: "confidence?player=" + $("#player").prop('value'),
+                        url: "confidence/search/findByPlayerAndTaskAndDifficulty?player="
+                                + $("#player").prop('value')
+                                + "&task=" + $("#task").prop('value')
+                                + "&difficulty=" + $("#difficulty").prop('value'),
                         type: "GET",
                         contentType: "application/json; charset=utf-8",
                         async: true,
@@ -138,7 +141,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         success: function (data, status) {
 //                            $("#true_positive").prop('checked', true);
                             $("#confidenceDataPoints").empty();
-                            var dataLength = data._embedded.confidences.length;
+                            var dataLength = data._embedded.confidence.length;
                             var graphWidth = 1200; //$("#graphRect").width;
                             var graphHeight = 400; //$("#graphRect").width;
                             $.each(data._embedded, function () {

@@ -36,9 +36,16 @@ public interface ConfidenceRepository extends PagingAndSortingRepository<Confide
 
     List<Confidence> findAll();
 
-    Confidence findByPlayerAndTaskAndDifficulty(@Param("taskType") Task taskType,
+    List<Confidence> findByPlayerAndTaskAndDifficulty(
             @Param("player") Player player,
+            @Param("task") Task task,
             @Param("difficulty") Difficulty difficulty);
+
+    List<Confidence> findByPlayer(@Param("player") Player player);
+
+    List<Confidence> findByTask(@Param("task") Task task);
+
+    List<Confidence> findByDifficulty(@Param("difficulty") Difficulty difficulty);
 //
 //    Confidence findByDisc(@Param("disc") String disc);
 

@@ -116,4 +116,21 @@ public class Confidence {
     public double getUpperBound() {
         return upperBound;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean isHasValidConfidence() {
+        return hasValidConfidence;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
 }
