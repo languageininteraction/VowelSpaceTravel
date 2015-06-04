@@ -121,7 +121,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             var wrongButtonLabel = document.createTextNode("submit wrong");
                             wrongButton.appendChild(wrongButtonLabel);
                             wrongButton.onclick = function () {
-                                addresponse(textArea.value.replace(/null/g, "false"));
+                                addresponse(textArea.value
+                                        .replace(/"responseDate":null/g, "\"responseDate\": \"" + $("#responseDate").prop('value') + "\"")
+                                        .replace(/"responseTimeMs":0/g, "\"responseTimeMs\": \"" + $("#responseTimeMs").prop('value') + "\"")
+                                        .replace(/"playerResponse":null/g, "\"playerResponse\":false")
+                                        );
                             };
                             $("#audioArea").append(wrongButton);
                         }

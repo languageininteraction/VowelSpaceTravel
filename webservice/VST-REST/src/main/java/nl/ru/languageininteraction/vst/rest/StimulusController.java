@@ -134,7 +134,6 @@ public class StimulusController {
 
     @RequestMapping(value = "/response/{taskType}/{difficulty}/{player}", method = POST)
     @ResponseBody
-//    public ResponseEntity<Resources<Confidence>> postStimulusSequence(
     public ResponseEntity postStimulusSequence(
             @PathVariable("taskType") Task taskType,
             @PathVariable("player") Player player,
@@ -144,11 +143,10 @@ public class StimulusController {
         System.out.println("taskType:" + taskType);
         System.out.println("player:" + player.getEmail());
         System.out.println("stimulus: " + results.size());
-//        Resources<Confidence> wrapped = new Resources<>());
         HashSet<Vowel> standardVowels = new HashSet<>();
         Vowel targetVowel = null;
         for (Stimulus stimulus : results) {
-            if (Stimulus.Relevance.isStandard.equals(stimulus.getRelevance())  {
+            if (Stimulus.Relevance.isStandard.equals(stimulus.getRelevance())) {
                 standardVowels.add(vowelRepository.findOne(stimulus.getVowelId()));
             } else if (targetVowel == null && Stimulus.Relevance.isTarget.equals(stimulus.getRelevance())) {
                 targetVowel = vowelRepository.findOne(stimulus.getVowelId());
@@ -162,7 +160,6 @@ public class StimulusController {
             System.out.println(stimulus.getRelevance());
             System.out.println(stimulus.getSampleId());
             System.out.println(stimulus.getVowelId());
-//            System.out.println(stimulus.getWordSample().getWord().getVowel().getDisc());
             if (stimulus.getPlayerResponse() != null) {
                 final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
                 if (stimulus.getRelevance().equals(Stimulus.Relevance.isStandard)) {
@@ -173,8 +170,7 @@ public class StimulusController {
                 responseRepository.save(stimulusResponse);
             }
         }
-        // todo: update and save all confidence values
-        // todo: add confidence table and repository
+        // update and save all confidence values
         for (Vowel standardVowel : standardVowels) {
             confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, targetVowel, standardVowel);
             confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, targetVowel, standardVowel));
