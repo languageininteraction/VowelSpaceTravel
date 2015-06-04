@@ -56,6 +56,30 @@ public class StimulusSequence extends ResourceSupport {
         return stimulusList;
     }
 
+    private List<WordSample> filterByDifficulty(List<WordSample> wordSamples, Difficulty difficulty) {
+        List<WordSample> returnSamples = new ArrayList<>();
+        final WordSample givenSample = wordSamples.get(new Random().nextInt(wordSamples.size()));
+        for (WordSample wordSample : wordSamples) {
+            if (difficulty.allowMultipleSpeaker && difficulty.allowMultipleStartConsonant) {
+                returnSamples.add(wordSample);
+            } else if (!difficulty.allowMultipleSpeaker && !difficulty.allowMultipleStartConsonant) {
+                if (wordSample.getSpokenBy().equals(givenSample.getSpokenBy())
+                        && wordSample.getWord().getInitailConsonant().equals(givenSample.getWord().getInitailConsonant())) {
+                    returnSamples.add(wordSample);
+                }
+            } else if (!difficulty.allowMultipleSpeaker) {
+                if (wordSample.getSpokenBy().equals(givenSample.getSpokenBy())) {
+                    returnSamples.add(wordSample);
+                }
+            } else if (!difficulty.allowMultipleStartConsonant) {
+                if (wordSample.getWord().getInitailConsonant().equals(givenSample.getWord().getInitailConsonant())) {
+                    returnSamples.add(wordSample);
+                }
+            }
+        }
+        return returnSamples;
+    }
+
     /**
      * discrimination
      *
@@ -78,8 +102,8 @@ public class StimulusSequence extends ResourceSupport {
         if (standardVowel == null) {
             throw new UnsupportedOperationException();
         }
-        final List<WordSample> foundByTarget = sampleRepository.findByVowelId(targetVowel.getId());
-        final List<WordSample> foundByStandard = sampleRepository.findByVowelId(standardVowel.getId());
+        final List<WordSample> foundByTarget = filterByDifficulty(sampleRepository.findByVowelId(targetVowel.getId()), difficulty);
+        final List<WordSample> foundByStandard = filterByDifficulty(sampleRepository.findByVowelId(standardVowel.getId()), difficulty);
         final ArrayList<Stimulus> stimulusList = new ArrayList<>();
 //        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
         final IntStream randomTargetInts = new Random().ints(0, foundByTarget.size());

@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,4 +51,27 @@ public class Speaker {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 73 * hash + Objects.hashCode(this.label);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Speaker other = (Speaker) obj;
+        if (!Objects.equals(this.label, other.label)) {
+            return false;
+        }
+        return true;
+    }
+    
 }
