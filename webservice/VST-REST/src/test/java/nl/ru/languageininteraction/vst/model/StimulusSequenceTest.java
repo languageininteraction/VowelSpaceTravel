@@ -114,7 +114,7 @@ public class StimulusSequenceTest {
         int expTargetCount = 10;
         Vowel targetVowel = vowelRepository.findByDisc("U"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
         Vowel standardVowel = vowelRepository.findByDisc("{"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
-        ArrayList<Stimulus> result1 = stimulusSequence.getDiscriminationWords((int) wordSampleRepository.count() + expResultCount, expTargetCount, targetVowel, standardVowel);
+        ArrayList<Stimulus> result1 = stimulusSequence.getDiscriminationWords((int) wordSampleRepository.count() + expResultCount, expTargetCount, targetVowel, standardVowel, Difficulty.veryhard);
         assertEquals(wordSampleRepository.count() + expResultCount, result1.size());
         // test that the first three words contain the target vowel
         // and that each subsequent pair of words sequentially contain the standard then target vowels
@@ -146,8 +146,42 @@ public class StimulusSequenceTest {
     @Test
     public void testGetDiscriminationWordsDifficulty() {
         System.out.println("getDiscriminationWords");
-        // todo: pass Difficulty when creating the sequence and check that the correct output is produced
-//        fail("The test case is a prototype.");
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player());
+        Vowel targetVowel = vowelRepository.findByDisc("U"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
+        Vowel standardVowel = vowelRepository.findByDisc("{"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
+        int maxSize = 100;
+        int maxTargetCount = 10;
+        // pass each Difficulty when creating a sequence and check that the correct output is produced
+        for (Difficulty difficulty : Difficulty.values()) {
+            ArrayList<Stimulus> result1 = stimulusSequence.getDiscriminationWords(maxSize, maxTargetCount, targetVowel, standardVowel, difficulty);
+            assertEquals(maxSize, result1.size());
+            HashSet<Speaker> speakers = new HashSet<>();
+            HashSet<Consonant> consonants = new HashSet<>();
+            for (Stimulus stimulus : result1) {
+                speakers.add(stimulus.getWordSample().getSpokenBy());
+                consonants.add(stimulus.getWordSample().getWord().getInitailConsonant());
+            }
+            switch (difficulty) {
+                case easy:
+                    assertEquals(1, speakers.size());
+                    assertEquals(1, consonants.size());
+                    break;
+                case medium:
+                    assertEquals(1, speakers.size());
+                    assertEquals(1, consonants.size());
+                    break;
+                case hard:
+                    assertEquals(1, speakers.size());
+                    assertEquals(1, consonants.size());
+                    break;
+                case veryhard:
+                    assertEquals(1, speakers.size());
+                    assertEquals(1, consonants.size());
+                    break;
+                default:
+                    fail("Unexpected Difficulty level:" + difficulty);
+            }
+        }
     }
 
     /**

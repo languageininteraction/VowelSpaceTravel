@@ -112,7 +112,7 @@ public class StimulusController {
         final ArrayList<Stimulus> words;
         switch (taskType) {
             case discrimination:
-                words = stimulusSequence.getDiscriminationWords(maxSize, maxTargetCount, targetVowel, standardVowel);
+                words = stimulusSequence.getDiscriminationWords(maxSize, maxTargetCount, targetVowel, standardVowel, difficulty);
                 break;
             case identification:
                 words = stimulusSequence.getIdentificationWords(maxSize);

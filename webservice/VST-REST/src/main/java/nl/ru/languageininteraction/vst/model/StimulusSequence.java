@@ -71,7 +71,7 @@ public class StimulusSequence extends ResourceSupport {
      * @return {sequence of samples with a single target vowel and single
      * standard vowel} a, a, a, e, a, e, e
      */
-    public ArrayList<Stimulus> getDiscriminationWords(int maxSize, int maxTargetCount, Vowel targetVowel, Vowel standardVowel) {
+    public ArrayList<Stimulus> getDiscriminationWords(int maxSize, int maxTargetCount, Vowel targetVowel, Vowel standardVowel, Difficulty difficulty) {
         if (targetVowel == null) {
             throw new UnsupportedOperationException();
         }
@@ -102,15 +102,15 @@ public class StimulusSequence extends ResourceSupport {
                             targetCounter++;
                             lastWasTarget = true;
                         } else {
-                            stimulusList.add(new Stimulus( foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                            stimulusList.add(new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
                             lastWasTarget = false;
                         }
                     } else {
-                        stimulusList.add(new Stimulus( foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                        stimulusList.add(new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
                         lastWasTarget = false;
                     }
                 } else {
-                    stimulusList.add(new Random().nextInt(stimulusList.size() - 3) + 3, new Stimulus( foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                    stimulusList.add(new Random().nextInt(stimulusList.size() - 3) + 3, new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
                 }
             }
         }
