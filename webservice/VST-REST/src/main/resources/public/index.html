@@ -1,0 +1,183 @@
+<!--
+Copyright (C) 2015 Language In Interaction
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Vowel Space Travel</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <a href="consonants">consonants</a><br>
+        <a href="settings">settings</a><br>
+        <a href="speakers">speakers</a><br>
+        <a href="words">words</a><br>
+        <a href="wordsamples">word samples</a><br>
+        <a href="responses">responses</a><br>
+        <a href="players">players</a><br>
+        <a href="vowels">vowels</a><br>
+        <a href="confidence/values">confidence</a><br>
+        <br>
+        <br>
+        responseTimeMs<input type="number" id="responseTimeMs" value="1"><br>
+        responseDate<input type="text" id="responseDate" value="2015-06-02T12:35:43.684+0000"><br>
+        player<input id="player" value="2"><br>
+        maxSize<input id="maxSize" value="10"><br>
+        maxTargetCount<input id="maxTargetCount" value="3"><br>
+        task<select id="task">
+            <option value="discrimination" selected="true">discrimination</option>
+            <option value="identification">identification</option>
+        </select><br>
+        difficulty<select id="difficulty">  
+            <option value="easy">easy</option>
+            <option value="medium">medium</option>
+            <option value="hard">hard</option>
+            <option value="veryhard" selected="true">veryhard</option>
+        </select><br>
+        standardVowel<input id="standard" value="6"><br>
+        targetVowel<input id="target" value="3"><br>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>        
+        <script>
+            $(document).ready(function () {
+                addresponse = function (postData) {
+                    $.ajax({
+                        url: "stimulus/response/" + $("#task").prop('value') + "/" + $("#difficulty").prop('value') + "/" + $("#player").prop('value'), //?player=" + $("#player").prop('value'),
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        data: postData,
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                        }
+                    })
+                };
+                $("#getsamples").click(function () {
+                    $.ajax({
+                        url: "/stimulus/sequence/" + $("#task").prop('value') + "/" + $("#difficulty").prop('value') + "/" + $("#player").prop('value') + "?maxSize=" + $("#maxSize").prop('value') + "&maxTargetCount=" + $("#maxTargetCount").prop('value') + "&target=" + $("#target").prop('value') + "&standard=" + $("#standard").prop('value'),
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                            $("#audioArea").empty();
+                            var textArea = document.createElement("TEXTAREA");
+                            textArea.value = /*"{ \"results\": */"[";
+                            $.each(data._embedded, function () {
+                                $.each(this, function (index, stimulus) {
+                                    if (stimulus.relevance !== "isIrelevant") {
+                                        textArea.value += JSON.stringify(stimulus) + ",";
+                                    }
+                                    var audioTag = document.createElement("AUDIO");
+                                    audioTag.controls = true;
+                                    var sourceTag = document.createElement("SOURCE");
+                                    sourceTag.src = stimulus._links.audio.href;
+                                    sourceTag.type = "audio/wav";
+                                    audioTag.appendChild(sourceTag);
+                                    $("#audioArea").append(audioTag);
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.wordString));
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.speakerLabel));
+                                    $("#audioArea").append(document.createTextNode(" "));
+                                    $("#audioArea").append(document.createTextNode(stimulus.relevance));
+                                    $("#audioArea").append(document.createTextNode(" sample_"));
+                                    $("#audioArea").append(document.createTextNode(stimulus.sampleId));
+                                    $("#audioArea").append(document.createElement("BR"));
+                                });
+                            });
+                            textArea.value += "{}]"; //, \"player\":\"" + $("#player").prop('value') +"\"}";
+                            $("#audioArea").append(textArea);
+                            var correctButton = document.createElement("BUTTON");
+                            var correctButtonLabel = document.createTextNode("submit correct");
+                            correctButton.appendChild(correctButtonLabel);
+                            correctButton.onclick = function () {
+                                addresponse(textArea.value
+                                        .replace(/"responseDate":null/g, "\"responseDate\": \"" + $("#responseDate").prop('value') + "\"")
+                                        .replace(/"responseTimeMs":0/g, "\"responseTimeMs\": \"" + $("#responseTimeMs").prop('value') + "\"")
+                                        .replace(/"playerResponse":null/g, "\"playerResponse\":true")
+                                        );
+                            };
+                            $("#audioArea").append(correctButton);
+
+                            var wrongButton = document.createElement("BUTTON");
+                            var wrongButtonLabel = document.createTextNode("submit wrong");
+                            wrongButton.appendChild(wrongButtonLabel);
+                            wrongButton.onclick = function () {
+                                addresponse(textArea.value
+                                        .replace(/"responseDate":null/g, "\"responseDate\": \"" + $("#responseDate").prop('value') + "\"")
+                                        .replace(/"responseTimeMs":0/g, "\"responseTimeMs\": \"" + $("#responseTimeMs").prop('value') + "\"")
+                                        .replace(/"playerResponse":null/g, "\"playerResponse\":false")
+                                        );
+                            };
+                            $("#audioArea").append(wrongButton);
+                        }
+                    })
+                });
+                $("#getconfidence").click(function () {
+                    $.ajax({
+                        url: "confidence/search/findByPlayerAndTaskAndDifficulty?player="
+                                + $("#player").prop('value')
+                                + "&task=" + $("#task").prop('value')
+                                + "&difficulty=" + $("#difficulty").prop('value'),
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        async: true,
+                        cache: false,
+                        processData: false,
+                        success: function (data, status) {
+//                            $("#true_positive").prop('checked', true);
+                            $("#confidenceDataPoints").empty();
+                            var dataLength = data._embedded.confidence.length;
+                            var graphWidth = 1200; //$("#graphRect").width;
+                            var graphHeight = 400; //$("#graphRect").width;
+                            $.each(data._embedded, function () {
+                                $.each(this, function (index, confidence) {
+                                    var dataPointTag = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                                    dataPointTag.setAttribute("x1", graphWidth / (dataLength + 1) * (index + 1));
+                                    dataPointTag.setAttribute("x2", graphWidth / (dataLength + 1) * (index + 1));
+                                    dataPointTag.setAttribute("y1", (1.0 - confidence.lowerBound) * graphHeight);
+                                    dataPointTag.setAttribute("y2", (1.0 - confidence.upperBound) * graphHeight);
+                                    dataPointTag.setAttribute("style", "stroke:rgb(255,0,0);stroke-width:1");
+//                                    dataPointTag.setAttribute("stroke", "black");
+//                                    dataPointTag.setAttribute("stroke-width", "1");
+//                                    dataPointTag.setAttribute("fill", "grey");
+                                    $("#confidenceDataPoints").append(dataPointTag);
+                                });
+                            });
+                        }
+                    });
+                });
+            });</script>
+        <br>
+        <br>
+        <button id="getsamples">get samples</button>   
+        <br>
+        <div id="audioArea"></div>
+        <br>        
+        <button id="getconfidence">get confidence</button><br> 
+        <svg id="graphSvg" height="420" width="1220">
+        <rect id="graphRect" x="10" y="10" width="1200" height="400" style="fill:rgb(200,200,200);stroke-width:1;stroke:rgb(0,0,0)" />
+        <g transform="translate(10, 10)" id="confidenceDataPoints">
+        <!--<circle cx="50" cy="60" r="10" stroke="black" stroke-width="1" fill="grey" />-->
+        </g>
+        </svg>
+    </body>
+</html>

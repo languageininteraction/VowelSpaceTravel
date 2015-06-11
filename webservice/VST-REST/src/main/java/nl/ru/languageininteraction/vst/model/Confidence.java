@@ -17,25 +17,76 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
+import org.apache.commons.math3.stat.interval.ConfidenceInterval;
+import org.apache.commons.math3.stat.interval.WilsonScoreInterval;
 
 /**
  * @since Apr 23, 2015 4:11:22 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
+@Entity
 public class Confidence {
 // this is the confidence that the application has in the users ability to distinguish a given vowel pair
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+//    @Column(unique = true)
+    @ManyToOne
+    private Player player;
     @ManyToOne
     private Vowel targetVowel;
     @ManyToOne
     private Vowel standardVowel;
-    float value; // 0 to 1
+    private double confidenceLevel;
+    private double lowerBound;
+    private double upperBound;
+    private boolean hasValidConfidence = false;
+    private Task task;
+    private Difficulty difficulty;
 
-    public Confidence(Vowel targetVowel, Vowel standardVowel, float value) {
+    public Confidence() {
+    }
+
+    public Confidence(StimulusResponseRepository responseRepository, Player player, Task task, Difficulty difficulty, Vowel targetVowel, Vowel standardVowel) {
         this.targetVowel = targetVowel;
         this.standardVowel = standardVowel;
-        this.value = value;
+        this.task = task;
+        this.difficulty = difficulty;
+        this.player = player;
+        final int truePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        final int falsePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        final int trueNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        final int falseNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
+    }
+
+    public Confidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+        calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
+    }
+
+    public boolean hasValidConfidence() {
+        return hasValidConfidence;
+    }
+
+    private void calculateConfidence(final int truePositiveCount, final int falsePositiveCount, final int trueNegativeCount, final int falseNegativeCount) {
+        final WilsonScoreInterval wilsonScoreInterval = new WilsonScoreInterval();
+        final int numberOfTrials = truePositiveCount + falsePositiveCount + trueNegativeCount + falseNegativeCount;
+        final int numberOfSuccesses = truePositiveCount + trueNegativeCount;
+        final double confidenceInputLevel = 0.95;
+        if (numberOfTrials > 0) {
+            final ConfidenceInterval currentInterval = wilsonScoreInterval.createInterval(numberOfTrials, numberOfSuccesses, confidenceInputLevel);
+            confidenceLevel = currentInterval.getConfidenceLevel();
+            lowerBound = currentInterval.getLowerBound();
+            upperBound = currentInterval.getUpperBound();
+            hasValidConfidence = true;
+        }
     }
 
     public Vowel getTargetVowel() {
@@ -54,7 +105,32 @@ public class Confidence {
         return standardVowel.getId();
     }
 
-    public float getValue() {
-        return value;
+    public double getConfidenceLevel() {
+        return confidenceLevel;
     }
+
+    public double getLowerBound() {
+        return lowerBound;
+    }
+
+    public double getUpperBound() {
+        return upperBound;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean isHasValidConfidence() {
+        return hasValidConfidence;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
 }

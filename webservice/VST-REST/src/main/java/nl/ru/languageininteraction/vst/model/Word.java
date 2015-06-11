@@ -20,12 +20,13 @@ package nl.ru.languageininteraction.vst.model;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @since Apr 8, 2015 11:25:42 AM (creation date)
@@ -41,18 +42,21 @@ public class Word {
     private String wordString;
     @ManyToOne
     private Consonant initailConsonant;
-    @ManyToMany
-    private List<Vowel> vowel;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Vowel vowel;
     @ManyToOne
     private Consonant finalConsonant;
     @OneToMany(mappedBy = "word")
     private List<WordSample> wordSamples;
 
-    public Word(String wordString, Consonant initailConsonant, List<Vowel> vowel, Consonant finalConsonant) {
+    public Word(String wordString, Consonant initailConsonant, Vowel vowel, Consonant finalConsonant) {
         this.wordString = wordString;
         this.initailConsonant = initailConsonant;
         this.vowel = vowel;
         this.finalConsonant = finalConsonant;
+        if (vowel == null) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     public Word() {
@@ -66,7 +70,8 @@ public class Word {
         return initailConsonant;
     }
 
-    public List<Vowel> getVowel() {
+    @Transactional
+    public Vowel getVowel() {
         return vowel;
     }
 

@@ -18,6 +18,9 @@
 package nl.ru.languageininteraction.vst.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.IIOException;
 import nl.ru.languageininteraction.vst.model.Speaker;
 import nl.ru.languageininteraction.vst.model.Word;
 import nl.ru.languageininteraction.vst.model.WordSample;
@@ -61,20 +64,42 @@ public class AudioSamplesIngester {
 
     public void processAudioResources() throws IOException {
         System.out.println("processAudioResources");
-        final Resource[] stimuliResources = resourceResolver.getResources("classpath:" + STIMULI_PATH + "*.wav");
-        for (Resource currentStimulus : stimuliResources) {
-            final String stimulusFileName = currentStimulus.getFile().getName();
-            final String[] splitStimulusName = stimulusFileName.split("_", 2);
-            if (splitStimulusName.length > 1) {
-                System.out.println(stimulusFileName);
-                String wordString = splitStimulusName[0];
-                System.out.println("wordString:" + wordString);
-                String speakerString = splitStimulusName[1].substring(0, splitStimulusName[1].length() - ".wav".length());
-                System.out.println("speakerString: " + speakerString);
-                insertSample(wordsRepository.findByWordString(wordString), getSpeaker(speakerString), "/" + STIMULI_PATH + currentStimulus.getFilename());
-            } else {
-                System.out.println("failed to parse: " + stimulusFileName);
+        List<String> excludedWords = new ArrayList<>();
+        // the following words are excluded because there are not enough samples for them to be used
+        excludedWords.add("beard");
+        excludedWords.add("bourse");
+        excludedWords.add("cairn");
+        excludedWords.add("cheers");
+        excludedWords.add("fierce");
+        excludedWords.add("kirsch");
+        excludedWords.add("pierce");
+        excludedWords.add("real");
+        try {
+            final Resource[] stimuliResources = resourceResolver.getResources("classpath:" + STIMULI_PATH + "*.wav");
+            for (Resource currentStimulus : stimuliResources) {
+                final String stimulusFileName = currentStimulus.getFilename();
+                final String[] splitStimulusName = stimulusFileName.split("_", 2);
+                if (splitStimulusName.length > 1) {
+                    System.out.println(stimulusFileName);
+                    String wordString = splitStimulusName[0];
+                    System.out.println("wordString:" + wordString);
+                    String speakerString = splitStimulusName[1].substring(0, splitStimulusName[1].length() - ".wav".length());
+                    System.out.println("speakerString: " + speakerString);
+                    if (excludedWords.contains(wordString)) {
+                        System.out.println("excluding: " + wordString);
+                    } else {
+                        insertSample(wordsRepository.findByWordString(wordString), getSpeaker(speakerString), "/" + STIMULI_PATH + currentStimulus.getFilename());
+                    }
+                } else {
+                    System.out.println("failed to parse: " + stimulusFileName);
+                }
             }
+        } catch (IOException iOException) {
+            throw new IIOException("Error scanning for audio stimuli files!\n"
+                    + "These files should be in the following format, {word}_{speaker}.wav\n"
+                     +" and be placed in:\n"
+                    + "/VowelSpaceTravel/webservice/VST-REST/src/main/resources/stimuli/\n"
+                    + iOException.getMessage());
         }
     }
 }

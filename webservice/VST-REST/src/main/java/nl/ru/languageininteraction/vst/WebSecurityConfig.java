@@ -15,24 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.ru.languageininteraction.vst.rest;
+package nl.ru.languageininteraction.vst;
 
-import java.util.List;
-import nl.ru.languageininteraction.vst.model.Player;
-import nl.ru.languageininteraction.vst.model.Settings;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * @since Apr 2, 2015 5:41:33 PM (creation date)
+ * @since Jun 11, 2015 9:56:49 AM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "settings", path = "settings")
-public interface SettingsRepository extends PagingAndSortingRepository<Settings, Long> {
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    List<Settings> findByPlayer(@Param("player") Player player);
-//    List<Settings> findAll();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().anyRequest().fullyAuthenticated().and().
+                httpBasic().and().
+                csrf().disable();
+    }
 
-    Settings findById(@Param("id") long id);
 }

@@ -18,10 +18,9 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.List;
+import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
-import nl.ru.languageininteraction.vst.model.Stimulus;
-import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.Vowel;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -30,36 +29,36 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
- * @since Apr 8, 2015 11:29:18 AM (creation date)
- * @author Peter Withers <p.withers@psych.ru.nl>
+ * @since Jun 4, 2015 2:17:51 PM (creation date)
+ * @author petwit
  */
-@RepositoryRestResource(collectionResourceRel = "responses", path = "responses")
-public interface StimulusResponseRepository extends PagingAndSortingRepository<StimulusResponse, Long> {
+@RepositoryRestResource(collectionResourceRel = "confidence", path = "confidence")
+public interface ConfidenceRepository extends PagingAndSortingRepository<Confidence, Long> {
+
+    public List<Confidence> findAll();
+
+    public List<Confidence> findByPlayerAndTaskAndDifficulty(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty);
+
+    @RestResource(exported = false)
+    public void deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel,
+            @Param("standardVowel") Vowel standardVowel);
+
+    public List<Confidence> findByPlayer(@Param("player") Player player);
+
+    public List<Confidence> findByTask(@Param("task") Task task);
+
+    public List<Confidence> findByDifficulty(@Param("difficulty") Difficulty difficulty);
 
     @Override
-    List<StimulusResponse> findAll();
-
-    List<StimulusResponse> findByTargetVowel(@Param("targetVowel") Vowel targetVowel);
-
-    List<StimulusResponse> findByStandardVowels(@Param("standardVowel") Vowel standardVowel);
-
-    List<StimulusResponse> findByTargetVowelAndStandardVowels(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);
-
-    int countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(
-            @Param("player") Player player,
-            @Param("task") Task task,
-            @Param("difficulty") Difficulty difficulty,
-            @Param("targetVowel") Vowel targetVowel,
-            @Param("standardVowel") Vowel standardVowel,
-            @Param("relevance") Stimulus.Relevance relevance);
-
-    int countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(
-            @Param("player") Player player,
-            @Param("task") Task task,
-            @Param("difficulty") Difficulty difficulty,
-            @Param("targetVowel") Vowel targetVowel,
-            @Param("standardVowel") Vowel standardVowel,
-            @Param("relevance") Stimulus.Relevance relevance);
+    @RestResource(exported = false)
+    public <S extends Confidence> Iterable<S> save(Iterable<S> entities);
 
     @Override
     @RestResource(exported = false)
@@ -67,21 +66,17 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
 
     @Override
     @RestResource(exported = false)
-    public void delete(Iterable<? extends StimulusResponse> itrbl);
+    public void delete(Iterable<? extends Confidence> entities);
 
     @Override
     @RestResource(exported = false)
-    public void delete(StimulusResponse t);
+    public <S extends Confidence> S save(S entity);
+
+    @Override
+    @RestResource(exported = false)
+    public void delete(Confidence entity);
 
     @Override
     @RestResource(exported = false)
     public void delete(Long id);
-
-    @Override
-    @RestResource(exported = false)
-    public <S extends StimulusResponse> Iterable<S> save(Iterable<S> itrbl);
-
-    @Override
-    @RestResource(exported = false)
-    public <S extends StimulusResponse> S save(S s);
 }

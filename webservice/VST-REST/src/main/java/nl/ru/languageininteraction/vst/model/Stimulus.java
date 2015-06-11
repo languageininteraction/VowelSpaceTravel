@@ -17,11 +17,14 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 import org.springframework.hateoas.ResourceSupport;
 
 /**
@@ -38,20 +41,22 @@ public class Stimulus extends ResourceSupport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @ManyToOne
-    private Player player;
+    private long responseTimeMs;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date responseDate = null;
     @ManyToOne
     private WordSample wordSample;
-    @ManyToOne
-    private Vowel targetVowel;
-    @ManyToOne
-    private Vowel standardVowel;
     private Relevance relevance;
     private Boolean playerResponse = null;
+    private long vowelId;
 
-    public Stimulus(Player player, WordSample wordSample, Relevance relevance) {
-        this.player = player;
+    public Stimulus(WordSample wordSample, Relevance relevance) {
+        if (wordSample == null) {
+            throw new UnsupportedOperationException("wordSample is null");
+        }
         this.wordSample = wordSample;
+        this.relevance = relevance;
+        this.vowelId = wordSample.getWord().getVowel().getId();
     }
 
     public Stimulus() {
@@ -63,6 +68,10 @@ public class Stimulus extends ResourceSupport {
         } else {
             return null;
         }
+    }
+
+    public WordSample getWordSample() {
+        return wordSample;
     }
 
     public String getWordString() {
@@ -83,13 +92,55 @@ public class Stimulus extends ResourceSupport {
 
     public Relevance getRelevance() {
         return relevance;
-    }  
+    }
 
-    public Boolean isPlayerResponse() {
+    public Boolean getPlayerResponse() {
         return playerResponse;
     }
 
     public void setPlayerResponse(boolean playerResponse) {
         this.playerResponse = playerResponse;
+    }
+
+    public long getResponseTimeMs() {
+        return responseTimeMs;
+    }
+
+    public void setResponseTimeMs(long responseTimeMs) {
+        this.responseTimeMs = responseTimeMs;
+    }
+
+    public Date getResponseDate() {
+        return responseDate;
+    }
+
+    public void setResponseDate(Date responseDate) {
+        this.responseDate = responseDate;
+    }
+
+    public long getVowelId() {
+        return vowelId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.wordSample);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Stimulus other = (Stimulus) obj;
+        if (!Objects.equals(this.wordSample, other.wordSample)) {
+            return false;
+        }
+        return true;
     }
 }

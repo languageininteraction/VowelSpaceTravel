@@ -27,15 +27,14 @@ import javax.persistence.Id;
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class Task {
+public enum Task {
 
+    identification,
+    discrimination,
+    @Deprecated
+    assessment;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    public enum TaskType {
-
-        identification, discrimination, assessment
-    }
-    private TaskType taskType;
 }

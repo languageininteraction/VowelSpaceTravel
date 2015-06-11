@@ -1,11 +1,13 @@
 package nl.ru.languageininteraction.vst;
 
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.SettingsRepository;
 import nl.ru.languageininteraction.vst.rest.SpeakerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
+import nl.ru.languageininteraction.vst.rest.VowelQualityRepository;
 import nl.ru.languageininteraction.vst.rest.VowelRepository;
 import nl.ru.languageininteraction.vst.rest.WordRepository;
 import nl.ru.languageininteraction.vst.util.AudioSamplesIngester;
@@ -18,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.config.EnableEntityLinks;
 
 /**
  * @since Apr 2, 2015 4:58:19 PM (creation date)
@@ -26,14 +29,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
+@EnableEntityLinks
 public class Application implements CommandLineRunner {
 
     @Autowired
     private VowelRepository vowelRepository;
     @Autowired
+    private VowelQualityRepository vowelQualityRepository;
+    @Autowired
     private PlayerRepository playerRepository;
     @Autowired
     private StimulusResponseRepository stimulusResultRepository;
+    @Autowired
+    private ConfidenceRepository confidenceRepository;
     @Autowired
     private WordRepository wordsRepository;
     @Autowired
@@ -58,7 +66,7 @@ public class Application implements CommandLineRunner {
         consonantRepository.deleteAll();
         speakerRepository.deleteAll();
 
-        DefaultData defaultData = new DefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
+        DefaultData defaultData = new DefaultData(vowelRepository, vowelQualityRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
         defaultData.insertVowels();
         defaultData.insertConsonants();
         defaultData.insertWords();
@@ -69,6 +77,6 @@ public class Application implements CommandLineRunner {
             System.out.println(currentPlayer);
         }
         System.out.println();
-        new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository).insertDummyData();
+        new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, confidenceRepository).insertDummyData();
     }
 }

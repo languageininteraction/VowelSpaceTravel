@@ -17,22 +17,16 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
-import java.util.List;
-import nl.ru.languageininteraction.vst.model.Player;
-import nl.ru.languageininteraction.vst.model.Settings;
+import nl.ru.languageininteraction.vst.model.VowelQuality;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
- * @since Apr 2, 2015 5:41:33 PM (creation date)
+ * @since Apr 2, 2015 4:56:21 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "settings", path = "settings")
-public interface SettingsRepository extends PagingAndSortingRepository<Settings, Long> {
+@RepositoryRestResource(collectionResourceRel = "qualities", path = "qualities")
+public interface VowelQualityRepository extends PagingAndSortingRepository<VowelQuality, Long> {
 
-    List<Settings> findByPlayer(@Param("player") Player player);
-//    List<Settings> findAll();
-
-    Settings findById(@Param("id") long id);
 }

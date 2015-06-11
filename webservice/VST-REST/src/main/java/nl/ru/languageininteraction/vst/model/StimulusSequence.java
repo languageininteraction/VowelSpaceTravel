@@ -20,6 +20,8 @@ package nl.ru.languageininteraction.vst.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.PrimitiveIterator;
 import java.util.Random;
 import java.util.stream.IntStream;
 import nl.ru.languageininteraction.vst.rest.WordSampleRepository;
@@ -31,24 +33,129 @@ import org.springframework.hateoas.ResourceSupport;
  */
 public class StimulusSequence extends ResourceSupport {
 
-    private ArrayList<Stimulus> stimulusList;
-    Player player;
+    private final WordSampleRepository sampleRepository;
+    private final Player player;
 
     @JsonCreator
     public StimulusSequence(WordSampleRepository sampleRepository, @JsonProperty("player") Player player) {
+        // todo: prehaps the settings object could also be sent rather than using a previously stored values?
+        this.sampleRepository = sampleRepository;
         this.player = player;
-        stimulusList = new ArrayList<>();
-        final int returnCount = 10;
-        final Random randomBool = new Random();
-        final IntStream randomInts = new Random().ints(returnCount, 1, (int) sampleRepository.count());
-        final IntStream distinctInts = randomInts.distinct();
-        distinctInts.forEach((int value) -> {
-            System.out.println("distinctInt: " + value);
-            stimulusList.add(new Stimulus(player, sampleRepository.findOne((long) value), randomBool.nextBoolean()));
-        });
     }
 
-    public ArrayList<Stimulus> getRandomWords() {
+    public ArrayList<Stimulus> getRandomWords(int maxSize) {
+        final ArrayList<Stimulus> stimulusList = new ArrayList<>();
+        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
+        final IntStream randomInts = new Random().ints(1, availableCount + 1);
+        final IntStream distinctInts = randomInts.distinct();
+        distinctInts.limit(availableCount).forEach((int value) -> {
+            System.out.println("distinctInt: " + value);
+            // todo: select relevant Stimuli and set the Stimulus.Relevance correctly
+            stimulusList.add(new Stimulus(sampleRepository.findOne((long) value), Stimulus.Relevance.isIrelevant));
+        });
         return stimulusList;
+    }
+
+    private List<WordSample> filterByDifficulty(WordSample givenSample, List<WordSample> wordSamples, Difficulty difficulty) {
+        List<WordSample> returnSamples = new ArrayList<>();
+        for (WordSample wordSample : wordSamples) {
+            if (difficulty.allowMultipleSpeaker && difficulty.allowMultipleStartConsonant) {
+                returnSamples.add(wordSample);
+            } else if (!difficulty.allowMultipleSpeaker && !difficulty.allowMultipleStartConsonant) {
+                if (wordSample.getSpokenBy().equals(givenSample.getSpokenBy())
+                        && wordSample.getWord().getInitailConsonant().equals(givenSample.getWord().getInitailConsonant())) {
+                    returnSamples.add(wordSample);
+                }
+            } else if (!difficulty.allowMultipleSpeaker) {
+                if (wordSample.getSpokenBy().equals(givenSample.getSpokenBy())) {
+                    returnSamples.add(wordSample);
+                }
+            } else if (!difficulty.allowMultipleStartConsonant) {
+                if (wordSample.getWord().getInitailConsonant().equals(givenSample.getWord().getInitailConsonant())) {
+                    returnSamples.add(wordSample);
+                }
+            }
+        }
+        return returnSamples;
+    }
+
+    /**
+     * discrimination
+     *
+     * // todo: this should take input of a vowel pair (because the selection
+     * of this vowel pair is yet to be defined)
+     *
+     * // todo: add parameters of difficulty level, number of speakers in
+     * stimuli selection and requireSameStartingConsonent
+     *
+     * @param maxSize
+     * @param targetVowel
+     * @param standardVowel
+     * @return {sequence of samples with a single target vowel and single
+     * standard vowel} a, a, a, e, a, e, e
+     */
+    public ArrayList<Stimulus> getDiscriminationWords(int maxSize, int maxTargetCount, Vowel targetVowel, Vowel standardVowel, Difficulty difficulty) {
+        if (targetVowel == null) {
+            throw new UnsupportedOperationException();
+        }
+        if (standardVowel == null) {
+            throw new UnsupportedOperationException();
+        }
+        final List<WordSample> foundByVowelId = sampleRepository.findByVowelId(targetVowel.getId());
+        final WordSample givenSample = foundByVowelId.get(new Random().nextInt(foundByVowelId.size()));
+        final List<WordSample> foundByTarget = filterByDifficulty(givenSample, foundByVowelId, difficulty);
+        final List<WordSample> foundByStandard = filterByDifficulty(givenSample, sampleRepository.findByVowelId(standardVowel.getId()), difficulty);
+        final ArrayList<Stimulus> stimulusList = new ArrayList<>();
+//        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
+        final IntStream randomTargetInts = new Random().ints(0, foundByTarget.size());
+        final PrimitiveIterator.OfInt targetRandomIterator = randomTargetInts.iterator();
+        final IntStream randomStandardInts = new Random().ints(0, foundByStandard.size());
+        final PrimitiveIterator.OfInt standardRandomIterator = randomStandardInts.iterator();
+        boolean lastWasTarget = false;
+        int targetCounter = 0;
+        for (int index = 0; index < maxSize; index++) {
+            if (index == 0) {
+                stimulusList.add(new Stimulus(foundByTarget.get(targetRandomIterator.nextInt()), Stimulus.Relevance.isIrelevant));
+            } else if (index < 4) {
+                stimulusList.add(new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isIrelevant));
+            } else {
+                if (maxTargetCount > targetCounter) {
+                    if (!lastWasTarget) {
+                        if (new Random().nextBoolean()) {
+                            final WordSample targetStimulus = foundByTarget.get(targetRandomIterator.nextInt());
+                            stimulusList.add(new Stimulus(targetStimulus, Stimulus.Relevance.isTarget));
+                            targetCounter++;
+                            lastWasTarget = true;
+                        } else {
+                            stimulusList.add(new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                            lastWasTarget = false;
+                        }
+                    } else {
+                        stimulusList.add(new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                        lastWasTarget = false;
+                    }
+                } else {
+                    stimulusList.add(new Random().nextInt(stimulusList.size() - 3) + 3, new Stimulus(foundByStandard.get(standardRandomIterator.nextInt()), Stimulus.Relevance.isStandard));
+                }
+            }
+        }
+        return stimulusList;
+    }
+
+    /**
+     * identification
+     *
+     * // todo: this should take input of a vowel pair (because the selection
+     * of this vowel pair is yet to be defined)
+     *
+     * // todo: add parameters of difficulty level, number of speakers in
+     * stimuli selection and requireSameStartingConsonent
+     *
+     * @param maxSize
+     * @return {sequence of samples each with a single target vowel and multiple
+     * distinct standard vowels} a, e, a, u, a, i
+     */
+    public ArrayList<Stimulus> getIdentificationWords(int maxSize) {
+        return getRandomWords(maxSize);
     }
 }

@@ -17,61 +17,74 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
-import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
- * @since Apr 16, 2015 4:08:59 PM (creation date)
+ * @since May 21, 2015 5:49:21 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
 @Entity
-public class Speaker {
+public class VowelQuality {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    @Column(unique = true)
-    private String label;
+    private Long id;
 
-    public Speaker(String speakerName) {
-        this.label = speakerName;
+    public enum Place {
+
+        front, near_front, central, near_back, back
     }
 
-    public Speaker() {
+    public enum Roundness {
+
+        unrounded, rounded
     }
 
-    public String getLabel() {
-        return label;
+    public enum Manner {
+
+        close, near_close, close_mid, mid, open_mid, near_open, open
+    }
+    @ManyToOne
+    private Vowel vowel;
+    private Place place;
+    private Manner manner;
+    private Roundness roundness;
+
+    public VowelQuality(Vowel vowel, Place place, Manner manner, Roundness roundness) {
+        this.vowel = vowel;
+        this.place = place;
+        this.manner = manner;
+        this.roundness = roundness;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public VowelQuality() {
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 73 * hash + Objects.hashCode(this.label);
-        return hash;
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Speaker other = (Speaker) obj;
-        if (!Objects.equals(this.label, other.label)) {
-            return false;
-        }
-        return true;
+    public void setId(Long id) {
+        this.id = id;
     }
-    
+
+    public Vowel getVowel() {
+        return vowel;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public Manner getManner() {
+        return manner;
+    }
+
+    public Roundness getRoundness() {
+        return roundness;
+    }
 }

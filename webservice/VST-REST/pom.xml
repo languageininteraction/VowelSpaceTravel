@@ -4,7 +4,7 @@
 
     <groupId>nl.ru.languageininteraction.vst-rest</groupId>
     <artifactId>VST-REST</artifactId>
-    <version>0.1-testing-SNAPSHOT</version>
+    <version>0.1.86-testing</version>
     <packaging>jar</packaging>
 
     <name>VST-REST</name>
@@ -21,6 +21,12 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <!--    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.2.3.RELEASE</version>
+        <relativePath />
+    </parent>-->
     <dependencies>
         <!--        <dependency>
             <groupId>org.slf4j</groupId>
@@ -37,7 +43,7 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>1.2.3.RELEASE</version>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>org.springframework.hateoas</groupId>
             <artifactId>spring-hateoas</artifactId>
             <version>0.17.0.RELEASE</version>
@@ -48,6 +54,38 @@
             <version>2.3.2</version>
             <scope>runtime</scope>
         </dependency>
+        <!--        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.35</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>1.2.3.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>1.2.3.RELEASE</version>
+        </dependency>
+        <!--        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+            <version>1.2.3.RELEASE</version>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -106,7 +144,7 @@
                         <exclude>**/nb-configuration.xml</exclude>
                     </excludes>
                 </configuration>
-<!--                <executions>
+                <!--                <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
@@ -116,6 +154,25 @@
             </plugin>
         </plugins>
     </build>
+    <reporting>                                                                              
+        <plugins>                                                                            
+            <plugin>                                                                         
+                <groupId>org.apache.maven.plugins</groupId>                                  
+                <artifactId>maven-javadoc-plugin</artifactId>                                
+                <version>2.10.3</version>                                                       
+                <configuration>                                                              
+                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>                         
+                    <docletArtifact>                                                         
+                        <groupId>org.umlgraph</groupId>                                      
+                        <artifactId>umlgraph</artifactId>                                    
+                        <version>5.6</version>                                               
+                    </docletArtifact>                                                        
+                    <additionalparam>-views -all</additionalparam>                           
+                    <useStandardDocletOptions>true</useStandardDocletOptions>                
+                </configuration>                                                             
+            </plugin>                                                                        
+        </plugins>                                                                           
+    </reporting>     
     <repositories>
         <repository>
             <id>spring-releases</id>
