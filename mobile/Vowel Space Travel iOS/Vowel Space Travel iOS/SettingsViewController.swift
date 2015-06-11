@@ -180,12 +180,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.vowelSelectionTableViewController = VowelSelectionTableViewController()
         self.vowelSelectionTableViewController!.modalPresentationStyle = UIModalPresentationStyle.Popover
         self.vowelSelectionTableViewController!.vowelExampleWords = Array(self.availableVowels!.keys)
+        self.vowelSelectionTableViewController!.selectedWords.append(self.currentGame!.selectedTargetVowel!.exampleWord)
         
-        for selectedVowelToCompareWith in self.currentGame!.selectedVowelsToCompareWith
-        {
-            self.vowelSelectionTableViewController!.selectedWords.append(selectedVowelToCompareWith.exampleWord)
-        }
-            
         self.popoverController = UIPopoverController(contentViewController: vowelSelectionTableViewController!)
         self.popoverController!.delegate = self
         self.popoverController!.presentPopoverFromRect(rect, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
@@ -196,7 +192,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     func popoverControllerDidDismissPopover(popoverController: UIPopoverController)
     {
         //Rebuild the list of selected vowels
-        self.currentGame!.selectedVowelsToCompareWith = []
+        /*self.currentGame!.selectedVowelsToCompareWith = []
         
         var contentViewController = popoverController.contentViewController as VowelSelectionTableViewController
         
@@ -208,21 +204,12 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
             self.currentGame!.selectedVowelsToCompareWith.append(self.availableVowels![exampleWord]!)
         }
         
-        updateVowelIndicatorLabel()
+        updateVowelIndicatorLabel()*/
     }
     
     func updateVowelIndicatorLabel()
     {
-        var vowelIndicatorText : String
-        
-        if self.currentGame!.selectedVowelsToCompareWith.count > 1
-        {
-            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs multiple"
-        }
-        else
-        {
-            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs \(self.currentGame!.selectedVowelsToCompareWith[0].exampleWord)"
-        }
+        var vowelIndicatorText : String = "\(self.currentGame!.selectedBaseVowel!.exampleWord) vs \(self.currentGame!.selectedTargetVowel!.exampleWord)"
 
         self.vowelIndicatorLabel.text = vowelIndicatorText
     }

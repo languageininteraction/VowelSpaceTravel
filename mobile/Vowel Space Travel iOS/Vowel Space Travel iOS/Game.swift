@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Task
+public enum Task
 {
     case Discrimination
     case Identification
@@ -16,8 +16,7 @@ enum Task
 
 enum GameStage
 {
-    case SelectingInitialVowel
-    case SelectingVowelsToCompareWith
+    case SelectingVowels
     case SettingOtherSettings
     case Trial
     case Playing
@@ -27,14 +26,14 @@ enum GameStage
 
 class Game : NSObject
 {
-    var stage : GameStage = GameStage.SelectingInitialVowel
+    var stage : GameStage = GameStage.SelectingVowels
     
     var roundNr : Int = 0
     var nrOfRounds : Int = 1
     
-    var selectedInitialVowel : VowelDefinition?
-    var selectedVowelsToCompareWith = [VowelDefinition]()
-    var selectedTask : Task?
+    var selectedBaseVowel : VowelDefinition?
+    var selectedTargetVowel : VowelDefinition?
+    var selectedTask : Task = Task.Discrimination
     
     var multipleSpeakers : Bool = false
     var differentStartingSounds : Bool = false

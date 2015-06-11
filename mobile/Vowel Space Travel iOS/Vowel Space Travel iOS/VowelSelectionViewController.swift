@@ -21,7 +21,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     var settingsViewController : SettingsViewController?
     var infoViewController : InfoViewController?
     var trialViewController : TrialViewController?
-    
+
+    var server : VSTServer = VSTServer(url: kWebserviceURL)
     var currentGame : Game = Game()
     
     var instructionTitle : UILabel = UILabel()
@@ -30,12 +31,14 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     var availableVowels : [String : VowelDefinition]?
     var vowelButtons : [String : UIButton]?
 
-    var suggestedInitialVowel : VowelDefinition?
-    var suggestedComparingVowel : VowelDefinition?
-    var suggestionView : SuggestionView?
+    var suggestedBaseVowel : VowelDefinition?
+    var suggestedTargetVowel : VowelDefinition?
+
+    var suggestionViewForBaseVowel : SuggestionView?
+    var suggestionViewForTargetVowel : SuggestionView?
     
-    var buttonsForSecondVowelSelectionStage = [UIButton]()
     var readyButton = UIButton()
+    var taskSegmentedControl : UISegmentedControl?
 
     override func viewDidLoad()
     {
@@ -48,14 +51,28 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         //Make the background white
         self.view.backgroundColor = UIColor.whiteColor()
         
-        //Temporarily set the suggested vowel
+        //Set the suggested vowels
+        var suggestedBaseVowelExampleWord : String = self.server.getSuggestedBaseVowelExampleWord()
+        var suggestedTargetVowelExampleWord : String = self.server.getSuggestedTargetVowelExampleWord()
+
         availableVowels = self.loadAvailableVowels()
-        self.suggestedInitialVowel = self.availableVowels!["pet"]
-        self.suggestedComparingVowel = self.availableVowels!["pit"]
         
+        self.suggestedBaseVowel = self.availableVowels![suggestedBaseVowelExampleWord]
+        self.suggestedTargetVowel = self.availableVowels![suggestedTargetVowelExampleWord]
+
         //Prepare the suggestion view
-        self.suggestionView = SuggestionView(frame: CGRect(x: 0,y: 0,width: 200,height: 40), text: "Why not this one?")
-        self.view.addSubview(self.suggestionView!)
+        var suggestionViewWidth : Int = 250
+        var suggestionViewHeight : Int = 40
+        
+        self.suggestionViewForBaseVowel = SuggestionView(frame: CGRect(x: 0,y: 0,width: suggestionViewWidth,height: suggestionViewHeight), text: "Why not compare this one...")
+        self.view.addSubview(self.suggestionViewForBaseVowel!)
+
+        self.suggestionViewForTargetVowel = SuggestionView(frame: CGRect(x: 0,y: 0,width: suggestionViewWidth,height: suggestionViewHeight), text: "... to this one?")
+        self.view.addSubview(self.suggestionViewForTargetVowel!)
+        
+        //Preselect the suggestions
+        self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
+        self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
         
         //Show the vowelbuttons
         let buttonWidth : CGFloat = 200
@@ -73,20 +90,21 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             currentButton.setTitle(vowel.exampleWord, forState: UIControlState.Normal)
             currentButton.addTarget(self, action: "vowelButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
             
-            currentButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            currentButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Selected)
-            currentButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
-            
             self.view.addSubview(currentButton)
             vowelButtons![vowel.exampleWord] = currentButton
             
             //If this is the suggested vowel, move the suggestion view to here
-            if suggestedInitialVowel == vowel
+            if self.suggestedBaseVowel! == vowel
             {
-                self.moveSuggestionViewToVowelButton(currentButton)
+                self.moveSuggestionViewToVowelButton(self.suggestionViewForBaseVowel!,vowelButton: currentButton)
             }
-            
+            else if self.suggestedTargetVowel! == vowel
+            {
+                self.moveSuggestionViewToVowelButton(self.suggestionViewForTargetVowel!,vowelButton: currentButton)
+            }
         }
+        
+        self.updateVowelButtonColors()
         
         //Create the static buttons
         var distanceFromRight : CGFloat = 50
@@ -94,31 +112,24 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.readyButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)-150,buttonWidth,buttonHeight))
         self.readyButton.setTitle("Ready", forState: UIControlState.Normal)
         self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-        self.readyButton.enabled = false
-        self.readyButton.hidden = true
         self.view.addSubview(readyButton)
-        
-        let selectAllButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)-50,buttonWidth,buttonHeight))
-        selectAllButton.setTitle("Select all", forState: UIControlState.Normal)
-        selectAllButton.addTarget(self, action: "selectAllButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonsForSecondVowelSelectionStage.append(selectAllButton)
-        
-        let deSelectAllButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)+50,buttonWidth,buttonHeight))
-        deSelectAllButton.setTitle("Deselect all", forState: UIControlState.Normal)
-        deSelectAllButton.addTarget(self, action: "deselectAllButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonsForSecondVowelSelectionStage.append(deSelectAllButton)
         
         let infoButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)+150,buttonWidth,buttonHeight))
         infoButton.setTitle("Info", forState: UIControlState.Normal)
         infoButton.addTarget(self, action: "infoButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-        self.buttonsForSecondVowelSelectionStage.append(infoButton)
+        self.view.addSubview(infoButton)
         
-        for button in self.buttonsForSecondVowelSelectionStage
-        {
-            button.hidden = true
-            button.enabled = false
-            self.view.addSubview(button)
-        }
+        //Create the task selection segmented control
+        var segmentedControlDistanceFromBottom : CGFloat = 50
+        var segmentedControlDistanceFromLeft : CGFloat = 50
+        var segmentedControlWidth : CGFloat = 300
+        var segmentedControlHeight : CGFloat = 50
+        
+        self.taskSegmentedControl = UISegmentedControl(items: ["Distinguish","Recognize"])
+        self.taskSegmentedControl!.selectedSegmentIndex = 0
+        self.taskSegmentedControl!.frame =  CGRect(x: segmentedControlDistanceFromLeft,y: self.screenHeight!-segmentedControlHeight-segmentedControlDistanceFromBottom,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.taskSegmentedControl!.addTarget(self, action: "taskSegmentedControlPressed:", forControlEvents: UIControlEvents.ValueChanged)
+        self.view.addSubview(self.taskSegmentedControl!)
         
         //Display the labels
         self.instructionTitle = UILabel();
@@ -172,6 +183,41 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         // Dispose of any resources that can be recreated.
     }
     
+    func updateVowelButtonColors()
+    {
+        var currentButton : UIButton
+        
+        for (exampleWord, vowel) in self.availableVowels!
+        {
+            currentButton = self.vowelButtons![exampleWord]!;
+            
+            if self.currentGame.selectedBaseVowel! == vowel
+            {
+                currentButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
+            }
+            else if self.currentGame.selectedTask == Task.Identification
+            {
+
+                currentButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
+                
+            }
+            else if self.currentGame.selectedTask == Task.Discrimination
+            {
+
+                if self.currentGame.selectedTargetVowel! == vowel
+                {
+                    currentButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
+                }
+                else
+                {
+                    currentButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+                }
+                
+            }
+            
+        }
+    }
+    
     func resetView()
     {
         //Make sure the vowel buttons are not yet selected
@@ -181,24 +227,14 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             button.enabled = true
         }
         
-        //Make sure the buttons are not yet visible
-        for button in self.buttonsForSecondVowelSelectionStage
-        {
-            button.enabled = false
-            button.hidden = true
-        }
-        
         //Make sure the title is set to its initial value
         self.instructionTitle.text = "Select vowel to practice"
-        
-        //Make sure the task description is not yet visible
-        self.updateTaskAndTaskDescriptionLabel()
-        self.updateReadyButton()
-        self.taskDescription.hidden = true
         
         //Reset all the views of all other settings by simply recreating the view controller
         self.settingsViewController = SettingsViewController()
         self.settingsViewController!.superController = self
+        
+        self.updateVowelButtonColors()
     }
     
     func loadAvailableVowels() -> [String: VowelDefinition]
@@ -227,15 +263,11 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         switch (self.currentGame.stage)
         {
-            case GameStage.SelectingInitialVowel:
-
-                self.currentGame.selectedInitialVowel = vowelCorrespondingToButtonPressed
-                sender.enabled = false
-                self.goToSelectingVowelsToCompareWithStage()
+            case GameStage.SelectingVowels:
             
-            case GameStage.SelectingVowelsToCompareWith:
+                println("Selected vowel")
             
-                if !sender.selected
+                /*if !sender.selected
                 {
                 self.currentGame.selectedVowelsToCompareWith.append(vowelCorrespondingToButtonPressed!)
                     sender.selected = true
@@ -248,7 +280,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                 }
             
                 self.updateTaskAndTaskDescriptionLabel();
-                self.updateReadyButton()
+                self.updateReadyButton()*/
+            
             default:
                 println("Warning! You got in a gamestate you can't be in right now!")
             
@@ -261,115 +294,27 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.goToSettingsView()
     }
     
-    func selectAllButtonPressed()
-    {
-        //Make all vowelbuttons selected
-        for (exampleWord,vowelButton) in self.vowelButtons!
-        {
-            if vowelButton.enabled
-            {
-                vowelButton.selected = true
-            }
-        }
-            
-        //Add all vowels to the selected vowels
-        self.currentGame.selectedVowelsToCompareWith = []
-        
-        for (exampleWord,availableVowel) in self.availableVowels!
-        {
-            if availableVowel != self.currentGame.selectedInitialVowel!
-            {
-                self.currentGame.selectedVowelsToCompareWith.append(availableVowel)
-            }
-        }
-        
-        self.updateTaskAndTaskDescriptionLabel()
-        self.updateReadyButton()
-    }
-
-    func deselectAllButtonPressed()
-    {
-        //Make all vowelbuttons selected
-        for (exampleWord,vowelButton) in self.vowelButtons!
-        {
-            if vowelButton.enabled
-            {
-                vowelButton.selected = false
-            }
-        }
-        
-        //Add all vowels to the selected vowels
-        self.currentGame.selectedVowelsToCompareWith = []
-        
-        self.updateTaskAndTaskDescriptionLabel()
-        self.updateReadyButton()
-    }
     
     func infoButtonPressed()
     {
         self.goToInfoView()
     }
-        
-    func goToSelectingVowelsToCompareWithStage()
+    
+    func taskSegmentedControlPressed(sender : UISegmentedControl)
     {
-        self.currentGame.stage = GameStage.SelectingVowelsToCompareWith
-        
-        //Make buttons appear
-        for button in self.buttonsForSecondVowelSelectionStage
+        switch(sender.selectedSegmentIndex)
         {
-            button.enabled = true
-            button.hidden = false
+            case 0: self.currentGame.selectedTask = Task.Discrimination
+            case 1: self.currentGame.selectedTask = Task.Identification
+            default: println("Warning! You've selected as task that does not exist")
         }
         
-        //Move the suggestion view
-        var suggestedButton : UIButton = self.vowelButtons![self.suggestedComparingVowel!.exampleWord]!
-        self.moveSuggestionViewToVowelButton(suggestedButton)
-        
-        //Make title change
-        self.instructionTitle.text = "Select one or more vowels to compare with"
-        
-        //Make the task description text appear
-        self.taskDescription.hidden = false
+        self.updateVowelButtonColors()
     }
     
-    //I have doubts whether it's smart to combine view and model here
-    func updateTaskAndTaskDescriptionLabel()
+    func moveSuggestionViewToVowelButton(suggestionView : SuggestionView, vowelButton : UIButton)
     {
-        if self.currentGame.selectedVowelsToCompareWith.count == 0
-        {
-            self.currentGame.selectedTask = nil
-            self.taskDescription.text = "Task: None"
-        }
-        else if self.currentGame.selectedVowelsToCompareWith.count == 1
-        {
-            self.currentGame.selectedTask = Task.Discrimination
-            self.taskDescription.text = "Task: Discrimination"
-        }
-        else
-        {
-            self.currentGame.selectedTask = Task.Identification
-            self.taskDescription.text = "Task: Identification"
-        }
-        
-    }
-    
-    func updateReadyButton()
-    {
-        if self.currentGame.selectedVowelsToCompareWith.count > 0
-        {
-            self.readyButton.hidden = false
-            self.readyButton.enabled = true
-        }
-        else
-        {
-            self.readyButton.hidden = true
-            self.readyButton.enabled = false
-        }
-    }
-    
-    func moveSuggestionViewToVowelButton(vowelButton : UIButton)
-    {
-        self.suggestionView!.frame = CGRect(x: vowelButton.frame.minX+20,y: vowelButton.frame.minY-15, width: self.suggestionView!.frame.width,height: self.suggestionView!.frame.height)
+        suggestionView.frame = CGRect(x: vowelButton.frame.minX+20,y: vowelButton.frame.minY-15, width: suggestionView.frame.width,height: suggestionView.frame.height)
     }
     
     func goToSettingsView()
