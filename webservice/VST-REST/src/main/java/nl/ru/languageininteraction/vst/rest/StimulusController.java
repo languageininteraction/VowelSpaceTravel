@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -138,11 +139,16 @@ public class StimulusController {
             @PathVariable("taskType") Task taskType,
             @PathVariable("player") Player player,
             @PathVariable("difficulty") Difficulty difficulty,
-            @RequestBody List<Stimulus> results) {
+            @RequestBody List<Stimulus> results,
+            Principal principal) {
         System.out.println("difficulty:" + difficulty);
         System.out.println("taskType:" + taskType);
         System.out.println("player:" + player.getEmail());
         System.out.println("stimulus: " + results.size());
+        System.out.println("principal:" + principal.getName());
+        if (!principal.getName().equals(player.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         HashSet<Vowel> standardVowels = new HashSet<>();
         Vowel targetVowel = null;
         for (Stimulus stimulus : results) {

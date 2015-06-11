@@ -4,7 +4,7 @@
 
     <groupId>nl.ru.languageininteraction.vst-rest</groupId>
     <artifactId>VST-REST</artifactId>
-    <version>0.1.84-testing</version>
+    <version>0.1.86-testing</version>
     <packaging>jar</packaging>
 
     <name>VST-REST</name>
