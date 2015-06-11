@@ -116,6 +116,7 @@ class TaskViewController: SubViewController {
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
     {
         self.tapDetectedDuringThisStimulus = true
+        self.playSound("cello")
     }
     
     func taskIsFinished()
