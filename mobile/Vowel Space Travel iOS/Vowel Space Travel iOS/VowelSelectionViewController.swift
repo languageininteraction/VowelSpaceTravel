@@ -89,6 +89,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             
             currentButton.setTitle(vowel.exampleWord, forState: UIControlState.Normal)
             currentButton.addTarget(self, action: "vowelButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
+            currentButton.addTarget(self, action: "vowelButtonLeftDragging:", forControlEvents: UIControlEvents.TouchDragExit)
+            currentButton.addTarget(self, action: "vowelButtonEnteredDragging:", forControlEvents: UIControlEvents.TouchDragEnter)
             
             self.view.addSubview(currentButton)
             vowelButtons![vowel.exampleWord] = currentButton
@@ -175,6 +177,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.infoViewController = InfoViewController();
         self.infoViewController!.superController = self
         
+        //Add the pan gestures, possible depricated?
+        //self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))
     }
     
     override func didReceiveMemoryWarning()
@@ -233,8 +237,6 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         //Reset all the views of all other settings by simply recreating the view controller
         self.settingsViewController = SettingsViewController()
         self.settingsViewController!.superController = self
-        
-        self.updateVowelButtonColors()
     }
     
     func loadAvailableVowels() -> [String: VowelDefinition]
@@ -246,6 +248,16 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         var pet : VowelDefinition = VowelDefinition(exampleWord: "pet",xPositionInMouth: 250,yPositionInMouth: 250)
         
         return [pit.exampleWord: pit,putt.exampleWord: putt,pet.exampleWord: pet]
+    }
+    
+    func vowelButtonLeftDragging(sender: UIButton)
+    {
+        println("Left vowel button")
+    }
+    
+    func vowelButtonEnteredDragging(sender : UIButton)
+    {
+        println("Entered vowel button")
     }
     
     func vowelButtonPressed(sender : UIButton)
@@ -263,6 +275,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         switch (self.currentGame.stage)
         {
+            
             case GameStage.SelectingVowels:
             
                 println("Selected vowel")
@@ -310,6 +323,18 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         }
         
         self.updateVowelButtonColors()
+    }
+    
+    func handlePan(recognizer : UIPanGestureRecognizer)
+    {
+        if recognizer.state == UIGestureRecognizerState.Began
+        {
+            println(recognizer.locationInView(self.view) )
+        }
+        else if recognizer.state == UIGestureRecognizerState.Ended
+        {
+            println(recognizer.locationInView(self.view))
+        }
     }
     
     func moveSuggestionViewToVowelButton(suggestionView : SuggestionView, vowelButton : UIButton)
@@ -372,7 +397,17 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                 self.currentGame.stage = GameStage.Trial
                 self.goToDownloadView()
             case self.downloadViewController!:
-                self.goToTrialView()
+                
+                if !self.currentGame.autoPilotMode
+                {
+                    self.goToTrialView()
+                }
+                else
+                {
+                    self.currentGame.stage = GameStage.Playing
+                    self.goToTaskView()
+                }
+
             case self.trialViewController!:
                 self.currentGame.stage = GameStage.Playing
                 self.goToTaskView()
@@ -389,8 +424,16 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             case self.resultViewController!:
                 if self.currentGame.stage == GameStage.Finished
                 {
-                    self.currentGame = Game()
-                    self.resetView()
+                    if !self.currentGame.autoPilotMode
+                    {
+                        self.currentGame = Game()
+                        self.resetView()
+                    }
+                    else
+                    {
+                        self.currentGame = self.CreateANewGameBasedOnServerSuggestions();
+                        self.goToDownloadView()
+                    }
                 }
                 else if self.currentGame.stage == GameStage.Playing
                 {
@@ -400,5 +443,15 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                 println("")
         }
         
+    }
+    
+    func CreateANewGameBasedOnServerSuggestions() -> Game
+    {
+        var newGame : Game = Game()
+        newGame.selectedBaseVowel = self.availableVowels!["pit"]
+        newGame.selectedBaseVowel = self.availableVowels!["putt"]
+        newGame.autoPilotMode = true
+        
+        return newGame
     }
 }
