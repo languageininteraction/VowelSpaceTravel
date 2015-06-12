@@ -89,9 +89,9 @@ class TaskViewController: SubViewController {
         }
     }
     
-    func playSound(soundFileName : String)
+    func playSound(soundFileName : String, ofType: String = "wav")
     {
-        var soundToPlay = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: "wav")!)
+        var soundToPlay = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: ofType)!)
         
         self.audioPlayer = AVAudioPlayer(contentsOfURL: soundToPlay, error: nil)
         self.audioPlayer.prepareToPlay()
@@ -116,7 +116,7 @@ class TaskViewController: SubViewController {
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
     {
         self.tapDetectedDuringThisStimulus = true
-        self.playSound("cello")
+        self.playSound("click",ofType: "aiff")
     }
     
     func taskIsFinished()
