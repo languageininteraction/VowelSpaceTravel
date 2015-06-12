@@ -29,6 +29,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     
     var singleOrMultipleSpeakerSegmentedControl = UISegmentedControl()
     var sameOrDifferentStartingSoundSegmentedControl = UISegmentedControl()
+    var autoPilotSegmentedControl = UISegmentedControl()
     
     var vowelIndicatorLabel = UILabel()
     var vowelSelectionTableViewController : VowelSelectionTableViewController?
@@ -89,22 +90,13 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.sameOrDifferentStartingSoundSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: soundsSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
         self.view.addSubview(self.sameOrDifferentStartingSoundSegmentedControl)
         
-        //Create the stepper to determin the number of rounds
-        var numberOfRoundsStepperDistanceFromTop : CGFloat = 400
-        var numberOfRoundsStepperWidth : CGFloat = 90
-        var numberOfRoundsStepperHeight : CGFloat = 50
+        //Create the autopilot segmented control
+        var autoPilotSegmentedControlDistanceFromTop : CGFloat = 400
         
-        self.numberOfRoundsStepper = UIStepper(frame: CGRect(x: 0.5 * (self.screenWidth!-numberOfRoundsStepperWidth),y: numberOfRoundsStepperDistanceFromTop,width: numberOfRoundsStepperWidth,height: numberOfRoundsStepperHeight))
-        self.numberOfRoundsStepper.minimumValue = 1
-        self.numberOfRoundsStepper.addTarget(self,action: "numberOfRoundsStepperChanged",
-            forControlEvents: UIControlEvents.ValueChanged)
-        self.view.addSubview(self.numberOfRoundsStepper)
-        
-        //Create the label that indicates the height of the stepper
-        self.numberOfRoundsIndicator = UILabel();
-        self.numberOfRoundsIndicator.frame = CGRectMake(0.5 * (self.screenWidth!-numberOfRoundsStepperWidth)-40,numberOfRoundsStepperDistanceFromTop-15,50,50)
-        self.numberOfRoundsIndicator.text = "1"
-        self.view.addSubview(numberOfRoundsIndicator)
+        self.autoPilotSegmentedControl = UISegmentedControl(items: ["Single round","Autopilot"])
+        self.autoPilotSegmentedControl.selectedSegmentIndex = 0
+        self.autoPilotSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: autoPilotSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.view.addSubview(self.autoPilotSegmentedControl)
         
         //Create the labels to go with the various options
         let labelDistanceFromLeft : CGFloat = 100
@@ -121,10 +113,10 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         startingSoundLabel.text = "Starting sound"
         self.view.addSubview(startingSoundLabel)
         
-        var numberOfRoundsLabel : UILabel = UILabel();
-        numberOfRoundsLabel.frame = CGRectMake(labelDistanceFromLeft,numberOfRoundsStepperDistanceFromTop-25,labelWidth,labelHeight)
-        numberOfRoundsLabel.text = "Number of rounds"
-        self.view.addSubview(numberOfRoundsLabel)
+        var autoPilotLabel : UILabel = UILabel();
+        autoPilotLabel.frame = CGRectMake(labelDistanceFromLeft,autoPilotSegmentedControlDistanceFromTop-25,labelWidth,labelHeight)
+        autoPilotLabel.text = "Mode"
+        self.view.addSubview(autoPilotLabel)
         
         //Create the area to see and change the selected vowels
         var chosenVowelsLabelDistanceFromTop : CGFloat = 0
@@ -168,11 +160,6 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(readyButton)
         
-    }
-    
-    func numberOfRoundsStepperChanged()
-    {
-        self.updateNumberOfRounds()
     }
     
     func presentVowelChangePopoverFromRect(rect: CGRect)
@@ -221,13 +208,12 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     
     func readyButtonPressed()
     {
+        //Interpret all settings
+        self.currentGame!.multipleSpeakers = self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex == 1
+        self.currentGame!.differentStartingSounds = self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex == 1
+        self.currentGame!.autoPilotMode = self.autoPilotSegmentedControl.selectedSegmentIndex == 1
+        
         self.superController!.subControllerFinished(self)
-    }
-    
-    func updateNumberOfRounds()
-    {
-        self.currentGame!.nrOfRounds = Int(self.numberOfRoundsStepper.value)
-        self.numberOfRoundsIndicator.text = "\(self.currentGame!.nrOfRounds)"
     }
     
     func changeVowelButtonPressed(sender : UIButton)

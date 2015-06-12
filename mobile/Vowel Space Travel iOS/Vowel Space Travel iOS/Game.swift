@@ -29,7 +29,7 @@ class Game : NSObject
     var stage : GameStage = GameStage.SelectingVowels
     
     var roundNr : Int = 0
-    var nrOfRounds : Int = 1
+    var autoPilotMode : Bool = false
     
     var selectedBaseVowel : VowelDefinition?
     var selectedTargetVowel : VowelDefinition?
