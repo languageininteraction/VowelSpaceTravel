@@ -122,5 +122,15 @@ class VSTServer : NSObject
 
         }
     }
+    
+    func getSuggestedBaseVowelExampleWord() -> String
+    {
+        return "pit"
+    }
+    
+    func getSuggestedTargetVowelExampleWord() -> String
+    {
+        return "putt"
+    }
 
 }

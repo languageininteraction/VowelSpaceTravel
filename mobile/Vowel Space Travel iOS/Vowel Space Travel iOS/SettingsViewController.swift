@@ -29,6 +29,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     
     var singleOrMultipleSpeakerSegmentedControl = UISegmentedControl()
     var sameOrDifferentStartingSoundSegmentedControl = UISegmentedControl()
+    var autoPilotSegmentedControl = UISegmentedControl()
     
     var vowelIndicatorLabel = UILabel()
     var vowelSelectionTableViewController : VowelSelectionTableViewController?
@@ -89,22 +90,13 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.sameOrDifferentStartingSoundSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: soundsSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
         self.view.addSubview(self.sameOrDifferentStartingSoundSegmentedControl)
         
-        //Create the stepper to determin the number of rounds
-        var numberOfRoundsStepperDistanceFromTop : CGFloat = 400
-        var numberOfRoundsStepperWidth : CGFloat = 90
-        var numberOfRoundsStepperHeight : CGFloat = 50
+        //Create the autopilot segmented control
+        var autoPilotSegmentedControlDistanceFromTop : CGFloat = 400
         
-        self.numberOfRoundsStepper = UIStepper(frame: CGRect(x: 0.5 * (self.screenWidth!-numberOfRoundsStepperWidth),y: numberOfRoundsStepperDistanceFromTop,width: numberOfRoundsStepperWidth,height: numberOfRoundsStepperHeight))
-        self.numberOfRoundsStepper.minimumValue = 1
-        self.numberOfRoundsStepper.addTarget(self,action: "numberOfRoundsStepperChanged",
-            forControlEvents: UIControlEvents.ValueChanged)
-        self.view.addSubview(self.numberOfRoundsStepper)
-        
-        //Create the label that indicates the height of the stepper
-        self.numberOfRoundsIndicator = UILabel();
-        self.numberOfRoundsIndicator.frame = CGRectMake(0.5 * (self.screenWidth!-numberOfRoundsStepperWidth)-40,numberOfRoundsStepperDistanceFromTop-15,50,50)
-        self.numberOfRoundsIndicator.text = "1"
-        self.view.addSubview(numberOfRoundsIndicator)
+        self.autoPilotSegmentedControl = UISegmentedControl(items: ["Single round","Autopilot"])
+        self.autoPilotSegmentedControl.selectedSegmentIndex = 0
+        self.autoPilotSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: autoPilotSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.view.addSubview(self.autoPilotSegmentedControl)
         
         //Create the labels to go with the various options
         let labelDistanceFromLeft : CGFloat = 100
@@ -121,10 +113,10 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         startingSoundLabel.text = "Starting sound"
         self.view.addSubview(startingSoundLabel)
         
-        var numberOfRoundsLabel : UILabel = UILabel();
-        numberOfRoundsLabel.frame = CGRectMake(labelDistanceFromLeft,numberOfRoundsStepperDistanceFromTop-25,labelWidth,labelHeight)
-        numberOfRoundsLabel.text = "Number of rounds"
-        self.view.addSubview(numberOfRoundsLabel)
+        var autoPilotLabel : UILabel = UILabel();
+        autoPilotLabel.frame = CGRectMake(labelDistanceFromLeft,autoPilotSegmentedControlDistanceFromTop-25,labelWidth,labelHeight)
+        autoPilotLabel.text = "Mode"
+        self.view.addSubview(autoPilotLabel)
         
         //Create the area to see and change the selected vowels
         var chosenVowelsLabelDistanceFromTop : CGFloat = 0
@@ -170,22 +162,13 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         
     }
     
-    func numberOfRoundsStepperChanged()
-    {
-        self.updateNumberOfRounds()
-    }
-    
     func presentVowelChangePopoverFromRect(rect: CGRect)
     {
         self.vowelSelectionTableViewController = VowelSelectionTableViewController()
         self.vowelSelectionTableViewController!.modalPresentationStyle = UIModalPresentationStyle.Popover
         self.vowelSelectionTableViewController!.vowelExampleWords = Array(self.availableVowels!.keys)
+        self.vowelSelectionTableViewController!.selectedWords.append(self.currentGame!.selectedTargetVowel!.exampleWord)
         
-        for selectedVowelToCompareWith in self.currentGame!.selectedVowelsToCompareWith
-        {
-            self.vowelSelectionTableViewController!.selectedWords.append(selectedVowelToCompareWith.exampleWord)
-        }
-            
         self.popoverController = UIPopoverController(contentViewController: vowelSelectionTableViewController!)
         self.popoverController!.delegate = self
         self.popoverController!.presentPopoverFromRect(rect, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
@@ -196,7 +179,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     func popoverControllerDidDismissPopover(popoverController: UIPopoverController)
     {
         //Rebuild the list of selected vowels
-        self.currentGame!.selectedVowelsToCompareWith = []
+        /*self.currentGame!.selectedVowelsToCompareWith = []
         
         var contentViewController = popoverController.contentViewController as VowelSelectionTableViewController
         
@@ -208,21 +191,12 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
             self.currentGame!.selectedVowelsToCompareWith.append(self.availableVowels![exampleWord]!)
         }
         
-        updateVowelIndicatorLabel()
+        updateVowelIndicatorLabel()*/
     }
     
     func updateVowelIndicatorLabel()
     {
-        var vowelIndicatorText : String
-        
-        if self.currentGame!.selectedVowelsToCompareWith.count > 1
-        {
-            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs multiple"
-        }
-        else
-        {
-            vowelIndicatorText = "\(self.currentGame!.selectedInitialVowel!.exampleWord) vs \(self.currentGame!.selectedVowelsToCompareWith[0].exampleWord)"
-        }
+        var vowelIndicatorText : String = "\(self.currentGame!.selectedBaseVowel!.exampleWord) vs \(self.currentGame!.selectedTargetVowel!.exampleWord)"
 
         self.vowelIndicatorLabel.text = vowelIndicatorText
     }
@@ -234,13 +208,12 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     
     func readyButtonPressed()
     {
+        //Interpret all settings
+        self.currentGame!.multipleSpeakers = self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex == 1
+        self.currentGame!.differentStartingSounds = self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex == 1
+        self.currentGame!.autoPilotMode = self.autoPilotSegmentedControl.selectedSegmentIndex == 1
+        
         self.superController!.subControllerFinished(self)
-    }
-    
-    func updateNumberOfRounds()
-    {
-        self.currentGame!.nrOfRounds = Int(self.numberOfRoundsStepper.value)
-        self.numberOfRoundsIndicator.text = "\(self.currentGame!.nrOfRounds)"
     }
     
     func changeVowelButtonPressed(sender : UIButton)

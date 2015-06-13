@@ -34,6 +34,7 @@
 		49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153461AFB8FE0000101F6 /* TrialViewController.swift */; };
 		49F153491AFB93BE000101F6 /* Vowel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153481AFB93BE000101F6 /* Vowel.swift */; };
 		49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1F5C51AD8097000457411 /* ResultViewController.swift */; };
+		49F383531B2AFE21008C4437 /* click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 49F383521B2AFE21008C4437 /* click.aiff */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		49F153461AFB8FE0000101F6 /* TrialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrialViewController.swift; sourceTree = "<group>"; };
 		49F153481AFB93BE000101F6 /* Vowel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vowel.swift; sourceTree = "<group>"; };
 		49F1F5C51AD8097000457411 /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		49F383521B2AFE21008C4437 /* click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = click.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 		4996A4A11AD7E4B1000437CF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				49F383521B2AFE21008C4437 /* click.aiff */,
 				49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */,
 				49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */,
 				49C653E21ACEA68900CA2803 /* cello.wav */,
@@ -287,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */,
+				49F383531B2AFE21008C4437 /* click.aiff in Resources */,
 				49C653E31ACEA68A00CA2803 /* cello.wav in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
