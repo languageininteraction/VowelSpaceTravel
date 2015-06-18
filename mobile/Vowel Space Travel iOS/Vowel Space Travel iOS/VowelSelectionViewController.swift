@@ -10,6 +10,12 @@ import Foundation
 
 import UIKit
 
+enum VowelDraggingType
+{
+    case BaseVowel
+    case TargetVowel
+}
+
 class VowelSelectionViewController: UIViewController, PassControlToSubControllerProtocol
 {
     var screenWidth : CGFloat?
@@ -34,6 +40,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     var suggestedBaseVowel : VowelDefinition?
     var suggestedTargetVowel : VowelDefinition?
 
+    var currentVowelDraggingType : VowelDraggingType? = nil
+    
     var suggestionViewForBaseVowel : SuggestionView?
     var suggestionViewForTargetVowel : SuggestionView?
     
@@ -83,15 +91,13 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         for (exampleWord,vowel) in availableVowels!
         {
-            currentButton = UIButton(frame: CGRectMake(CGFloat(vowel.xPositionInMouth),CGFloat(vowel.yPositionInMouth),100,70))
+            currentButton = UIButton(frame: CGRectMake(CGFloat(vowel.xPositionInMouth),CGFloat(vowel.yPositionInMouth),50,35))
             
             currentButton.enabled = true
             
             currentButton.setTitle(vowel.exampleWord, forState: UIControlState.Normal)
             currentButton.addTarget(self, action: "vowelButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-            currentButton.addTarget(self, action: "vowelButtonLeftDragging:", forControlEvents: UIControlEvents.TouchDragExit)
-            currentButton.addTarget(self, action: "vowelButtonEnteredDragging:", forControlEvents: UIControlEvents.TouchDragEnter)
-            
+
             self.view.addSubview(currentButton)
             vowelButtons![vowel.exampleWord] = currentButton
             
@@ -178,7 +184,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.infoViewController!.superController = self
         
         //Add the pan gestures, possible depricated?
-        //self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))
+        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))
     }
     
     override func didReceiveMemoryWarning()
@@ -250,16 +256,6 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         return [pit.exampleWord: pit,putt.exampleWord: putt,pet.exampleWord: pet]
     }
     
-    func vowelButtonLeftDragging(sender: UIButton)
-    {
-        println("Left vowel button")
-    }
-    
-    func vowelButtonEnteredDragging(sender : UIButton)
-    {
-        println("Entered vowel button")
-    }
-    
     func vowelButtonPressed(sender : UIButton)
     {
         //Find out which vowel was chosen
@@ -324,22 +320,67 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         self.updateVowelButtonColors()
     }
+
+    func FindVowelForTouchLocation(touchLocation : CGPoint) -> VowelDefinition?
+    {
+        for (exampleWord, vowelButton) in self.vowelButtons!
+        {
+            if CGRectContainsPoint(vowelButton.frame, touchLocation)
+            {
+                return self.availableVowels![exampleWord]
+            }
+        }
+        
+        return nil
+    }
     
     func handlePan(recognizer : UIPanGestureRecognizer)
     {
         if recognizer.state == UIGestureRecognizerState.Began
         {
-            println(recognizer.locationInView(self.view) )
+            var startLocation : CGPoint = recognizer.locationInView(self.view)
+            var startVowel : VowelDefinition? = self.FindVowelForTouchLocation(startLocation)
+            
+            if startVowel != nil
+            {
+                //See whether this was the selected start vowel
+                if startVowel == self.currentGame.selectedBaseVowel
+                {
+                    self.currentVowelDraggingType = VowelDraggingType.BaseVowel
+                }
+                
+                //Or the vowel to compare with
+                else if self.currentGame.selectedTask == Task.Discrimination && startVowel == self.currentGame.selectedTargetVowel
+                {
+                    self.currentVowelDraggingType = VowelDraggingType.TargetVowel
+                }
+            }
+        
         }
         else if recognizer.state == UIGestureRecognizerState.Ended
         {
-            println(recognizer.locationInView(self.view))
+            var endLocation : CGPoint = recognizer.locationInView(self.view)
+            var endVowel : VowelDefinition? = self.FindVowelForTouchLocation(endLocation)
+            
+            if self.currentVowelDraggingType != nil && endVowel != nil
+            {
+                if self.currentVowelDraggingType == VowelDraggingType.BaseVowel && (endVowel != self.currentGame.selectedTargetVowel || self.currentGame.selectedTask == Task.Identification)
+                {
+                    self.currentGame.selectedBaseVowel = endVowel
+                }
+                else if self.currentVowelDraggingType == VowelDraggingType.TargetVowel && endVowel != self.currentGame.selectedBaseVowel
+                {
+                    self.currentGame.selectedTargetVowel = endVowel
+                }
+            }
+            
+            self.updateVowelButtonColors()
         }
     }
     
     func moveSuggestionViewToVowelButton(suggestionView : SuggestionView, vowelButton : UIButton)
     {
-        suggestionView.frame = CGRect(x: vowelButton.frame.minX+20,y: vowelButton.frame.minY-15, width: suggestionView.frame.width,height: suggestionView.frame.height)
+        suggestionView.frame = CGRect(x: vowelButton.frame.minX-15,y: vowelButton.frame.minY-30, width: suggestionView.frame.width,height: suggestionView.frame.height)
     }
     
     func goToSettingsView()
