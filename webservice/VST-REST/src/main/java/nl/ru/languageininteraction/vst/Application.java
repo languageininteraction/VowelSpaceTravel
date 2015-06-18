@@ -59,24 +59,26 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        vowelRepository.deleteAll();
-        playerRepository.deleteAll();
-        wordsRepository.deleteAll();
-        stimulusResultRepository.deleteAll();
-        consonantRepository.deleteAll();
-        speakerRepository.deleteAll();
+        if (playerRepository.count() == 0) {
+            vowelRepository.deleteAll();
+            playerRepository.deleteAll();
+            wordsRepository.deleteAll();
+            stimulusResultRepository.deleteAll();
+            consonantRepository.deleteAll();
+            speakerRepository.deleteAll();
 
-        DefaultData defaultData = new DefaultData(vowelRepository, vowelQualityRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
-        defaultData.insertVowels();
-        defaultData.insertConsonants();
-        defaultData.insertWords();
-        audioSamplesIngester.processAudioResources();
-        new PlayerDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, settingsRepository).insertPlayer();
-        System.out.println("Players");
-        for (Player currentPlayer : playerRepository.findAll()) {
-            System.out.println(currentPlayer);
+            DefaultData defaultData = new DefaultData(vowelRepository, vowelQualityRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
+            defaultData.insertVowels();
+            defaultData.insertConsonants();
+            defaultData.insertWords();
+            audioSamplesIngester.processAudioResources();
+            new PlayerDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, settingsRepository).insertPlayer();
+            System.out.println("Players");
+            for (Player currentPlayer : playerRepository.findAll()) {
+                System.out.println(currentPlayer);
+            }
+            System.out.println();
+            new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, confidenceRepository).insertDummyData();
         }
-        System.out.println();
-        new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, confidenceRepository).insertDummyData();
     }
 }
