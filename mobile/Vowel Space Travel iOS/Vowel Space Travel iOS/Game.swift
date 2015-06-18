@@ -8,10 +8,10 @@
 
 import Foundation
 
-public enum Task
+enum Task : String
 {
-    case Discrimination
-    case Identification
+    case Discrimination = "discrimination"
+    case Identification = "identification"
 }
 
 enum GameStage
@@ -37,6 +37,8 @@ class Game : NSObject
     
     var multipleSpeakers : Bool = false
     var differentStartingSounds : Bool = false
+    
+    var stimuli : [Stimulus] = []
     
     override init() {}
 }

@@ -81,7 +81,7 @@ class TaskViewController: SubViewController {
         if self.currentStimulusIndex < self.stimuli.count
         {
             var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
-            self.playSound(currentStimulus.soundFileName)
+            self.playSound(currentStimulus.fileLocation!)
         }
         else
         {
@@ -89,11 +89,21 @@ class TaskViewController: SubViewController {
         }
     }
     
-    func playSound(soundFileName : String, ofType: String = "wav")
+    func playSound(soundFileName : String, ofType: String = "wav", absolutePath : Bool = true)
     {
-        var soundToPlay = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: ofType)!)
+        var soundPath : NSURL
         
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: soundToPlay, error: nil)
+        if absolutePath
+        {
+            soundPath = NSURL(fileURLWithPath: soundFileName)!
+        }
+        else
+        {
+            println(soundFileName)
+            soundPath = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: ofType)!)!
+        }
+            
+        self.audioPlayer = AVAudioPlayer(contentsOfURL: soundPath, error: nil)
         self.audioPlayer.prepareToPlay()
         self.audioPlayer.play()
     }
@@ -116,7 +126,7 @@ class TaskViewController: SubViewController {
     override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
     {
         self.tapDetectedDuringThisStimulus = true
-        self.playSound("click",ofType: "aiff")
+        self.playSound("click",ofType: "aiff",absolutePath : false)
     }
     
     func taskIsFinished()

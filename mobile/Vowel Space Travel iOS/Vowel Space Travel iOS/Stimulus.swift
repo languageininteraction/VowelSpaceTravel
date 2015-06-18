@@ -11,11 +11,12 @@ import Foundation
 class Stimulus : NSObject
 {
     var requiresResponse : Bool
-    var soundFileName : String
+    var sampleID : Int
+    var fileLocation : String?
     
-    init(soundFileName : String, requiresResponse : Bool)
+    init(sampleID : Int, requiresResponse : Bool)
     {
+        self.sampleID = sampleID
         self.requiresResponse = requiresResponse
-        self.soundFileName = soundFileName
     }
 }

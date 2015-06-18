@@ -165,19 +165,19 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.view.addSubview(taskDescription)
         
         //Preload the views
-        self.downloadViewController = DownloadViewController();
+        self.downloadViewController = DownloadViewController()
         self.downloadViewController!.superController = self
         
-        self.trialViewController = TrialViewController();
+        self.trialViewController = TrialViewController()
         self.trialViewController!.superController = self
         
-        self.taskViewController = TaskViewController();
+        self.taskViewController = TaskViewController()
         self.taskViewController!.superController = self
 
-        self.resultViewController = ResultViewController();
+        self.resultViewController = ResultViewController()
         self.resultViewController!.superController = self
 
-        self.settingsViewController = SettingsViewController();
+        self.settingsViewController = SettingsViewController()
         self.settingsViewController!.superController = self
 
         self.infoViewController = InfoViewController();
@@ -228,18 +228,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         }
     }
     
-    func resetView()
+    func resetView() //Possibly: rename to resetSettingsViewController?
     {
-        //Make sure the vowel buttons are not yet selected
-        for button in self.vowelButtons!.values
-        {
-            button.selected = false
-            button.enabled = true
-        }
-        
-        //Make sure the title is set to its initial value
-        self.instructionTitle.text = "Select vowel to practice"
-        
         //Reset all the views of all other settings by simply recreating the view controller
         self.settingsViewController = SettingsViewController()
         self.settingsViewController!.superController = self
@@ -321,7 +311,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.updateVowelButtonColors()
     }
 
-    func FindVowelForTouchLocation(touchLocation : CGPoint) -> VowelDefinition?
+    func findVowelForTouchLocation(touchLocation : CGPoint) -> VowelDefinition?
     {
         for (exampleWord, vowelButton) in self.vowelButtons!
         {
@@ -339,7 +329,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         if recognizer.state == UIGestureRecognizerState.Began
         {
             var startLocation : CGPoint = recognizer.locationInView(self.view)
-            var startVowel : VowelDefinition? = self.FindVowelForTouchLocation(startLocation)
+            var startVowel : VowelDefinition? = self.findVowelForTouchLocation(startLocation)
             
             if startVowel != nil
             {
@@ -360,7 +350,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         else if recognizer.state == UIGestureRecognizerState.Ended
         {
             var endLocation : CGPoint = recognizer.locationInView(self.view)
-            var endVowel : VowelDefinition? = self.FindVowelForTouchLocation(endLocation)
+            var endVowel : VowelDefinition? = self.findVowelForTouchLocation(endLocation)
             
             if self.currentVowelDraggingType != nil && endVowel != nil
             {
@@ -393,6 +383,9 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     func goToDownloadView()
     {
+        self.downloadViewController!.server = self.server
+        self.downloadViewController!.currentGame = self.currentGame
+        
         self.presentViewController(self.downloadViewController!, animated: false, completion: nil)
     }
 
@@ -405,11 +398,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     {
         self.presentViewController(self.taskViewController!, animated: false, completion: nil)
         
-        var stimulus1 : Stimulus = Stimulus(soundFileName: "bag_sp_1",requiresResponse: false)
-        var stimulus2 : Stimulus = Stimulus(soundFileName: "babe_sp_1",requiresResponse: true)
-        var stimulus3 : Stimulus = Stimulus(soundFileName: "bag_sp_1",requiresResponse: false)
-
-        self.taskViewController!.stimuli = [stimulus1,stimulus2,stimulus3]
+        self.taskViewController!.stimuli = self.currentGame.stimuli
         self.taskViewController!.startTask()
     }
     
@@ -427,63 +416,97 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.presentViewController(infoViewController!, animated: false, completion: nil)
     }
     
+    func collectStimuliForCurrentGameAndGoToDownloadView()
+    {
+        self.server.getSampleIDsAndExpectedAnswersForSettings(self.currentGame.selectedTask,multipleSpeakers: self.currentGame.multipleSpeakers,differentStartingSounds: self.currentGame.differentStartingSounds)
+            {
+                (sampleIDs,expectedAnswers,err) -> Void in
+
+                var index : Int = 0
+                var expectedAnswer : Bool
+                
+                for sampleID in sampleIDs
+                {
+                    expectedAnswer = expectedAnswers[index]
+                    self.currentGame.stimuli.append(Stimulus(sampleID: sampleID,requiresResponse: expectedAnswer))
+                    
+                    index++;
+                }
+                
+                self.goToDownloadView()
+        }
+    }
+    
     func subControllerFinished(subController: SubViewController)
     {
 
-        subController.dismissViewControllerAnimated(false, completion: nil)        
-        
-        switch subController
+        subController.dismissViewControllerAnimated(false, completion:
         {
-            case self.settingsViewController!:
-                self.currentGame.stage = GameStage.Trial
-                self.goToDownloadView()
-            case self.downloadViewController!:
-                
-                if !self.currentGame.autoPilotMode
-                {
-                    self.goToTrialView()
-                }
-                else
-                {
-                    self.currentGame.stage = GameStage.Playing
-                    self.goToTaskView()
-                }
-
-            case self.trialViewController!:
-                self.currentGame.stage = GameStage.Playing
-                self.goToTaskView()
-            case self.taskViewController!:
-                
-                //Show the result of the task
-                self.currentGame.stage = GameStage.ShowingResult
-                self.goToResultView(self.taskViewController!.countNumberOfCorrectResponses(),totalNumberOfAnswers: self.taskViewController!.correctResponses.count)
+            () -> Void in
             
-                //Reset the task view for later use
-                self.taskViewController = TaskViewController()
-                self.taskViewController!.superController = self
-            
-            case self.resultViewController!:
-                if self.currentGame.stage == GameStage.Finished
-                {
+            switch subController
+            {
+                case self.settingsViewController!:
+                    self.currentGame.stage = GameStage.Trial
+                    self.collectStimuliForCurrentGameAndGoToDownloadView();
+                
+                case self.downloadViewController!:
+                                    
                     if !self.currentGame.autoPilotMode
                     {
-                        self.currentGame = Game()
-                        self.resetView()
+                        self.goToTrialView()
                     }
                     else
                     {
-                        self.currentGame = self.CreateANewGameBasedOnServerSuggestions();
-                        self.goToDownloadView()
+                        self.currentGame.stage = GameStage.Playing
+                        self.goToTaskView()
                     }
-                }
-                else if self.currentGame.stage == GameStage.Playing
-                {
+
+                case self.trialViewController!:
+                    self.currentGame.stage = GameStage.Playing
                     self.goToTaskView()
-                }
-            default:
-                println("")
-        }
-        
+                case self.taskViewController!:
+                    
+                    //Show the result of the task
+                    self.currentGame.stage = GameStage.ShowingResult
+                    self.goToResultView(self.taskViewController!.countNumberOfCorrectResponses(),totalNumberOfAnswers: self.taskViewController!.correctResponses.count)
+                
+                    //Reset the task view for later use
+                    self.taskViewController = TaskViewController()
+                    self.taskViewController!.superController = self
+                
+                case self.resultViewController!:
+                    if self.currentGame.stage == GameStage.Finished
+                    {
+                        if !self.currentGame.autoPilotMode
+                        {
+                            self.currentGame = Game()
+                            
+                            //Preselect the suggestions
+                            self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
+                            self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
+                            
+                            self.resetView()
+                        }
+                        else
+                        {
+                            self.currentGame = self.CreateANewGameBasedOnServerSuggestions();
+                            self.goToDownloadView()
+                        }
+                    }
+                    else if self.currentGame.stage == GameStage.Playing
+                    {
+                        self.goToTaskView()
+                    }
+                
+                    //Reset the result view for later use
+                    self.resultViewController = ResultViewController()
+                    self.resultViewController!.superController = self
+                
+                default:
+                    println("")
+            }
+        })
     }
     
     func CreateANewGameBasedOnServerSuggestions() -> Game

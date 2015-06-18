@@ -16,3 +16,6 @@ let kWebserviceURL = kDevelopmentMode ? "http://applejack.science.ru.nl:8080/" :
 let kTimeBetweenStimuli : Double = 2
 let kPauseBetweenRounds : Double = 6
 let kNumberOfStimuliInRound : Int = 10 //Not used yet
+
+let kCachedStimuliLocation : String = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomainMask.UserDomainMask,true)[0] as String + "/Caches/"
+let kSoundFileExtension = ".wav"

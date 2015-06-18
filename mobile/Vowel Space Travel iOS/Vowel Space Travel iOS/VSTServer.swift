@@ -35,9 +35,6 @@ class VSTServer : NSObject
         
         var request : NSURLRequest = NSURLRequest(URL: NSURL(string: self.url+urlExtension)!)
 
-        println(request.URL.standardizedURL)
-        println(request.HTTPBody)
-        
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, responseData: NSData!,error:NSError!) -> Void in
             
             if error == nil
@@ -133,4 +130,69 @@ class VSTServer : NSObject
         return "putt"
     }
 
+    func translateSettingsToDifficultyString(multipleSpeakers : Bool, differentStartingSounds : Bool) -> String
+    {
+        if !multipleSpeakers && !differentStartingSounds
+        {
+            return "easy"
+        }
+        else if multipleSpeakers && !differentStartingSounds
+        {
+            return "medium"
+        }
+        else if !multipleSpeakers && differentStartingSounds
+        {
+            return "hard"
+        }
+        else if multipleSpeakers && differentStartingSounds
+        {
+            return "veryhard"
+        }
+        
+        return "easy"
+    }
+    
+    func getSampleIDsAndExpectedAnswersForSettings(task : Task, multipleSpeakers : Bool, differentStartingSounds : Bool, completionHandler: (([Int],[Bool], NSError?) -> Void))
+    {
+        //Turned off until logging in is fixed
+        //assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
+        
+        var difficulty : String = self.translateSettingsToDifficultyString(multipleSpeakers, differentStartingSounds: differentStartingSounds);
+        
+        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+task.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=3&standard=6"
+
+        var sampleIDs : [Int] = []
+        var expectedAnswers : [Bool] = []
+        
+        self.HTTPGetToJSON(urlExtensionToGetSoundFileUrls)
+            {
+                (jsonData,err) -> Void in
+                
+                var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as NSDictionary
+                
+                for stimulus in unpackagedJsonData["stimuli"] as NSArray
+                {
+                    sampleIDs.append(stimulus["sampleId"] as Int)
+                    expectedAnswers.append(stimulus["relevance"] as String == "isTarget")
+                }
+                
+                completionHandler(sampleIDs,expectedAnswers,nil);
+            }
+    }
+    
+    func downloadSampleWithID(id : Int, fileSafePath : String)
+    {
+        println("Downloading sample \(id)")
+        var urlExtensionToDownloadSample : String = "stimulus/audio/\(id)"
+        
+        let url = NSURL(string: self.url + urlExtensionToDownloadSample)
+        let dataFromURL = NSData(contentsOfURL: url!)
+        
+        let fileManager = NSFileManager.defaultManager()
+        var result = fileManager.createFileAtPath(fileSafePath, contents: dataFromURL, attributes: nil)
+        println(result)
+        
+        println("Saved at \(fileSafePath)")
+    }
+    
 }

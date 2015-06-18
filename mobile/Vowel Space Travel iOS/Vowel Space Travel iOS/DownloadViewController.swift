@@ -28,6 +28,9 @@ class DownloadViewController: SubViewController
     
     var tempTimer : NSTimer?
     
+    var server : VSTServer?
+    var currentGame : Game?
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -59,12 +62,27 @@ class DownloadViewController: SubViewController
 
     override func viewDidAppear(animated: Bool)
     {
-        println("View did appear")
-        
         setProgressBar(0.0,animated:false)
         
         //Start updating the progress bar
-        self.tempTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
+        //self.tempTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
+
+        var counter : Int = 0
+        var percentageDone : Float = 0.0
+        
+        for stimulus in self.currentGame!.stimuli
+        {
+            stimulus.fileLocation = kCachedStimuliLocation+"\(stimulus.sampleID)"+kSoundFileExtension
+            self.server!.downloadSampleWithID(stimulus.sampleID,fileSafePath: stimulus.fileLocation!)
+                        
+            percentageDone = Float(counter) / Float(self.currentGame!.stimuli.count)
+            self.setProgressBar(percentageDone, animated: true)
+            
+            counter++;
+        }
+        
+        self.downloadingCompleted()
+        
     }
     
     func increaseProgressBarWithOnePercent()
@@ -97,30 +115,10 @@ class DownloadViewController: SubViewController
     {
         self.downloadProgress = progress
         downloadProgressBar.setProgress(progress, animated: animated)
-    }
-    
-    func downloadFile()
-    {
-        let url = NSURL(string: "http://cls.ru.nl/staff/wstoop/test.zip")
-        let fileSafePath = "/Users/woseseltops/Desktop/test.zip"
-        let dataFromURL = NSData(contentsOfURL: url!)
-        
-        let fileManager = NSFileManager.defaultManager()
-        fileManager.createFileAtPath(fileSafePath, contents: dataFromURL, attributes: nil)
-        
-        println("Saved at \(fileSafePath)")
-        
-        /*let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {(data, response, error) in
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
-        }
-        
-        task.resume()*/
-    }
-    
+    }    
     
     func downloadingCompleted()
     {
-        self.tempTimer!.invalidate()
         self.superController!.subControllerFinished(self)
     }
     
