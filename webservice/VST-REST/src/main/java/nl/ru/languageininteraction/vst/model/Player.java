@@ -43,7 +43,7 @@ public class Player {
     @Column(unique = true)
     private String email;
     @JsonIgnore
-    private int token; // user password that has been hashed in the mobile app
+    private String token; // user password that has been hashed in the mobile app
 
     @OneToOne
     private Settings settings;
@@ -51,7 +51,7 @@ public class Player {
     public Player() {
     }
 
-    public Player(String firstName, String lastName, String email, int token, Settings settings) {
+    public Player(String firstName, String lastName, String email, String token, Settings settings) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -87,11 +87,11 @@ public class Player {
         this.email = email;
     }
 
-    public int getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(int token) {
+    public void setToken(String token) {
         this.token = token;
     }
 

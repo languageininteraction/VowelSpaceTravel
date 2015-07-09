@@ -4,7 +4,7 @@
 
     <groupId>nl.ru.languageininteraction.vst-rest</groupId>
     <artifactId>VST-REST</artifactId>
-    <version>0.1.87-testing</version>
+    <version>0.1.88-testing</version>
     <packaging>jar</packaging>
 
     <name>VST-REST</name>
@@ -12,7 +12,7 @@
         <name>Language In Interaction</name>
         <url>https://www.languageininteraction.nl</url>
     </organization>
-    <properties>
+    <properties>        
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -20,45 +20,31 @@
         <plugin.license.copyrightYear>2015</plugin.license.copyrightYear>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!--<java.version>1.8</java.version>-->
     </properties>
-    <!--    <parent>
+    <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.3.RELEASE</version>
+        <version>1.2.4.RELEASE</version>
         <relativePath />
-    </parent>-->
+    </parent>
     <dependencies>
-        <!--        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.5</version>
-        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-            <version>1.2.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>1.2.3.RELEASE</version>
         </dependency>
-        <!--        <dependency>
-            <groupId>org.springframework.hateoas</groupId>
-            <artifactId>spring-hateoas</artifactId>
-            <version>0.17.0.RELEASE</version>
-        </dependency>-->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.3.2</version>
-            <scope>test</scope>
+            <!--<scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.35</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -66,35 +52,20 @@
             <version>3.4.1</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>1.2.3.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>1.2.3.RELEASE</version>
         </dependency>
-        <!--        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-            <version>1.2.3.RELEASE</version>
-        </dependency>-->
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.2.3.RELEASE</version>
                 <executions>
                     <execution>
                         <goals>
@@ -141,50 +112,23 @@
                     </mapping>
                     <excludes>
                         <exclude>**/*.txt</exclude>
+                        <exclude>**/*.wav</exclude>
+                        <exclude>**/logging.properties</exclude>
                         <exclude>**/nbactions.xml</exclude>
                         <exclude>**/nb-configuration.xml</exclude>
                     </excludes>
                 </configuration>
-                <!--                <executions>
+                <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
         </plugins>
     </build>
-    <reporting>                                                                              
-        <plugins>                                                                            
-            <plugin>                                                                         
-                <groupId>org.apache.maven.plugins</groupId>                                  
-                <artifactId>maven-javadoc-plugin</artifactId>                                
-                <version>2.10.3</version>                                                       
-                <configuration>                                                              
-                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>                         
-                    <docletArtifact>                                                         
-                        <groupId>org.umlgraph</groupId>                                      
-                        <artifactId>umlgraph</artifactId>                                    
-                        <version>5.6</version>                                               
-                    </docletArtifact>                                                        
-                    <additionalparam>-views -all</additionalparam>                           
-                    <useStandardDocletOptions>true</useStandardDocletOptions>                
-                </configuration>                                                             
-            </plugin>                                                                        
-        </plugins>                                                                           
-    </reporting>     
-    <repositories>
-        <repository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </repository>
-    </repositories>
     <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </pluginRepository>
         <pluginRepository>
             <id>MPI</id>
             <name>MPI LAT Repository</name>
