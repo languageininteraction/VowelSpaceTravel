@@ -233,6 +233,10 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         //Reset all the views of all other settings by simply recreating the view controller
         self.settingsViewController = SettingsViewController()
         self.settingsViewController!.superController = self
+        
+        //Recreate the suggestion views
+        self.view.addSubview(self.suggestionViewForBaseVowel!)
+        self.view.addSubview(self.suggestionViewForTargetVowel!)
     }
     
     func loadAvailableVowels() -> [String: VowelDefinition]
@@ -245,9 +249,11 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         return [pit.exampleWord: pit,putt.exampleWord: putt,pet.exampleWord: pet]
     }
-    
+
+    //Depricated
     func vowelButtonPressed(sender : UIButton)
     {
+        /*
         //Find out which vowel was chosen
         var vowelCorrespondingToButtonPressed : VowelDefinition?
         
@@ -285,7 +291,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                 println("Warning! You got in a gamestate you can't be in right now!")
             
         }
-
+        */
     }
     
     func readyButtonPressed()
@@ -365,7 +371,13 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             }
             
             self.updateVowelButtonColors()
+            
+            //Remove the suggestion views
+            self.suggestionViewForBaseVowel!.removeFromSuperview()
+            self.suggestionViewForTargetVowel!.removeFromSuperview()
+            
         }
+        
     }
     
     func moveSuggestionViewToVowelButton(suggestionView : SuggestionView, vowelButton : UIButton)
