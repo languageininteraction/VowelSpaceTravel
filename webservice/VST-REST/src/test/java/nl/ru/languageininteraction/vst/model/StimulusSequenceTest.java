@@ -83,7 +83,7 @@ public class StimulusSequenceTest {
     @Test
     public void testGetRandomWords() {
         System.out.println("getRandomWords");
-        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player());
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player(), vowelRepository);
         int expResultCount = 23;
         ArrayList<Stimulus> result1 = stimulusSequence.getRandomWords((int) wordSampleRepository.count() + expResultCount);
         assertEquals(wordSampleRepository.count(), result1.size());
@@ -106,7 +106,7 @@ public class StimulusSequenceTest {
     @Test
     public void testGetDiscriminationWords() {
         System.out.println("getDiscriminationWords");
-        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player());
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player(), vowelRepository);
         int expResultCount = 23;
         int stimulusIndex = 0;
         boolean lastWasTarget = false;
@@ -146,7 +146,7 @@ public class StimulusSequenceTest {
     @Test
     public void testGetDiscriminationWordsDifficulty() {
         System.out.println("getDiscriminationWords");
-        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player());
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, new Player(), vowelRepository);
         Vowel targetVowel = vowelRepository.findByDisc("U"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
         Vowel standardVowel = vowelRepository.findByDisc("{"/*(long) new Random().nextInt((int) vowelRepository.count())*/);
         int maxSize = 100;

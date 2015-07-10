@@ -113,14 +113,14 @@ public class StimulusController {
             @RequestParam(value = "maxTargetCount", required = true) Integer maxTargetCount,
             @RequestParam(value = "target", required = true) Vowel targetVowel,
             @RequestParam(value = "standard", required = true) Vowel standardVowel) {
-        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, player);
+        final StimulusSequence stimulusSequence = new StimulusSequence(wordSampleRepository, player,vowelRepository);
         final ArrayList<Stimulus> words;
         switch (taskType) {
             case discrimination:
                 words = stimulusSequence.getDiscriminationWords(maxSize, maxTargetCount, targetVowel, standardVowel, difficulty);
                 break;
             case identification:
-                words = stimulusSequence.getIdentificationWords(maxSize);
+                words = stimulusSequence.getIdentificationWords(maxSize, maxTargetCount, targetVowel, difficulty);
                 break;
             default:
                 words = stimulusSequence.getRandomWords(maxSize);
