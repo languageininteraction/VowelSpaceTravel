@@ -32,7 +32,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     var autoPilotSegmentedControl = UISegmentedControl()
     
     var vowelIndicatorLabel = UILabel()
-    var vowelSelectionTableViewController : VowelSelectionTableViewController?
+    var taskIndicatorLabel = UILabel()
     var popoverController : UIPopoverController?
     
     var numberOfRoundsStepper = UIStepper()
@@ -118,29 +118,42 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         autoPilotLabel.text = "Mode"
         self.view.addSubview(autoPilotLabel)
         
-        //Create the area to see and change the selected vowels
+        //Create the area to see the selected vowels and game mode
         var chosenVowelsLabelDistanceFromTop : CGFloat = 0
-        var chosenVowelsLabelDistanceFromLeft : CGFloat = 20
-        var chosenVowelsLabelWidth : CGFloat = 150
+        var selectedSettingsLabelsDistanceFromLeft : CGFloat = 20
+        var selectedSettingsLabelsLabelWidth : CGFloat = 200
         
         var chosenVowelsLabel : UILabel = UILabel();
-        chosenVowelsLabel.frame = CGRectMake(chosenVowelsLabelDistanceFromLeft,chosenVowelsLabelDistanceFromTop, chosenVowelsLabelWidth,labelHeight)
+        chosenVowelsLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,chosenVowelsLabelDistanceFromTop, selectedSettingsLabelsLabelWidth,labelHeight)
         chosenVowelsLabel.textAlignment = NSTextAlignment.Center
         chosenVowelsLabel.text = "Chosen vowels"
         self.view.addSubview(chosenVowelsLabel)
         
-        var changeVowelButton = TempStyledButton(frame: CGRect(x: chosenVowelsLabelDistanceFromLeft,y: chosenVowelsLabelDistanceFromTop+60,width: chosenVowelsLabelWidth,height: 20))
-        changeVowelButton.enabled = true
-        changeVowelButton.addTarget(self, action: "changeVowelButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(changeVowelButton)
-        
         self.vowelIndicatorLabel = UILabel();
-        self.vowelIndicatorLabel.frame = CGRectMake(chosenVowelsLabelDistanceFromLeft,chosenVowelsLabelDistanceFromTop+20, chosenVowelsLabelWidth,labelHeight)
+        self.vowelIndicatorLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,chosenVowelsLabelDistanceFromTop+20, selectedSettingsLabelsLabelWidth,labelHeight)
         self.vowelIndicatorLabel.textAlignment = NSTextAlignment.Center
-        self.vowelIndicatorLabel.textColor = UIColor.whiteColor()
         
-        self.updateVowelIndicatorLabel()
+        var vowelIndicatorText : String = "\(self.currentGame!.selectedBaseVowel!.exampleWord) vs \(self.currentGame!.selectedTargetVowel!.exampleWord)"
+        
+        self.vowelIndicatorLabel.text = vowelIndicatorText
+
         self.view.addSubview(self.vowelIndicatorLabel)
+        
+        var selectedGameModeLabelDistanceFromTop : CGFloat = 50
+        
+        var selectedGameModeLabel : UILabel = UILabel();
+        selectedGameModeLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,selectedGameModeLabelDistanceFromTop, selectedSettingsLabelsLabelWidth,labelHeight)
+        selectedGameModeLabel.textAlignment = NSTextAlignment.Center
+        selectedGameModeLabel.text = "Chosen gamemode"
+        self.view.addSubview(selectedGameModeLabel)
+
+        var gameModeIndicatorLabelDistanceFromTop : CGFloat = 70
+        
+        var gameModeIndicatorLabel : UILabel = UILabel();
+        gameModeIndicatorLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,gameModeIndicatorLabelDistanceFromTop, selectedSettingsLabelsLabelWidth,labelHeight)
+        gameModeIndicatorLabel.textAlignment = NSTextAlignment.Center
+        gameModeIndicatorLabel.text = self.currentGame!.selectedTask.rawValue
+        self.view.addSubview(gameModeIndicatorLabel)
         
         //Create the buttons
         let buttonWidth : CGFloat = 200
@@ -162,45 +175,6 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         
     }
     
-    func presentVowelChangePopoverFromRect(rect: CGRect)
-    {
-        self.vowelSelectionTableViewController = VowelSelectionTableViewController()
-        self.vowelSelectionTableViewController!.modalPresentationStyle = UIModalPresentationStyle.Popover
-        self.vowelSelectionTableViewController!.vowelExampleWords = Array(self.availableVowels!.keys)
-        self.vowelSelectionTableViewController!.selectedWords.append(self.currentGame!.selectedTargetVowel!.exampleWord)
-        
-        self.popoverController = UIPopoverController(contentViewController: vowelSelectionTableViewController!)
-        self.popoverController!.delegate = self
-        self.popoverController!.presentPopoverFromRect(rect, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        
-    }
-    
-
-    func popoverControllerDidDismissPopover(popoverController: UIPopoverController)
-    {
-        //Rebuild the list of selected vowels
-        /*self.currentGame!.selectedVowelsToCompareWith = []
-        
-        var contentViewController = popoverController.contentViewController as VowelSelectionTableViewController
-        
-        var exampleWord : String
-        
-        for indexPath in contentViewController.tableView.indexPathsForSelectedRows()!
-        {
-            exampleWord = contentViewController.vowelExampleWords[indexPath.row]
-            self.currentGame!.selectedVowelsToCompareWith.append(self.availableVowels![exampleWord]!)
-        }
-        
-        updateVowelIndicatorLabel()*/
-    }
-    
-    func updateVowelIndicatorLabel()
-    {
-        var vowelIndicatorText : String = "\(self.currentGame!.selectedBaseVowel!.exampleWord) vs \(self.currentGame!.selectedTargetVowel!.exampleWord)"
-
-        self.vowelIndicatorLabel.text = vowelIndicatorText
-    }
-    
     func anotherSuggestionButtonPressed()
     {
         
@@ -216,8 +190,4 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.superController!.subControllerFinished(self)
     }
     
-    func changeVowelButtonPressed(sender : UIButton)
-    {
-        self.presentVowelChangePopoverFromRect(sender.frame)
-    }
 }
