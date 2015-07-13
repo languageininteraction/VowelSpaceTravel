@@ -19,14 +19,18 @@ package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.TaskSuggestion;
+import nl.ru.languageininteraction.vst.model.Vowel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -36,22 +40,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * @author Karen
  */
+@Controller
+@RequestMapping(value = "/suggestion", produces = "application/json")
 public class TaskSuggestionController {
 
-    private final ConfidenceRepository confidenceRepository;
-    private final StimulusResponseRepository responseRepository;
-
-    public TaskSuggestionController(ConfidenceRepository confidenceRepository, StimulusResponseRepository responseRepository) {
-        this.confidenceRepository = confidenceRepository;
-        this.responseRepository = responseRepository;
-    }
+    @Autowired
+    ConfidenceRepository confidenceRepository;
+    @Autowired
+    StimulusResponseRepository responseRepository;
+    @Autowired
+    VowelRepository vowelRepository;
 
     @RequestMapping(value = "/tasksuggestion/{player}", method = GET)
     @ResponseBody
     public ResponseEntity<Resources<TaskSuggestion>> getTaskSuggestion(@PathVariable("player") Player player) {
         ArrayList<TaskSuggestion> suggestions = new ArrayList<>();
         // todo: add suggestions
-        TaskSuggestion suggestion = new TaskSuggestion(Task.discrimination,Difficulty.veryhard,null,null);
+        final List<Vowel> allVowels = vowelRepository.findAll();
+        Vowel targetVowel = allVowels.get(new Random().nextInt((int) vowelRepository.count()));
+        allVowels.remove(targetVowel);
+        Vowel standardVowel = allVowels.get(new Random().nextInt((int) vowelRepository.count()));
+        TaskSuggestion suggestion = new TaskSuggestion(Task.discrimination,Difficulty.veryhard,targetVowel,standardVowel);
         suggestions.add(suggestion);
         Resources<TaskSuggestion> wrapped = new Resources<>(suggestions, linkTo(TaskSuggestionController.class).withSelfRel());
         return new ResponseEntity<>(wrapped, HttpStatus.OK);
