@@ -37,7 +37,17 @@ public interface ConfidenceRepository extends PagingAndSortingRepository<Confide
 
     public List<Confidence> findAll();
 
+    public int countByPlayerAndTaskAndDifficulty(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty);
+
     public List<Confidence> findByPlayerAndTaskAndDifficulty(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty);
+
+    public List<Confidence> findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(
             @Param("player") Player player,
             @Param("task") Task task,
             @Param("difficulty") Difficulty difficulty);

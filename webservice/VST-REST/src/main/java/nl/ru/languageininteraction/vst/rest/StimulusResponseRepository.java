@@ -39,6 +39,8 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
     @Override
     List<StimulusResponse> findAll();
 
+    List<StimulusResponse> findTop10ByPlayerOrderByResponseDateDesc(@Param("player") Player player);
+
     List<StimulusResponse> findByTargetVowel(@Param("targetVowel") Vowel targetVowel);
 
     List<StimulusResponse> findByStandardVowels(@Param("standardVowel") Vowel standardVowel);
