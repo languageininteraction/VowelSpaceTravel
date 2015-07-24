@@ -11,7 +11,8 @@ import UIKit
 
 class PlanetView : UIView
 {
-
+    let generalDownScaleRatio : CGFloat = 0.3
+    
     let planetSize : CGFloat = 50
     let shadowColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 0, alpha: 0.1)
     var planetColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 0, alpha: 1)
@@ -24,7 +25,7 @@ class PlanetView : UIView
     override init(frame: CGRect)
     {
         super.init(frame : frame)
-
+        
         self.hue = 0.4
         self.planetColor = UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1)
         
@@ -39,6 +40,9 @@ class PlanetView : UIView
         self.drawClouds(1);
         self.drawRing(1)
         
+        //This was made before I knew how large it would be... instead of changing all numbers, I scale down the whole thing
+        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.generalDownScaleRatio, self.generalDownScaleRatio);
+    
     }
     
     func drawBasePlanet(center: CGPoint)
