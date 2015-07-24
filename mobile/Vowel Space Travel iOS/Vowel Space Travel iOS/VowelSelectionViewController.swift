@@ -78,7 +78,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.suggestionViewForTargetVowel = SuggestionView(frame: CGRect(x: 0,y: 0,width: suggestionViewWidth,height: suggestionViewHeight), text: "... to this one?")
         self.view.addSubview(self.suggestionViewForTargetVowel!)
         
-        self.view.addSubview(PlanetView(frame : CGRect(x: 10,y: 10,width: 10,height: 10)))
+        self.view.addSubview(PlanetView(frame : CGRect(x: 50,y: 50,width: 10,height: 10)))
         
         //Preselect the suggestions
         self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
