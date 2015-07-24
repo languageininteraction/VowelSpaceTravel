@@ -58,6 +58,11 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         //Make the background white
         self.view.backgroundColor = UIColor.whiteColor()
+                
+        //Show the background image
+        var backgroundImageView = UIImageView(image: UIImage(named: "overview_background"))
+        backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
+        self.view.addSubview(backgroundImageView)
         
         //Set the suggested vowels
         var suggestedBaseVowelExampleWord : String = self.server.getSuggestedBaseVowelExampleWord()
@@ -78,7 +83,20 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.suggestionViewForTargetVowel = SuggestionView(frame: CGRect(x: 0,y: 0,width: suggestionViewWidth,height: suggestionViewHeight), text: "... to this one?")
         self.view.addSubview(self.suggestionViewForTargetVowel!)
         
-        self.view.addSubview(PlanetView(frame : CGRect(x: 50,y: 50,width: 10,height: 10)))
+        var planetLocations : [CGRect] = [CGRect(x: 400,y: 190,width: 1,height: 1),
+                                            CGRect(x: 470,y: 225,width: 1,height:1),
+                                            CGRect(x: 420,y: 240,width: 1,height:1),
+                                            CGRect(x: 350,y: 260,width: 1,height:1),
+                                            CGRect(x: 450,y: 300,width: 1,height:1),
+                                            CGRect(x: 400,y: 315,width: 1,height:1),
+                                            CGRect(x: 330,y: 335,width: 1,height:1)
+        ]
+        
+        for planetLocation in planetLocations
+        {
+            var planetView = PlanetView(frame : planetLocation)
+            self.view.addSubview(planetView)
+        }
         
         //Preselect the suggestions
         self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
