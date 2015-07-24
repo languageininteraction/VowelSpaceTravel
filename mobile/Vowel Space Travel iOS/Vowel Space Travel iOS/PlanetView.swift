@@ -14,6 +14,7 @@ class PlanetView : UIView
 
     let planetSize : CGFloat = 50
     let shadowColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 0, alpha: 0.1)
+    var planetColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 0, alpha: 1)
     var hue : CGFloat = 0
     
     required init(coder aDecoder: NSCoder) {
@@ -25,11 +26,17 @@ class PlanetView : UIView
         super.init(frame : frame)
 
         self.hue = 0.4
+        self.planetColor = UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1)
         
+        self.drawExternalCraters()
         self.drawBasePlanet(CGPoint(x: 40,y: 40))
-        self.drawCraters()
+        //self.drawInternalCraters()
+        
+        self.drawOcean()
         
         self.drawPlanetShadow()
+        
+        self.drawClouds(1);
         self.drawRing(1)
         
     }
@@ -37,7 +44,7 @@ class PlanetView : UIView
     func drawBasePlanet(center: CGPoint)
     {
         var path : UIBezierPath = createCircularPath(center, size: self.planetSize)
-        drawFilledInPath(path, color: UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1),position:CGPoint(x:0,y:0),scale: 1)
+        drawFilledInPath(path, color: self.planetColor,position:CGPoint(x:0,y:0),scale: 1)
     }
     
     func drawPlanetShadow()
@@ -137,8 +144,118 @@ class PlanetView : UIView
         drawFilledInPath(myBezier, color: UIColor(hue: 0, saturation: 0, brightness: 0, alpha: 0.2*opacity),position: CGPoint(x: -55,y: 20),scale: 12.8)
         
     }
+
+    func drawExternalCraters()
+    {
+        var myBezier : UIBezierPath
+        
+        //External craters
+        myBezier = UIBezierPath()
+        
+        myBezier.moveToPoint(CGPoint(x: 0.21115, y:9.99999997475e-06))
+        myBezier.addCurveToPoint(CGPoint(x: 0.0352, y: 0.34939),
+            controlPoint1: CGPoint(x: 0.18625, y:0.12865),
+            controlPoint2: CGPoint(x: 0.13875, y:0.26308))
+        myBezier.addCurveToPoint(CGPoint(x: 0.0362, y: 0.38019),
+            controlPoint1: CGPoint(x: 0.00839999999999, y:0.36479),
+            controlPoint2: CGPoint(x: 0.0, y:0.37389))
+        myBezier.addCurveToPoint(CGPoint(x: 0.66227, y: 0.92572),
+            controlPoint1: CGPoint(x: 0.30238, y:0.47839),
+            controlPoint2: CGPoint(x: 0.51715, y:0.68572))
+        myBezier.addCurveToPoint(CGPoint(x: 0.72907, y: 0.88162),
+            controlPoint1: CGPoint(x: 0.67817, y:0.96792),
+            controlPoint2: CGPoint(x: 0.69967, y:0.88682))
+        myBezier.addCurveToPoint(CGPoint(x: 1.04244, y: 0.79052),
+            controlPoint1: CGPoint(x: 0.82007, y:0.81802),
+            controlPoint2: CGPoint(x: 0.93376, y:0.79842))
+        myBezier.addCurveToPoint(CGPoint(x: 0.21086, y: 0.0),
+            controlPoint1: CGPoint(x: 0.76525, y:0.52701),
+            controlPoint2: CGPoint(x: 0.48805, y:0.26351))
+        
+        drawFilledInPath(myBezier, color: self.planetColor,position: CGPoint(x: -10,y: 60),scale: 18)
+        
+        myBezier = UIBezierPath()
+        myBezier.moveToPoint(CGPoint(x: 0.6259, y:0.0863000000001))
+        myBezier.addCurveToPoint(CGPoint(x: 0.34666, y: 0.028),
+            controlPoint1: CGPoint(x: 0.5308, y:0.0858800000001),
+            controlPoint2: CGPoint(x: 0.43053, y:0.0763000000001))
+        myBezier.addCurveToPoint(CGPoint(x: 0.31886, y: 0.029),
+            controlPoint1: CGPoint(x: 0.33216, y:0.019),
+            controlPoint2: CGPoint(x: 0.31726, y:0.0))
+        myBezier.addCurveToPoint(CGPoint(x: 0.0624, y: 0.41152),
+            controlPoint1: CGPoint(x: 0.28736, y:0.18413),
+            controlPoint2: CGPoint(x: 0.18172, y:0.31288))
+        myBezier.addCurveToPoint(CGPoint(x: 0.000300000000038, y: 0.46292),
+            controlPoint1: CGPoint(x: 0.0472, y:0.42912),
+            controlPoint2: CGPoint(x: 0.0, y:0.45102))
+        myBezier.addCurveToPoint(CGPoint(x: 0.15337, y: 0.63069),
+            controlPoint1: CGPoint(x: 0.0774, y:0.48602),
+            controlPoint2: CGPoint(x: 0.12392, y:0.56062))
+        myBezier.addCurveToPoint(CGPoint(x: 0.17907, y: 0.63769),
+            controlPoint1: CGPoint(x: 0.15837, y:0.65889),
+            controlPoint2: CGPoint(x: 0.16637, y:0.65879))
+        myBezier.addCurveToPoint(CGPoint(x: 0.6259, y: 0.0862399999999),
+            controlPoint1: CGPoint(x: 0.32801, y:0.45388),
+            controlPoint2: CGPoint(x: 0.47696, y:0.27006))
+        
+        drawFilledInPath(myBezier, color: self.planetColor,position: CGPoint(x: -9,y: 5),scale: 22)
+        
+        myBezier = UIBezierPath()
+        myBezier.moveToPoint(CGPoint(x: 1.99999999495e-05, y:0.28817))
+        myBezier.addCurveToPoint(CGPoint(x: 0.1453, y: 0.0495),
+            controlPoint1: CGPoint(x: 0.06312, y:0.21957),
+            controlPoint2: CGPoint(x: 0.12276, y:0.14163))
+        myBezier.addCurveToPoint(CGPoint(x: 0.1661, y: 0.0236),
+            controlPoint1: CGPoint(x: 0.1503, y:0.0333999999999),
+            controlPoint2: CGPoint(x: 0.1433, y:0.0))
+        myBezier.addCurveToPoint(CGPoint(x: 0.6054, y: 0.0965),
+            controlPoint1: CGPoint(x: 0.29679, y:0.1029),
+            controlPoint2: CGPoint(x: 0.45677, y:0.1143))
+        myBezier.addCurveToPoint(CGPoint(x: 0.7038, y: 0.0785999999999),
+            controlPoint1: CGPoint(x: 0.6385, y:0.0925),
+            controlPoint2: CGPoint(x: 0.6714, y:0.0865))
+        myBezier.addCurveToPoint(CGPoint(x: 0.7148, y: 0.29684),
+            controlPoint1: CGPoint(x: 0.6668, y:0.1468),
+            controlPoint2: CGPoint(x: 0.6862, y:0.22941))
+        myBezier.addCurveToPoint(CGPoint(x: 0.7128, y: 0.33374),
+            controlPoint1: CGPoint(x: 0.7218, y:0.31564),
+            controlPoint2: CGPoint(x: 0.7462, y:0.34284))
+        myBezier.addCurveToPoint(CGPoint(x: 0.0, y: 0.28814),
+            controlPoint1: CGPoint(x: 0.4752, y:0.31854),
+            controlPoint2: CGPoint(x: 0.2376, y:0.30334))
+        
+        drawFilledInPath(myBezier, color: self.planetColor,position: CGPoint(x: 30,y: -16),scale: 25)
+        
+        myBezier = UIBezierPath()
+        myBezier.moveToPoint(CGPoint(x: 0.31355, y:1.17041))
+        myBezier.addCurveToPoint(CGPoint(x: 0.66945, y: 1.03234),
+            controlPoint1: CGPoint(x: 0.40785, y:1.08231),
+            controlPoint2: CGPoint(x: 0.53637, y:1.01078))
+        myBezier.addCurveToPoint(CGPoint(x: 0.63095, y: 0.96574),
+            controlPoint1: CGPoint(x: 0.68285, y:1.02734),
+            controlPoint2: CGPoint(x: 0.63935, y:0.98634))
+        myBezier.addCurveToPoint(CGPoint(x: 0.39616, y: 0.15208),
+            controlPoint1: CGPoint(x: 0.47613, y:0.72497),
+            controlPoint2: CGPoint(x: 0.39706, y:0.43766))
+        myBezier.addCurveToPoint(CGPoint(x: 0.30816, y: 0.14708),
+            controlPoint1: CGPoint(x: 0.39116, y:0.12918),
+            controlPoint2: CGPoint(x: 0.33466, y:0.16228))
+        myBezier.addCurveToPoint(CGPoint(x: 0.0, y: 0.0),
+            controlPoint1: CGPoint(x: 0.19424, y:0.12778),
+            controlPoint2: CGPoint(x: 0.09305, y:0.06558))
+        myBezier.addCurveToPoint(CGPoint(x: 0.31455, y: 1.08826),
+            controlPoint1: CGPoint(x: 0.18294, y:0.3333),
+            controlPoint2: CGPoint(x: 0.30177, y:0.70671))
+        myBezier.addCurveToPoint(CGPoint(x: 0.31355, y: 1.17006),
+            controlPoint1: CGPoint(x: 0.3151, y:1.11556),
+            controlPoint2: CGPoint(x: 0.31518, y:1.14286))
+        
+        drawFilledInPath(myBezier, color: self.planetColor,position: CGPoint(x: 80,y: 10),scale: 22)
+        drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 80,y: 10),scale: 22)
+        
+    }
     
-    func drawCraters()
+    func drawInternalCraters()
     {
         
         var myBezier = self.createCircularPath(CGPoint(x: 0,y: 0), size: 10)
@@ -302,6 +419,140 @@ class PlanetView : UIView
         
         //The values below were found by trial and error
         drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 5,y: 45),scale: 28)
+    }
+    
+    func drawOcean()
+    {
+        var myBezier = UIBezierPath()
+        
+        myBezier.moveToPoint(CGPoint(x: 1.14061, y:1.35928))
+        myBezier.addCurveToPoint(CGPoint(x: 1.14061, y: 2.90615),
+            controlPoint1: CGPoint(x: 1.14061, y:1.35928),
+            controlPoint2: CGPoint(x: 0.90623, y:2.53115))
+        myBezier.addCurveToPoint(CGPoint(x: 2.01561, y: 2.84365),
+            controlPoint1: CGPoint(x: 1.24999, y:3.0624),
+            controlPoint2: CGPoint(x: 1.65623, y:3.1874))
+        myBezier.addCurveToPoint(CGPoint(x: 2.42186, y: 3.8749),
+            controlPoint1: CGPoint(x: 2.37499, y:2.98428),
+            controlPoint2: CGPoint(x: 1.95311, y:3.96865))
+        myBezier.addCurveToPoint(CGPoint(x: 4.87498, y: 1.95303),
+            controlPoint1: CGPoint(x: 3.06248, y:3.59365),
+            controlPoint2: CGPoint(x: 3.18748, y:1.8749))
+        myBezier.addCurveToPoint(CGPoint(x: 6.26561, y: 1.8437),
+            controlPoint1: CGPoint(x: 5.18749, y:2.04673),
+            controlPoint2: CGPoint(x: 5.93748, y:2.95308))
+        myBezier.addCurveToPoint(CGPoint(x: 3.73436, y: 0.0312),
+            controlPoint1: CGPoint(x: 6.39061, y:1.60932),
+            controlPoint2: CGPoint(x: 5.49999, y:0.42183))
+        myBezier.addCurveToPoint(CGPoint(x: 6.90624, y: 1.31245),
+            controlPoint1: CGPoint(x: 4.98436, y:0.18745),
+            controlPoint2: CGPoint(x: 5.68749, y:0.0))
+        myBezier.addCurveToPoint(CGPoint(x: 7.95311, y: 3.43745),
+            controlPoint1: CGPoint(x: 6.90624, y:1.31245),
+            controlPoint2: CGPoint(x: 7.98436, y:2.5312))
+        myBezier.addCurveToPoint(CGPoint(x: 6.40624, y: 2.89058),
+            controlPoint1: CGPoint(x: 7.95311, y:3.43745),
+            controlPoint2: CGPoint(x: 6.68749, y:2.74995))
+        myBezier.addCurveToPoint(CGPoint(x: 7.06249, y: 4.42183),
+            controlPoint1: CGPoint(x: 6.03124, y:3.28121),
+            controlPoint2: CGPoint(x: 7.29687, y:4.23433))
+        myBezier.addCurveToPoint(CGPoint(x: 5.82811, y: 5.95308),
+            controlPoint1: CGPoint(x: 6.65624, y:4.76558),
+            controlPoint2: CGPoint(x: 6.62499, y:5.79683))
+        myBezier.addCurveToPoint(CGPoint(x: 5.75001, y: 7.56245),
+            controlPoint1: CGPoint(x: 5.31248, y:6.03118),
+            controlPoint2: CGPoint(x: 6.34374, y:7.07807))
+        myBezier.addCurveToPoint(CGPoint(x: 4.04688, y: 7.76558),
+            controlPoint1: CGPoint(x: 5.75001, y:7.56245),
+            controlPoint2: CGPoint(x: 4.37501, y:7.99996))
+        myBezier.addCurveToPoint(CGPoint(x: 4.84376, y: 6.7187),
+            controlPoint1: CGPoint(x: 4.04688, y:7.76558),
+            controlPoint2: CGPoint(x: 4.67188, y:7.18745))
+        myBezier.addCurveToPoint(CGPoint(x: 4.89066, y: 5.7187),
+            controlPoint1: CGPoint(x: 5.03126, y:6.48432),
+            controlPoint2: CGPoint(x: 4.70316, y:5.95308))
+        myBezier.addCurveToPoint(CGPoint(x: 5.82816, y: 4.57808),
+            controlPoint1: CGPoint(x: 5.07811, y:5.42183),
+            controlPoint2: CGPoint(x: 5.37503, y:5.32808))
+        myBezier.addCurveToPoint(CGPoint(x: 4.64066, y: 3.4687),
+            controlPoint1: CGPoint(x: 5.92186, y:4.39058),
+            controlPoint2: CGPoint(x: 5.87506, y:3.26557))
+        myBezier.addCurveToPoint(CGPoint(x: 3.34379, y: 5.45308),
+            controlPoint1: CGPoint(x: 4.10941, y:3.57808),
+            controlPoint2: CGPoint(x: 3.76567, y:5.32808))
+        myBezier.addCurveToPoint(CGPoint(x: 1.42191, y: 6.8437),
+            controlPoint1: CGPoint(x: 3.34379, y:5.45308),
+            controlPoint2: CGPoint(x: 2.03129, y:6.14057))
+        myBezier.addCurveToPoint(CGPoint(x: 0.23441, y: 4.3437),
+            controlPoint1: CGPoint(x: 1.42191, y:6.8437),
+            controlPoint2: CGPoint(x: 0.20316, y:5.56245))
+        myBezier.addCurveToPoint(CGPoint(x: 1.14063, y: 1.35928),
+            controlPoint1: CGPoint(x: 0.23441, y:4.3437),
+            controlPoint2: CGPoint(x: 0.0, y:2.59366))
+        
+        //The values below were found by trial and error
+        drawFilledInPath(myBezier, color: UIColor(hue: 0.57, saturation: 0.49, brightness: 0.8, alpha: 1),position: CGPoint(x: -11.5,y: -10),scale: 12.8)
+    }
+    
+    func drawClouds(size : CGFloat)
+    {
+        var myBezier = UIBezierPath()
+        let cloudColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 1, alpha: 0.8)
+
+        myBezier.moveToPoint(CGPoint(x: 3.2343, y:1.36018))
+        myBezier.addCurveToPoint(CGPoint(x: 0.0, y: 1.27378),
+            controlPoint1: CGPoint(x: 3.2343, y:1.36018),
+            controlPoint2: CGPoint(x: 1.3181, y:1.51129))
+        myBezier.addCurveToPoint(CGPoint(x: 1.6393, y: 0.88517),
+            controlPoint1: CGPoint(x: 0.43353, y:0.26216),
+            controlPoint2: CGPoint(x: 1.33865, y:0.50671))
+        myBezier.addCurveToPoint(CGPoint(x: 2.72479, y: 0.10796),
+            controlPoint1: CGPoint(x: 1.6393, y:0.88517),
+            controlPoint2: CGPoint(x: 1.7168, y:0.0))
+        myBezier.addCurveToPoint(CGPoint(x: 3.45583, y: 0.71246),
+            controlPoint1: CGPoint(x: 3.47798, y:0.09716),
+            controlPoint2: CGPoint(x: 3.45583, y:0.71246))
+        myBezier.addCurveToPoint(CGPoint(x: 4.51916, y: 0.45338),
+            controlPoint1: CGPoint(x: 3.45583, y:0.71246),
+            controlPoint2: CGPoint(x: 3.84351, y:0.26987))
+        myBezier.addCurveToPoint(CGPoint(x: 4.785, y: 1.36014),
+            controlPoint1: CGPoint(x: 5.08359, y:0.60505),
+            controlPoint2: CGPoint(x: 4.80432, y:1.3185))
+        myBezier.addCurveToPoint(CGPoint(x: 3.2343, y: 1.36016),
+            controlPoint1: CGPoint(x: 3.97485, y:1.44254),
+            controlPoint2: CGPoint(x: 3.81028, y:1.39224))
+        
+        //The values below were found by trial and error
+        drawFilledInPath(myBezier, color: cloudColor,position: CGPoint(x: 15,y: 44),scale: 18*size)
+
+        myBezier = UIBezierPath()
+        
+        myBezier.moveToPoint(CGPoint(x: 2.28863, y:1.74058))
+        myBezier.addCurveToPoint(CGPoint(x: 6.29132, y: 1.63005),
+            controlPoint1: CGPoint(x: 2.28863, y:1.74058),
+            controlPoint2: CGPoint(x: 4.66008, y:1.93396))
+        myBezier.addCurveToPoint(CGPoint(x: 4.26257, y: 1.13274),
+            controlPoint1: CGPoint(x: 5.75481, y:0.33548),
+            controlPoint2: CGPoint(x: 4.63464, y:0.64842))
+        myBezier.addCurveToPoint(CGPoint(x: 2.91919, y: 0.13814),
+            controlPoint1: CGPoint(x: 4.26257, y:1.13274),
+            controlPoint2: CGPoint(x: 4.16667, y:0.0))
+        myBezier.addCurveToPoint(CGPoint(x: 2.01448, y: 0.91172),
+            controlPoint1: CGPoint(x: 1.98706, y:0.12424),
+            controlPoint2: CGPoint(x: 2.01448, y:0.91172))
+        myBezier.addCurveToPoint(CGPoint(x: 0.69852, y: 0.58019),
+            controlPoint1: CGPoint(x: 2.01448, y:0.91172),
+            controlPoint2: CGPoint(x: 1.53469, y:0.34535))
+        myBezier.addCurveToPoint(CGPoint(x: 0.36953, y: 1.74056),
+            controlPoint1: CGPoint(x: 0.0, y:0.77428),
+            controlPoint2: CGPoint(x: 0.34562, y:1.68728))
+        myBezier.addCurveToPoint(CGPoint(x: 2.28863, y: 1.74058),
+            controlPoint1: CGPoint(x: 1.37215, y:1.84601),
+            controlPoint2: CGPoint(x: 1.57581, y:1.78166))
+        
+        //The values below were found by trial and error
+        drawFilledInPath(myBezier, color: cloudColor,position: CGPoint(x: -20,y: 8),scale: 11*size)
+    
     }
     
     func createCircularPath(center : CGPoint,size : CGFloat) -> UIBezierPath
