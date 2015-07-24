@@ -87,8 +87,30 @@ class LoginViewController: UIViewController {
     func login(#username : String,password : String)
     {
         println("Loggin in");
-        let progressViewController = VowelSelectionViewController();
-        self.presentViewController(progressViewController, animated: false, completion: nil)
+        self.zoomFromVowelTractOverViewToVowelSelection()
+    }
+    
+    func zoomFromVowelTractOverViewToVowelSelection()
+    {
+        let vowelSelectionViewController = VowelSelectionViewController();
+        
+        var oldTransform = vowelSelectionViewController.view.layer.transform;
+        var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
+        var newTransform = CATransform3DTranslate(transformScale, 0, 50, 0)
+        
+        CATransaction.begin()
+        
+        var zoomAnimation = CABasicAnimation(keyPath: "transform")
+        zoomAnimation.speed = 0.1
+        zoomAnimation.fromValue = NSValue(CATransform3D: oldTransform)
+        zoomAnimation.toValue = NSValue(CATransform3D: newTransform)
+        vowelSelectionViewController.view.layer.addAnimation(zoomAnimation, forKey: "to new transform")
+        vowelSelectionViewController.view.layer.transform = newTransform
+        
+        CATransaction.commit()
+        
+        self.view.addSubview(vowelSelectionViewController.view)
+        
     }
     
 }
