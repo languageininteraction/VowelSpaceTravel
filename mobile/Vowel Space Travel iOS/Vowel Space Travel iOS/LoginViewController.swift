@@ -66,8 +66,6 @@ class LoginViewController: UIViewController {
         var vstServer : VSTServer = VSTServer(url: kWebserviceURL)
         
         vstServer.tryLoggingIn("wessel", password: "hunter2")
-
-        vstServer.getAllVowels()
         vstServer.createNewUser("Wessel")
         
     }

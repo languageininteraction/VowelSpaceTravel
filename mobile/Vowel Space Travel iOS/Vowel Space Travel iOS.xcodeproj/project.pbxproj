@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		491CF88E1B6B6095008D62A1 /* Muli.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 491CF88D1B6B6095008D62A1 /* Muli.ttf */; };
 		4947A75C1B0335CE00AF5A96 /* Stimulus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75B1B0335CE00AF5A96 /* Stimulus.swift */; };
 		4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */; };
 		495359281AE91A88009E870A /* VSTServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495359271AE91A88009E870A /* VSTServer.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		491CF88D1B6B6095008D62A1 /* Muli.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Muli.ttf; sourceTree = "<group>"; };
 		4947A75B1B0335CE00AF5A96 /* Stimulus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stimulus.swift; sourceTree = "<group>"; };
 		4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionTableViewController.swift; sourceTree = "<group>"; };
 		495359271AE91A88009E870A /* VSTServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSTServer.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		4996A4A11AD7E4B1000437CF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				491CF88D1B6B6095008D62A1 /* Muli.ttf */,
 				498003501B627490009AC7C1 /* overview_background.png */,
 				49F383521B2AFE21008C4437 /* click.aiff */,
 				49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */,
@@ -301,6 +304,7 @@
 				49C653E31ACEA68A00CA2803 /* cello.wav in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
+				491CF88E1B6B6095008D62A1 /* Muli.ttf in Resources */,
 				49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */,
 				49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */,
 			);

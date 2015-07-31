@@ -8,16 +8,36 @@
 
 import Foundation
 
+enum VowelPlace
+{
+    case back
+    case near_back
+    case mid
+    case front
+}
+
+enum VowelManner
+{
+    case open
+    case center
+    case near_close
+    case close
+}
+
+
 class VowelDefinition : NSObject
 {
-    var exampleWord : String
-    var xPositionInMouth : Float
-    var yPositionInMouth : Float
-
-    init(exampleWord : String, xPositionInMouth : Float, yPositionInMouth : Float)
+    var exampleWord : String = ""
+    var place : VowelPlace?
+    var manner : VowelManner?
+    var rounded : Bool?
+    var ipaNotation : String
+    
+    init(ipaNotation : String) //, place : VowelPlace, manner : VowelManner, rounded : Bool)
     {
-        self.exampleWord = exampleWord
-        self.xPositionInMouth = xPositionInMouth
-        self.yPositionInMouth = yPositionInMouth
+        self.ipaNotation = ipaNotation
+//        self.place = place
+//        self.manner = manner
+//        self.rounded = rounded
     }
 }

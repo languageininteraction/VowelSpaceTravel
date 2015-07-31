@@ -51,7 +51,11 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-                
+
+        //Set the example words... is there a better place for this?
+        var exampleWordsForIpaNotation : [String : String] = ["i":"bean","E":"pet","1":"bay","I":"pit","{":"pat","2":"bike","3":"burn","4":"boy","U":"push","6":"brow","5":"boat","V":"putt","u":"boot","Q":"pop","$":"born",
+            "#":"bark"]
+        
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
@@ -68,7 +72,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         var suggestedBaseVowelExampleWord : String = self.server.getSuggestedBaseVowelExampleWord()
         var suggestedTargetVowelExampleWord : String = self.server.getSuggestedTargetVowelExampleWord()
 
-        availableVowels = self.loadAvailableVowels()
+        availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
         
         self.suggestedBaseVowel = self.availableVowels![suggestedBaseVowelExampleWord]
         self.suggestedTargetVowel = self.availableVowels![suggestedTargetVowelExampleWord]
@@ -83,19 +87,34 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.suggestionViewForTargetVowel = SuggestionView(frame: CGRect(x: 0,y: 0,width: suggestionViewWidth,height: suggestionViewHeight), text: "... to this one?")
         self.view.addSubview(self.suggestionViewForTargetVowel!)
         
-        var planetLocations : [CGRect] = [CGRect(x: 400,y: 190,width: 1,height: 1),
-                                            CGRect(x: 470,y: 225,width: 1,height:1),
-                                            CGRect(x: 420,y: 240,width: 1,height:1),
-                                            CGRect(x: 350,y: 260,width: 1,height:1),
-                                            CGRect(x: 450,y: 300,width: 1,height:1),
-                                            CGRect(x: 400,y: 315,width: 1,height:1),
-                                            CGRect(x: 330,y: 335,width: 1,height:1)
-        ]
+        var planetLocationsForIpaNotation : [String : CGRect] = ["i" : CGRect(x: 400,y: 190,width: 1,height: 1),
+                                            "E" : CGRect(x: 353,y: 300,width: 1,height:1),
+                                            "1" : CGRect(x: 420,y: 240,width: 1,height:1),
+                                            "I" : CGRect(x: 485,y: 230,width: 1,height:1),
+            
+                                            "{" : CGRect(x: 375,y: 380,width: 1,height:1),
+                                            "2" : CGRect(x: 460,y: 340,width: 1,height:1),
+                                            "3" : CGRect(x: 535,y: 295,width: 1,height:1),
+
+                                            "4" : CGRect(x: 520,y: 380,width: 1,height:1),
+                                            "U" : CGRect(x: 615,y: 255,width: 1,height:1),
+
+                                            "6" : CGRect(x: 590,y: 410,width: 1,height:1),
+                                            "5" : CGRect(x: 610,y: 330,width: 1,height:1),
+
+                                            "V" : CGRect(x: 690,y: 370,width: 1,height:1),
+                                            "u" : CGRect(x: 690,y: 280,width: 1,height:1),
+            
+                                            "Q" : CGRect(x: 660,y: 440,width: 1,height:1),
+                                            "$" : CGRect(x: 740,y: 410,width: 1,height:1),
+            "#" : CGRect(x: 720,y: 480,width: 1,height:1)]
         
-        for planetLocation in planetLocations
+        for vowel in self.availableVowels
         {
-            var planetView = PlanetView(frame : planetLocation)
+            var planetView = PlanetView(frame : planetLocationsForIpaNotation[vowel.ipaNotation],exampleWord: vowel.exampleWord)
             self.view.addSubview(planetView)
+            
+            counter++
         }
         
         //Preselect the suggestions
@@ -259,15 +278,20 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.view.addSubview(self.suggestionViewForTargetVowel!)
     }
     
-    func loadAvailableVowels() -> [String: VowelDefinition]
+    func loadAvailableVowels(exampleWordsForIpaNotation : [String:String]) -> [String: VowelDefinition]
     {
-        var pit : VowelDefinition = VowelDefinition(exampleWord: "pit",xPositionInMouth: 150,yPositionInMouth: 150)
-
-        var putt : VowelDefinition = VowelDefinition(exampleWord: "putt",xPositionInMouth: 200,yPositionInMouth: 200)
-
-        var pet : VowelDefinition = VowelDefinition(exampleWord: "pet",xPositionInMouth: 250,yPositionInMouth: 250)
+        var vowelsFromTheServer : [VowelDefinition] = self.server.availableVowels
+        var currentExampleWord : String
+        var availableVowels : [String: VowelDefinition]
         
-        return [pit.exampleWord: pit,putt.exampleWord: putt,pet.exampleWord: pet]
+        for vowel in vowelsFromTheServer
+        {
+            currentExampleWord = exampleWordsForIpaNotation[vowel.ipaNotation]!
+            vowel.exampleWord = currentExampleWord
+            availableVowels[currentExampleWord] = vowel
+        }
+        
+        return availableVowels
     }
 
     //Depricated
@@ -355,6 +379,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         if recognizer.state == UIGestureRecognizerState.Began
         {
             var startLocation : CGPoint = recognizer.locationInView(self.view)
+            println(startLocation)
             var startVowel : VowelDefinition? = self.findVowelForTouchLocation(startLocation)
             
             if startVowel != nil

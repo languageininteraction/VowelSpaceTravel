@@ -18,14 +18,17 @@ class PlanetView : UIView
     var planetColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 0, alpha: 1)
     var hue : CGFloat = 0
     
+    var exampleWord : String = ""
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    override init(frame: CGRect)
+    init(frame: CGRect, exampleWord : String)
     {
         super.init(frame : frame)
         
+        self.exampleWord = exampleWord
         self.hue = 0.4
         self.planetColor = UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1)
         
@@ -42,7 +45,9 @@ class PlanetView : UIView
         
         //This was made before I knew how large it would be... instead of changing all numbers, I scale down the whole thing
         self.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.generalDownScaleRatio, self.generalDownScaleRatio);
-    
+        
+        self.drawExampleWord()
+        
     }
     
     func drawBasePlanet(center: CGPoint)
@@ -575,5 +580,16 @@ class PlanetView : UIView
         shapeLayer.transform = CATransform3DConcat(scale, translate)
         
         self.layer.addSublayer(shapeLayer)
+    }
+    
+    func drawExampleWord()
+    {
+        var label : UILabel = UILabel();
+        label.font = UIFont(name: "Muli", size: 150)
+        label.frame = CGRectMake(0,100, 80,20)
+        label.textAlignment = NSTextAlignment.Center
+        label.text = self.exampleWord
+        label.textColor = UIColor.whiteColor()
+        self.addSubview(label)
     }
 }

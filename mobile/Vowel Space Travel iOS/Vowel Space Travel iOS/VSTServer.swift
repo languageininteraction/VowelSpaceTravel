@@ -18,6 +18,8 @@ enum LoginResult
 class VSTServer : NSObject
 {
     var url : String
+
+    var availableVowels : [VowelDefinition] = []
     
     var userName : String?
     var userLoggedInSuccesfully : Bool = false
@@ -100,7 +102,7 @@ class VSTServer : NSObject
             }
     }
 
-    func getAllVowels()
+    func loadAvailableVowels()
     {
         assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
 
@@ -113,8 +115,8 @@ class VSTServer : NSObject
             
             for vowel in unpackagedJsonData["vowels"] as NSArray
             {
-                
-                println(vowel["ipa"]!)
+                var discNotation : String = vowel["disc"] as String
+                self.availableVowels.append(VowelDefinition(discNotation: discNotation))
             }
 
         }
