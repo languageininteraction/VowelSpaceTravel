@@ -28,7 +28,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     var infoViewController : InfoViewController?
     var trialViewController : TrialViewController?
 
-    var server : VSTServer = VSTServer(url: kWebserviceURL)
+    var server : VSTServer?
     var currentGame : Game = Game()
     
     var instructionTitle : UILabel = UILabel()
@@ -36,7 +36,8 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     var availableVowels : [String : VowelDefinition]?
     var vowelButtons : [String : UIButton]?
-
+    var planetLocationsForIpaNotation = [String : CGRect]()
+    
     var suggestedBaseVowel : VowelDefinition?
     var suggestedTargetVowel : VowelDefinition?
 
@@ -69,10 +70,14 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.view.addSubview(backgroundImageView)
         
         //Set the suggested vowels
-        var suggestedBaseVowelExampleWord : String = self.server.getSuggestedBaseVowelExampleWord()
-        var suggestedTargetVowelExampleWord : String = self.server.getSuggestedTargetVowelExampleWord()
+        var suggestedBaseVowelExampleWord : String = self.server!.getSuggestedBaseVowelExampleWord()
+        var suggestedTargetVowelExampleWord : String = self.server!.getSuggestedTargetVowelExampleWord()
 
-        availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
+        self.availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
+        
+        println(self.availableVowels!)
+        println(suggestedBaseVowelExampleWord)
+        println(self.availableVowels![suggestedBaseVowelExampleWord])
         
         self.suggestedBaseVowel = self.availableVowels![suggestedBaseVowelExampleWord]
         self.suggestedTargetVowel = self.availableVowels![suggestedTargetVowelExampleWord]
@@ -87,7 +92,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.suggestionViewForTargetVowel = SuggestionView(frame: CGRect(x: 0,y: 0,width: suggestionViewWidth,height: suggestionViewHeight), text: "... to this one?")
         self.view.addSubview(self.suggestionViewForTargetVowel!)
         
-        var planetLocationsForIpaNotation : [String : CGRect] = ["i" : CGRect(x: 400,y: 190,width: 1,height: 1),
+        self.planetLocationsForIpaNotation = ["i" : CGRect(x: 400,y: 190,width: 1,height: 1),
                                             "E" : CGRect(x: 353,y: 300,width: 1,height:1),
                                             "1" : CGRect(x: 420,y: 240,width: 1,height:1),
                                             "I" : CGRect(x: 485,y: 230,width: 1,height:1),
@@ -109,12 +114,10 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                                             "$" : CGRect(x: 740,y: 410,width: 1,height:1),
             "#" : CGRect(x: 720,y: 480,width: 1,height:1)]
         
-        for vowel in self.availableVowels
+        for (exampleWord,vowel) in self.availableVowels!
         {
-            var planetView = PlanetView(frame : planetLocationsForIpaNotation[vowel.ipaNotation],exampleWord: vowel.exampleWord)
+            var planetView = self.createPlanetViewBasedOnVowel(vowel)
             self.view.addSubview(planetView)
-            
-            counter++
         }
         
         //Preselect the suggestions
@@ -130,7 +133,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         for (exampleWord,vowel) in availableVowels!
         {
-            currentButton = UIButton(frame: CGRectMake(CGFloat(vowel.xPositionInMouth),CGFloat(vowel.yPositionInMouth),50,35))
+            currentButton = UIButton(frame: CGRectMake(0,0,50,35))
             
             currentButton.enabled = true
             
@@ -280,9 +283,11 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     func loadAvailableVowels(exampleWordsForIpaNotation : [String:String]) -> [String: VowelDefinition]
     {
-        var vowelsFromTheServer : [VowelDefinition] = self.server.availableVowels
+        self.server!.loadAvailableVowels()
+        var vowelsFromTheServer : [VowelDefinition] = self.server!.availableVowels
+        println(self.server!.availableVowels)
         var currentExampleWord : String
-        var availableVowels : [String: VowelDefinition]
+        var availableVowels = [String: VowelDefinition]()
         
         for vowel in vowelsFromTheServer
         {
@@ -475,7 +480,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     func collectStimuliForCurrentGameAndGoToDownloadView()
     {
-        self.server.getSampleIDsAndExpectedAnswersForSettings(self.currentGame.selectedTask,multipleSpeakers: self.currentGame.multipleSpeakers,differentStartingSounds: self.currentGame.differentStartingSounds)
+        self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame.selectedTask,multipleSpeakers: self.currentGame.multipleSpeakers,differentStartingSounds: self.currentGame.differentStartingSounds)
             {
                 (sampleIDs,expectedAnswers,err) -> Void in
 
@@ -547,7 +552,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                         }
                         else
                         {
-                            self.currentGame = self.CreateANewGameBasedOnServerSuggestions();
+                            self.currentGame = self.createANewGameBasedOnServerSuggestions();
                             self.goToDownloadView()
                         }
                     }
@@ -566,7 +571,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         })
     }
     
-    func CreateANewGameBasedOnServerSuggestions() -> Game
+    func createANewGameBasedOnServerSuggestions() -> Game
     {
         var newGame : Game = Game()
         newGame.selectedBaseVowel = self.availableVowels!["pit"]
@@ -575,4 +580,37 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         
         return newGame
     }
+    
+    func createPlanetViewBasedOnVowel(vowel : VowelDefinition) -> PlanetView
+    {
+        var ringOpacity : CGFloat
+        
+        if vowel.rounded!
+        {
+            ringOpacity = 1.0
+        }
+        else
+        {
+            ringOpacity = 0.0
+        }
+
+        var hue : CGFloat = 0
+        
+        switch(vowel.manner!)
+        {
+            case VowelManner.close: hue = 0; break
+            case VowelManner.near_close: hue = 0.2; break
+            case VowelManner.close_mid: hue = 0.4; break
+            case VowelManner.mid : hue = 0.5; break
+            case VowelManner.open_mid : hue = 0.6; break
+            case VowelManner.near_open : hue = 0.7; break
+            case VowelManner.open : hue = 0.8; break
+            default : "Warning: your planet corresponds to a vowel with an unknown manner of articulation"
+        }
+                
+        return PlanetView(frame : self.planetLocationsForIpaNotation[vowel.ipaNotation]!,
+            exampleWord: vowel.exampleWord, hue: hue, ringOpacity: ringOpacity)
+        
+    }
+    
 }

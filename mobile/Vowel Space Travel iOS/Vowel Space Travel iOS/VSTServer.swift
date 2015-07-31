@@ -29,6 +29,8 @@ class VSTServer : NSObject
     init(url: String)
     {
         self.url = url
+        super.init()
+        self.loadAvailableVowels()
     }
     
     func HTTPGetToJSON(urlExtension: String, completionHandler: ((NSDictionary?, NSError?) -> Void))
@@ -41,7 +43,7 @@ class VSTServer : NSObject
             
             if error == nil
             {
-                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as NSDictionary?
+                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
                 
                 completionHandler(jsonData,error);
 
@@ -72,7 +74,7 @@ class VSTServer : NSObject
             
             if error == nil
             {
-                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as NSDictionary?
+                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
                 
                 completionHandler(jsonData,error);
                 
@@ -104,27 +106,57 @@ class VSTServer : NSObject
 
     func loadAvailableVowels()
     {
-        assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
-
         var urlExtensionToGetVowels : String = "vowels?page=0&size=30"
         self.HTTPGetToJSON(urlExtensionToGetVowels)
         {
             (jsonData,err) -> Void in
             
-            var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as NSDictionary
+            var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
             
-            for vowel in unpackagedJsonData["vowels"] as NSArray
+            //Get the basic info
+            for vowel in unpackagedJsonData["vowels"] as! NSArray
             {
-                var discNotation : String = vowel["disc"] as String
-                self.availableVowels.append(VowelDefinition(discNotation: discNotation))
+                var discNotation : String = vowel["disc"] as! String
+                var currentVowel : VowelDefinition = VowelDefinition(ipaNotation: discNotation)
+                self.availableVowels.append(currentVowel)
+                
             }
-
+            
+            //Get the vowel qualities
+            urlExtensionToGetVowels = "qualities?page=0&size=30"
+            self.HTTPGetToJSON(urlExtensionToGetVowels)
+                {
+                    (jsonData,err) -> Void in
+                    
+                    var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                    
+                    var counter = 0
+                    var currentVowel : VowelDefinition
+                    
+                    for vowelQuality in unpackagedJsonData["qualities"] as! NSArray
+                    {
+                        currentVowel = self.availableVowels[counter]
+                        
+                        currentVowel.manner = VowelManner(rawValue: vowelQuality["manner"]! as! String)
+                        currentVowel.place = VowelPlace(rawValue: vowelQuality["place"]! as! String)
+                        currentVowel.rounded = vowelQuality["roundness"]! as! String == "rounded"
+                        
+                        counter++
+                        
+                        if counter == self.availableVowels.count
+                        {
+                            break
+                        }
+                        
+                    }
+            }
+            
         }
     }
     
     func getSuggestedBaseVowelExampleWord() -> String
     {
-        return "pit"
+        return "pet"
     }
     
     func getSuggestedTargetVowelExampleWord() -> String
@@ -170,12 +202,12 @@ class VSTServer : NSObject
             {
                 (jsonData,err) -> Void in
                 
-                var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as NSDictionary
+                var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
                 
-                for stimulus in unpackagedJsonData["stimuli"] as NSArray
+                for stimulus in unpackagedJsonData["stimuli"] as! NSArray
                 {
-                    sampleIDs.append(stimulus["sampleId"] as Int)
-                    expectedAnswers.append(stimulus["relevance"] as String == "isTarget")
+                    sampleIDs.append(stimulus["sampleId"] as! Int)
+                    expectedAnswers.append(stimulus["relevance"] as! String == "isTarget")
                 }
                 
                 completionHandler(sampleIDs,expectedAnswers,nil);

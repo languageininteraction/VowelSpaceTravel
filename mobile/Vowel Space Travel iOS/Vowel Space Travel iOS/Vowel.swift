@@ -8,20 +8,23 @@
 
 import Foundation
 
-enum VowelPlace
+enum VowelPlace : String
 {
-    case back
-    case near_back
-    case mid
-    case front
+    case back = "back"
+    case near_back = "near_back"
+    case mid = "mid"
+    case front = "front"
 }
 
-enum VowelManner
+enum VowelManner : String
 {
-    case open
-    case center
-    case near_close
-    case close
+    case open = "open"
+    case near_open = "near_open"
+    case open_mid = "open_mid"
+    case mid = "mid"
+    case close_mid = "close_mid"
+    case near_close = "near_close"
+    case close = "close"
 }
 
 

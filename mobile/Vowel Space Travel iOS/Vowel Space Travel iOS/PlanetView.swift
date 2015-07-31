@@ -24,12 +24,12 @@ class PlanetView : UIView
         super.init(coder: aDecoder)
     }
     
-    init(frame: CGRect, exampleWord : String)
+    init(frame: CGRect, exampleWord : String, hue : CGFloat, ringOpacity : CGFloat)
     {
         super.init(frame : frame)
         
         self.exampleWord = exampleWord
-        self.hue = 0.4
+        self.hue = hue
         self.planetColor = UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1)
         
         self.drawExternalCraters()
@@ -41,7 +41,7 @@ class PlanetView : UIView
         self.drawPlanetShadow()
         
         self.drawClouds(1);
-        self.drawRing(1)
+        self.drawRing(ringOpacity)
         
         //This was made before I knew how large it would be... instead of changing all numbers, I scale down the whole thing
         self.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.generalDownScaleRatio, self.generalDownScaleRatio);

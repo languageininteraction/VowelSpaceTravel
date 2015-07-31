@@ -13,6 +13,7 @@ class LoginViewController: UIViewController {
     
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
+    var server : VSTServer?
     
     override func viewDidLoad()
     {
@@ -63,10 +64,10 @@ class LoginViewController: UIViewController {
         self.view.addSubview(createAccountLink)
         
         //Create the VSTServer object
-        var vstServer : VSTServer = VSTServer(url: kWebserviceURL)
+        self.server = VSTServer(url: kWebserviceURL)
         
-        vstServer.tryLoggingIn("wessel", password: "hunter2")
-        vstServer.createNewUser("Wessel")
+        self.server!.tryLoggingIn("wessel", password: "hunter2")
+        self.server!.createNewUser("Wessel")
         
     }
     
@@ -91,6 +92,7 @@ class LoginViewController: UIViewController {
     func zoomFromVowelTractOverViewToVowelSelection()
     {
         let vowelSelectionViewController = VowelSelectionViewController();
+        vowelSelectionViewController.server = self.server!
         
         var oldTransform = vowelSelectionViewController.view.layer.transform;
         var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)

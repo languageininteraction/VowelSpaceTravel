@@ -123,7 +123,7 @@ class TaskViewController: SubViewController {
         return numberOfCorrectResponses
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent)
     {
         self.tapDetectedDuringThisStimulus = true
         self.playSound("click",ofType: "aiff",absolutePath : false)
