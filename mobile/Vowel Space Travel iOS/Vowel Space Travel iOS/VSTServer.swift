@@ -202,15 +202,25 @@ class VSTServer : NSObject
             {
                 (jsonData,err) -> Void in
                 
-                var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
-                
-                for stimulus in unpackagedJsonData["stimuli"] as! NSArray
+                if jsonData != nil && jsonData!["_embedded"] != nil
                 {
-                    sampleIDs.append(stimulus["sampleId"] as! Int)
-                    expectedAnswers.append(stimulus["relevance"] as! String == "isTarget")
+                    var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                    
+                    for stimulus in unpackagedJsonData["stimuli"] as! NSArray
+                    {
+                        sampleIDs.append(stimulus["sampleId"] as! Int)
+                        expectedAnswers.append(stimulus["relevance"] as! String == "isTarget")
+                    }
+                    
+                    completionHandler(sampleIDs,expectedAnswers,nil);
                 }
-                
-                completionHandler(sampleIDs,expectedAnswers,nil);
+                else
+                {
+                    //If this fails, go on until it does not
+                    println("Retry downloading the files")
+                    
+                    self.getSampleIDsAndExpectedAnswersForSettings(task, multipleSpeakers: multipleSpeakers, differentStartingSounds: differentStartingSounds, completionHandler: completionHandler)
+                }
             }
     }
     
