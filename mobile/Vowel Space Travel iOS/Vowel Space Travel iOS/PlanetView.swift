@@ -24,25 +24,43 @@ class PlanetView : UIView
         super.init(coder: aDecoder)
     }
     
-    init(frame: CGRect, exampleWord : String, hue : CGFloat, ringOpacity : CGFloat)
+    init(frame: CGRect, exampleWord : String, hue : CGFloat, ringOpacity : CGFloat, waterOpacity : CGFloat, craters : Bool)
     {
         super.init(frame : frame)
         
         self.exampleWord = exampleWord
         self.hue = hue
         self.planetColor = UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1)
+
+        if craters
+        {
+            self.drawExternalCraters()
+        }
         
-        self.drawExternalCraters()
         self.drawBasePlanet(CGPoint(x: 40,y: 40))
-        //self.drawInternalCraters()
+
+        if craters
+        {
+            self.drawInternalCraters()
+        }
         
-        self.drawOcean()
-        
+        if waterOpacity != 0
+        {
+            self.drawOcean(waterOpacity)
+        }
+            
         self.drawPlanetShadow()
         
-        self.drawClouds(1);
-        self.drawRing(ringOpacity)
+        if waterOpacity != 0
+        {
+            self.drawClouds(waterOpacity);
+        }
         
+        if ringOpacity != 0
+        {
+            self.drawRing(ringOpacity)
+        }
+            
         //This was made before I knew how large it would be... instead of changing all numbers, I scale down the whole thing
         self.transform = CGAffineTransformScale(CGAffineTransformIdentity, self.generalDownScaleRatio, self.generalDownScaleRatio);
         
@@ -430,7 +448,7 @@ class PlanetView : UIView
         drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 5,y: 45),scale: 28)
     }
     
-    func drawOcean()
+    func drawOcean(opacity : CGFloat)
     {
         var myBezier = UIBezierPath()
         
@@ -500,13 +518,13 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 0.0, y:2.59366))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: UIColor(hue: 0.57, saturation: 0.49, brightness: 0.8, alpha: 1),position: CGPoint(x: -11.5,y: -10),scale: 12.8)
+        drawFilledInPath(myBezier, color: UIColor(hue: 0.57, saturation: 0.49, brightness: 0.8, alpha: opacity),position: CGPoint(x: -11.5,y: -10),scale: 12.8)
     }
     
-    func drawClouds(size : CGFloat)
+    func drawClouds(opacity : CGFloat)
     {
         var myBezier = UIBezierPath()
-        let cloudColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 1, alpha: 0.8)
+        let cloudColor : UIColor = UIColor(hue: 0, saturation: 0, brightness: 1, alpha: 0.8*opacity)
 
         myBezier.moveToPoint(CGPoint(x: 3.2343, y:1.36018))
         myBezier.addCurveToPoint(CGPoint(x: 0.0, y: 1.27378),
@@ -532,7 +550,7 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 3.81028, y:1.39224))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: cloudColor,position: CGPoint(x: 15,y: 44),scale: 18*size)
+        drawFilledInPath(myBezier, color: cloudColor,position: CGPoint(x: 15,y: 44),scale: 18)
 
         myBezier = UIBezierPath()
         
@@ -560,7 +578,7 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 1.57581, y:1.78166))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: cloudColor,position: CGPoint(x: -20,y: 8),scale: 11*size)
+        drawFilledInPath(myBezier, color: cloudColor,position: CGPoint(x: -20,y: 8),scale: 11)
     
     }
     
@@ -585,7 +603,7 @@ class PlanetView : UIView
     func drawExampleWord()
     {
         var label : UILabel = UILabel();
-        label.font = UIFont(name: "Muli", size: 150)
+        //label.font = UIFont(name: "Muli", size: 150)
         label.frame = CGRectMake(0,100, 80,20)
         label.textAlignment = NSTextAlignment.Center
         label.text = self.exampleWord
