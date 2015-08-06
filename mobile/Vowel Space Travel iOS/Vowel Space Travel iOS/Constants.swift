@@ -10,6 +10,7 @@ import Foundation
 
 let kDevelopmentMode = true
 let kSpeedUpDownload = kDevelopmentMode ? true : false
+let kOnlyOneStimulus = kDevelopmentMode ? false : false
 
 let kWebserviceURL = kDevelopmentMode ? "http://applejack.science.ru.nl:8080/" : ""
 
