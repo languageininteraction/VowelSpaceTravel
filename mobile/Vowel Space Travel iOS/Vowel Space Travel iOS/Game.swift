@@ -18,7 +18,6 @@ enum GameStage
 {
     case SelectingVowels
     case SettingOtherSettings
-    case Trial
     case Playing
     case ShowingResult
     case Finished
