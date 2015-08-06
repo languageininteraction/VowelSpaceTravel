@@ -12,7 +12,8 @@ enum VowelPlace : String
 {
     case back = "back"
     case near_back = "near_back"
-    case mid = "mid"
+    case central = "central"
+    case near_front = "near_front"
     case front = "front"
 }
 

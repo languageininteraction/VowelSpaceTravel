@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		491CF88E1B6B6095008D62A1 /* Muli.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 491CF88D1B6B6095008D62A1 /* Muli.ttf */; };
 		4947A75C1B0335CE00AF5A96 /* Stimulus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75B1B0335CE00AF5A96 /* Stimulus.swift */; };
 		4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */; };
 		495359281AE91A88009E870A /* VSTServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495359271AE91A88009E870A /* VSTServer.swift */; };
 		4965A4ED1B6222AA0059FDB6 /* PlanetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4965A4EC1B6222AA0059FDB6 /* PlanetView.swift */; };
+		496FCD041B735B5100F08A8F /* startButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 496FCD031B735B5100F08A8F /* startButton.png */; };
 		498003511B627490009AC7C1 /* overview_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 498003501B627490009AC7C1 /* overview_background.png */; };
+		499603B91B736CE0004C0D71 /* taskSegmentedControl.png in Resources */ = {isa = PBXBuildFile; fileRef = 499603B71B736CE0004C0D71 /* taskSegmentedControl.png */; };
+		499603BA1B736CE0004C0D71 /* taskSegmentedControlSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 499603B81B736CE0004C0D71 /* taskSegmentedControlSelected.png */; };
+		499603BC1B737272004C0D71 /* Muli.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 499603BB1B737272004C0D71 /* Muli.ttf */; };
 		4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
 		4996A49C1AD7BA43000437CF /* VowelSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */; };
 		4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49D1AD7C9CE000437CF /* TempObjects.swift */; };
@@ -51,12 +54,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		491CF88D1B6B6095008D62A1 /* Muli.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Muli.ttf; sourceTree = "<group>"; };
 		4947A75B1B0335CE00AF5A96 /* Stimulus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stimulus.swift; sourceTree = "<group>"; };
 		4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionTableViewController.swift; sourceTree = "<group>"; };
 		495359271AE91A88009E870A /* VSTServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSTServer.swift; sourceTree = "<group>"; };
 		4965A4EC1B6222AA0059FDB6 /* PlanetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetView.swift; sourceTree = "<group>"; };
+		496FCD031B735B5100F08A8F /* startButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startButton.png; sourceTree = "<group>"; };
 		498003501B627490009AC7C1 /* overview_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overview_background.png; sourceTree = "<group>"; };
+		499603B71B736CE0004C0D71 /* taskSegmentedControl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = taskSegmentedControl.png; sourceTree = "<group>"; };
+		499603B81B736CE0004C0D71 /* taskSegmentedControlSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = taskSegmentedControlSelected.png; sourceTree = "<group>"; };
+		499603BB1B737272004C0D71 /* Muli.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Muli.ttf; sourceTree = "<group>"; };
 		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VowelSelectionViewController.swift; sourceTree = "<group>"; };
 		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
@@ -119,7 +125,10 @@
 		4996A4A11AD7E4B1000437CF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				491CF88D1B6B6095008D62A1 /* Muli.ttf */,
+				499603BB1B737272004C0D71 /* Muli.ttf */,
+				499603B71B736CE0004C0D71 /* taskSegmentedControl.png */,
+				499603B81B736CE0004C0D71 /* taskSegmentedControlSelected.png */,
+				496FCD031B735B5100F08A8F /* startButton.png */,
 				498003501B627490009AC7C1 /* overview_background.png */,
 				49F383521B2AFE21008C4437 /* click.aiff */,
 				49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */,
@@ -298,13 +307,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				499603B91B736CE0004C0D71 /* taskSegmentedControl.png in Resources */,
+				496FCD041B735B5100F08A8F /* startButton.png in Resources */,
 				498003511B627490009AC7C1 /* overview_background.png in Resources */,
+				499603BC1B737272004C0D71 /* Muli.ttf in Resources */,
 				49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */,
+				499603BA1B736CE0004C0D71 /* taskSegmentedControlSelected.png in Resources */,
 				49F383531B2AFE21008C4437 /* click.aiff in Resources */,
 				49C653E31ACEA68A00CA2803 /* cello.wav in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
-				491CF88E1B6B6095008D62A1 /* Muli.ttf in Resources */,
 				49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */,
 				49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */,
 			);

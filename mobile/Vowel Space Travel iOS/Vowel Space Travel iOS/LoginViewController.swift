@@ -96,7 +96,7 @@ class LoginViewController: UIViewController {
         
         var oldTransform = vowelSelectionViewController.view.layer.transform;
         var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
-        var newTransform = CATransform3DTranslate(transformScale, 0, 50, 0)
+        var newTransform = CATransform3DTranslate(transformScale, 0, 60, 0)
         
         CATransaction.begin()
         
