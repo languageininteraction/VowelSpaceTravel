@@ -110,13 +110,10 @@ class ResultViewController: SubViewController {
         self.currentGame!.stage = GameStage.Finished
         self.superController!.subControllerFinished(self)
     }
-    
-    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent)
+
+    func pilotModeFinished()
     {
-        if motion == UIEventSubtype.MotionShake
-        {
-            self.currentGame!.autoPilotMode = false
-            self.goBackToTheHomeScreen()
-        }
+        self.currentGame!.autoPilotMode = false
+        self.goBackToTheHomeScreen()
     }
 }

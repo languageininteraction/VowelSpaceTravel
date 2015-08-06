@@ -37,7 +37,6 @@
 		49E8B7111B05DDAE006CD1BE /* SuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E8B7101B05DDAE006CD1BE /* SuggestionView.swift */; };
 		49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */; };
 		49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */; };
-		49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153461AFB8FE0000101F6 /* TrialViewController.swift */; };
 		49F153491AFB93BE000101F6 /* Vowel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F153481AFB93BE000101F6 /* Vowel.swift */; };
 		49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1F5C51AD8097000457411 /* ResultViewController.swift */; };
 		49F383531B2AFE21008C4437 /* click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 49F383521B2AFE21008C4437 /* click.aiff */; };
@@ -87,7 +86,6 @@
 		49E8B7101B05DDAE006CD1BE /* SuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestionView.swift; sourceTree = "<group>"; };
 		49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = babe_sp_1.wav; sourceTree = "<group>"; };
 		49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bag_sp_1.wav; sourceTree = "<group>"; };
-		49F153461AFB8FE0000101F6 /* TrialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrialViewController.swift; sourceTree = "<group>"; };
 		49F153481AFB93BE000101F6 /* Vowel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vowel.swift; sourceTree = "<group>"; };
 		49F1F5C51AD8097000457411 /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		49F383521B2AFE21008C4437 /* click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = click.aiff; sourceTree = "<group>"; };
@@ -209,7 +207,6 @@
 				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
 				4947A75D1B03652200AF5A96 /* VowelSelectionTableViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
-				49F153461AFB8FE0000101F6 /* TrialViewController.swift */,
 				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
 				49F1F5C51AD8097000457411 /* ResultViewController.swift */,
 				49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */,
@@ -345,7 +342,6 @@
 				4996A49E1AD7C9CE000437CF /* TempObjects.swift in Sources */,
 				4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */,
 				49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */,
-				49F153471AFB8FE0000101F6 /* TrialViewController.swift in Sources */,
 				49E8B7111B05DDAE006CD1BE /* SuggestionView.swift in Sources */,
 				4965A4ED1B6222AA0059FDB6 /* PlanetView.swift in Sources */,
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,

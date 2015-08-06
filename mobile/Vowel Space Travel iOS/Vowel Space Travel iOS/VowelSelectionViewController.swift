@@ -16,7 +16,7 @@ enum VowelDraggingType
     case TargetVowel
 }
 
-class VowelSelectionViewController: UIViewController, PassControlToSubControllerProtocol
+class VowelSelectionViewController: SubViewController, PassControlToSubControllerProtocol
 {
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
@@ -26,7 +26,6 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     var resultViewController : ResultViewController?
     var settingsViewController : SettingsViewController?
     var infoViewController : InfoViewController?
-    var trialViewController : TrialViewController?
 
     var server : VSTServer?
     var currentGame : Game = Game()
@@ -212,12 +211,6 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         self.view.addSubview(playLabel)
         
         //Preload the views
-        self.downloadViewController = DownloadViewController()
-        self.downloadViewController!.superController = self
-        
-        self.trialViewController = TrialViewController()
-        self.trialViewController!.superController = self
-        
         self.taskViewController = TaskViewController()
         self.taskViewController!.superController = self
 
@@ -261,6 +254,7 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         //Create all views
         for (exampleWord,vowel) in self.availableVowels!
         {
+            println(exampleWord)
             var planetView = self.createPlanetViewBasedOnVowel(vowel)
             
             if self.currentGame.selectedBaseVowel! == vowel
@@ -353,20 +347,9 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
         }
     }
     
-    func resetView() //Possibly: rename to resetSettingsViewController?
-    {
-        //Reset all the views of all other settings by simply recreating the view controller
-        self.settingsViewController = SettingsViewController()
-        self.settingsViewController!.superController = self
-        
-        //Recreate the suggestion views
-        self.view.addSubview(self.suggestionViewForBaseVowel!)
-        self.view.addSubview(self.suggestionViewForTargetVowel!)
-    }
-    
     func loadAvailableVowels(exampleWordsForIpaNotation : [String:String]) -> [String: VowelDefinition]
     {
-        self.server!.loadAvailableVowels()
+        //self.server!.loadAvailableVowels()
         var vowelsFromTheServer : [VowelDefinition] = self.server!.availableVowels
         println(self.server!.availableVowels)
         var currentExampleWord : String
@@ -528,15 +511,13 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
     
     func goToDownloadView()
     {
+        self.downloadViewController = DownloadViewController()
+        self.downloadViewController!.superController = self
+        
         self.downloadViewController!.server = self.server
         self.downloadViewController!.currentGame = self.currentGame
         
         self.presentViewController(self.downloadViewController!, animated: false, completion: nil)
-    }
-
-    func goToTrialView()
-    {
-        self.presentViewController(self.trialViewController!, animated: false, completion: nil)
     }
     
     func goToTaskView()
@@ -592,24 +573,13 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
             switch subController
             {
                 case self.settingsViewController!:
-                    self.currentGame.stage = GameStage.Trial
                     self.collectStimuliForCurrentGameAndGoToDownloadView();
                 
                 case self.downloadViewController!:
                                     
-                    if !self.currentGame.autoPilotMode
-                    {
-                        self.goToTrialView()
-                    }
-                    else
-                    {
-                        self.currentGame.stage = GameStage.Playing
-                        self.goToTaskView()
-                    }
-
-                case self.trialViewController!:
                     self.currentGame.stage = GameStage.Playing
                     self.goToTaskView()
+
                 case self.taskViewController!:
                     
                     //Show the result of the task
@@ -631,12 +601,12 @@ class VowelSelectionViewController: UIViewController, PassControlToSubController
                             self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
                             self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
                             
-                            self.resetView()
+                            self.superController!.subControllerFinished(self)
                         }
                         else
                         {
                             self.currentGame = self.createANewGameBasedOnServerSuggestions();
-                            self.goToDownloadView()
+                            self.collectStimuliForCurrentGameAndGoToDownloadView()
                         }
                     }
                     else if self.currentGame.stage == GameStage.Playing

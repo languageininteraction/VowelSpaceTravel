@@ -9,11 +9,12 @@
 import Foundation
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
     var server : VSTServer?
+    var vowelSelectionViewController : VowelSelectionViewController = VowelSelectionViewController()
     
     override func viewDidLoad()
     {
@@ -91,8 +92,10 @@ class LoginViewController: UIViewController {
     
     func zoomFromVowelTractOverViewToVowelSelection()
     {
-        let vowelSelectionViewController = VowelSelectionViewController();
-        vowelSelectionViewController.server = self.server!
+        println("Showing zooming animation")
+        self.vowelSelectionViewController = VowelSelectionViewController();
+        self.vowelSelectionViewController.superController = self
+        self.vowelSelectionViewController.server = self.server!
         
         var oldTransform = vowelSelectionViewController.view.layer.transform;
         var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
@@ -110,7 +113,22 @@ class LoginViewController: UIViewController {
         CATransaction.commit()
         
         self.view.addSubview(vowelSelectionViewController.view)
-        
+    }
+
+    func subControllerFinished(subController: SubViewController)
+    {
+        //This can only be the vowel selection view controller, and that always want to be restarted
+        subController.view.removeFromSuperview()
+        self.zoomFromVowelTractOverViewToVowelSelection()
+    }
+    
+    //Motions can only be picked up here, because the vowel selection view controller is never officially presented
+    override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent)
+    {
+        if self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
+        {
+            self.vowelSelectionViewController.resultViewController!.pilotModeFinished()
+        }
     }
     
 }
