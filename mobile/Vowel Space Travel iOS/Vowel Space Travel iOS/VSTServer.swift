@@ -8,6 +8,15 @@
 
 import Foundation
 
+protocol StimuliRequest
+{
+    var selectedTask : Task { get }
+    var multipleSpeakers : Bool { get }
+    var differentStartingSounds : Bool { get }
+    var selectedBaseVowel : VowelDefinition? { get }
+    var selectedTargetVowel : VowelDefinition? { get }
+}
+
 enum LoginResult
 {
     case Successful
@@ -112,14 +121,16 @@ class VSTServer : NSObject
             (jsonData,err) -> Void in
             
             var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+            var idCounter : Int = 1
             
             //Get the basic info
             for vowel in unpackagedJsonData["vowels"] as! NSArray
             {
                 var discNotation : String = vowel["disc"] as! String
-                var currentVowel : VowelDefinition = VowelDefinition(ipaNotation: discNotation)
+                var currentVowel : VowelDefinition = VowelDefinition(id: idCounter, ipaNotation: discNotation)
                 self.availableVowels.append(currentVowel)
-                
+
+                idCounter++
             }
             
             //Get the vowel qualities
@@ -186,15 +197,17 @@ class VSTServer : NSObject
         return "easy"
     }
     
-    func getSampleIDsAndExpectedAnswersForSettings(task : Task, multipleSpeakers : Bool, differentStartingSounds : Bool, completionHandler: (([Int],[Bool], NSError?) -> Void))
+    func getSampleIDsAndExpectedAnswersForSettings(stimuliRequest : StimuliRequest, completionHandler: (([Int],[Bool], NSError?) -> Void))
     {
         //Turned off until logging in is fixed
         //assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
         
-        var difficulty : String = self.translateSettingsToDifficultyString(multipleSpeakers, differentStartingSounds: differentStartingSounds);
+        var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequest.multipleSpeakers, differentStartingSounds: stimuliRequest.differentStartingSounds);
         
-        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+task.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=3&standard=6"
+        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
 
+        println(urlExtensionToGetSoundFileUrls)
+        
         var sampleIDs : [Int] = []
         var expectedAnswers : [Bool] = []
         
@@ -216,10 +229,10 @@ class VSTServer : NSObject
                 }
                 else
                 {
-                    //If this fails, go on until it does not
+                    //If this fails, try again until it does not
                     println("Retry downloading the files")
                     
-                    self.getSampleIDsAndExpectedAnswersForSettings(task, multipleSpeakers: multipleSpeakers, differentStartingSounds: differentStartingSounds, completionHandler: completionHandler)
+                    self.getSampleIDsAndExpectedAnswersForSettings(stimuliRequest, completionHandler: completionHandler)
                 }
             }
     }

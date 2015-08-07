@@ -23,7 +23,7 @@ enum GameStage
     case Finished
 }
 
-class Game : NSObject
+class Game : NSObject, StimuliRequest
 {
     var stage : GameStage = GameStage.SelectingVowels
     

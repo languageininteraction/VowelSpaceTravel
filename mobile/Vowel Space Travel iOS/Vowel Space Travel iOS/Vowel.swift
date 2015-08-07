@@ -36,12 +36,11 @@ class VowelDefinition : NSObject
     var manner : VowelManner?
     var rounded : Bool?
     var ipaNotation : String
+    var id : Int
     
-    init(ipaNotation : String) //, place : VowelPlace, manner : VowelManner, rounded : Bool)
+    init(id : Int, ipaNotation : String)
     {
+        self.id = id
         self.ipaNotation = ipaNotation
-//        self.place = place
-//        self.manner = manner
-//        self.rounded = rounded
     }
 }
