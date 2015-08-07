@@ -528,12 +528,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.taskViewController!.startTask()
     }
     
-    func goToResultView(numberOfCorrectAnswers : Int,totalNumberOfAnswers : Int)
+    func goToResultView(stimuli : [Stimulus])
     {
         self.resultViewController!.currentGame = self.currentGame
-        self.resultViewController!.numberOfCorrectAnswers = numberOfCorrectAnswers
-        self.resultViewController!.totalNumberOfAnswers = totalNumberOfAnswers
-        
+        self.resultViewController!.exposedStimuli = stimuli
         self.presentViewController(self.resultViewController!, animated: false, completion: nil)
     }
     
@@ -544,7 +542,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func collectStimuliForCurrentGameAndGoToDownloadView()
     {
-        self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame.selectedTask,multipleSpeakers: self.currentGame.multipleSpeakers,differentStartingSounds: self.currentGame.differentStartingSounds)
+        self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame)
             {
                 (sampleIDs,expectedAnswers,err) -> Void in
 
@@ -584,7 +582,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     
                     //Show the result of the task
                     self.currentGame.stage = GameStage.ShowingResult
-                    self.goToResultView(self.taskViewController!.countNumberOfCorrectResponses(),totalNumberOfAnswers: self.taskViewController!.correctResponses.count)
+                    self.goToResultView(self.taskViewController!.stimuli)
                 
                     //Reset the task view for later use
                     self.taskViewController = TaskViewController()

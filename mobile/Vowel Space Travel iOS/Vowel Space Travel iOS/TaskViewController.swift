@@ -22,7 +22,6 @@ class TaskViewController: SubViewController {
     //Gameplay properties
     var stimuli = [Stimulus]()
     var currentStimulusIndex : Int = -1 //Increased at the start, so we start at 0
-    var correctResponses = [Bool]()
     var tapDetectedDuringThisStimulus = false
     var exampleFeedbackWasPlayed = false
     
@@ -73,7 +72,7 @@ class TaskViewController: SubViewController {
         if self.currentStimulusIndex > 0
         {
             var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
-            self.correctResponses.append(currentStimulus.requiresResponse == self.tapDetectedDuringThisStimulus)
+            currentStimulus.receivedResponse = self.tapDetectedDuringThisStimulus
         }
     
         //If this was the first stimulus, play example feedback and wait till next cycle
@@ -81,14 +80,13 @@ class TaskViewController: SubViewController {
         {
             self.playAuditiveTouchFeedback()
             self.exampleFeedbackWasPlayed = true
-            self.correctResponses.append(true)
             return
         }
 
         //If this was the first stimulus, switch from the example to the real deal
         if self.currentStimulusIndex == 0 && self.exampleFeedbackWasPlayed
         {
-            self.label.text = "Tap the screen when you hear a difference"
+            self.label.text = "Tap the screen when you hear the vowel again"
         }
         
         
@@ -131,22 +129,7 @@ class TaskViewController: SubViewController {
         self.audioPlayer.prepareToPlay()
         self.audioPlayer.play()
     }
-    
-    func countNumberOfCorrectResponses() -> Int
-    {
-        var numberOfCorrectResponses = 0
         
-        for response in self.correctResponses
-        {
-            if response
-            {
-                numberOfCorrectResponses++
-            }
-        }
-        
-        return numberOfCorrectResponses
-    }
-    
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent)
     {
         self.tapDetectedDuringThisStimulus = true
