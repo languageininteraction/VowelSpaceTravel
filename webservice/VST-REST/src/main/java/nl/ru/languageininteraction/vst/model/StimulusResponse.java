@@ -102,7 +102,7 @@ public class StimulusResponse { //extends ResourceSupport
     }
 
     public void addStandardVowels(Set<Vowel> standardVowels) {
-        standardVowels.addAll(standardVowels);
+        this.standardVowels.addAll(standardVowels);
     }
 
     public Stimulus.Relevance getRelevance() {
