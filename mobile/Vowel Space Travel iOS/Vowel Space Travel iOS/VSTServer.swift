@@ -8,6 +8,15 @@
 
 import Foundation
 
+protocol StimuliRequest
+{
+    var selectedTask : Task { get }
+    var multipleSpeakers : Bool { get }
+    var differentStartingSounds : Bool { get }
+    var selectedBaseVowel : VowelDefinition? { get }
+    var selectedTargetVowel : VowelDefinition? { get }
+}
+
 enum LoginResult
 {
     case Successful
@@ -18,6 +27,8 @@ enum LoginResult
 class VSTServer : NSObject
 {
     var url : String
+
+    var availableVowels : [VowelDefinition] = []
     
     var userName : String?
     var userLoggedInSuccesfully : Bool = false
@@ -27,6 +38,8 @@ class VSTServer : NSObject
     init(url: String)
     {
         self.url = url
+        super.init()
+        self.loadAvailableVowels()
     }
     
     func HTTPGetToJSON(urlExtension: String, completionHandler: ((NSDictionary?, NSError?) -> Void))
@@ -39,7 +52,7 @@ class VSTServer : NSObject
             
             if error == nil
             {
-                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as NSDictionary?
+                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
                 
                 completionHandler(jsonData,error);
 
@@ -70,7 +83,7 @@ class VSTServer : NSObject
             
             if error == nil
             {
-                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as NSDictionary?
+                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
                 
                 completionHandler(jsonData,error);
                 
@@ -100,29 +113,61 @@ class VSTServer : NSObject
             }
     }
 
-    func getAllVowels()
+    func loadAvailableVowels()
     {
-        assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
-
         var urlExtensionToGetVowels : String = "vowels?page=0&size=30"
         self.HTTPGetToJSON(urlExtensionToGetVowels)
         {
             (jsonData,err) -> Void in
             
-            var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as NSDictionary
+            var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+            var idCounter : Int = 1
             
-            for vowel in unpackagedJsonData["vowels"] as NSArray
+            //Get the basic info
+            for vowel in unpackagedJsonData["vowels"] as! NSArray
             {
-                
-                println(vowel["ipa"]!)
-            }
+                var discNotation : String = vowel["disc"] as! String
+                var currentVowel : VowelDefinition = VowelDefinition(id: idCounter, ipaNotation: discNotation)
+                self.availableVowels.append(currentVowel)
 
+                idCounter++
+            }
+            
+            //Get the vowel qualities
+            urlExtensionToGetVowels = "qualities?page=0&size=30"
+            self.HTTPGetToJSON(urlExtensionToGetVowels)
+                {
+                    (jsonData,err) -> Void in
+                    
+                    var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                    
+                    var counter = 0
+                    var currentVowel : VowelDefinition
+                    
+                    for vowelQuality in unpackagedJsonData["qualities"] as! NSArray
+                    {
+                        currentVowel = self.availableVowels[counter]
+                        
+                        currentVowel.manner = VowelManner(rawValue: vowelQuality["manner"]! as! String)
+                        currentVowel.place = VowelPlace(rawValue: vowelQuality["place"]! as! String)
+                        currentVowel.rounded = vowelQuality["roundness"]! as! String == "rounded"
+                        
+                        counter++
+                        
+                        if counter == self.availableVowels.count
+                        {
+                            break
+                        }
+                        
+                    }
+            }
+            
         }
     }
     
     func getSuggestedBaseVowelExampleWord() -> String
     {
-        return "pit"
+        return "pet"
     }
     
     func getSuggestedTargetVowelExampleWord() -> String
@@ -152,15 +197,17 @@ class VSTServer : NSObject
         return "easy"
     }
     
-    func getSampleIDsAndExpectedAnswersForSettings(task : Task, multipleSpeakers : Bool, differentStartingSounds : Bool, completionHandler: (([Int],[Bool], NSError?) -> Void))
+    func getSampleIDsAndExpectedAnswersForSettings(stimuliRequest : StimuliRequest, completionHandler: (([Int],[Bool], NSError?) -> Void))
     {
         //Turned off until logging in is fixed
         //assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
         
-        var difficulty : String = self.translateSettingsToDifficultyString(multipleSpeakers, differentStartingSounds: differentStartingSounds);
+        var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequest.multipleSpeakers, differentStartingSounds: stimuliRequest.differentStartingSounds);
         
-        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+task.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=3&standard=6"
+        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
 
+        println(urlExtensionToGetSoundFileUrls)
+        
         var sampleIDs : [Int] = []
         var expectedAnswers : [Bool] = []
         
@@ -168,15 +215,25 @@ class VSTServer : NSObject
             {
                 (jsonData,err) -> Void in
                 
-                var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as NSDictionary
-                
-                for stimulus in unpackagedJsonData["stimuli"] as NSArray
+                if jsonData != nil && jsonData!["_embedded"] != nil
                 {
-                    sampleIDs.append(stimulus["sampleId"] as Int)
-                    expectedAnswers.append(stimulus["relevance"] as String == "isTarget")
+                    var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                    
+                    for stimulus in unpackagedJsonData["stimuli"] as! NSArray
+                    {
+                        sampleIDs.append(stimulus["sampleId"] as! Int)
+                        expectedAnswers.append(stimulus["relevance"] as! String == "isTarget")
+                    }
+                    
+                    completionHandler(sampleIDs,expectedAnswers,nil);
                 }
-                
-                completionHandler(sampleIDs,expectedAnswers,nil);
+                else
+                {
+                    //If this fails, try again until it does not
+                    println("Retry downloading the files")
+                    
+                    self.getSampleIDsAndExpectedAnswersForSettings(stimuliRequest, completionHandler: completionHandler)
+                }
             }
     }
     

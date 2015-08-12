@@ -65,8 +65,6 @@ class DownloadViewController: SubViewController
         setProgressBar(0.0,animated:false)
         
         //Start updating the progress bar
-        //self.tempTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("increaseProgressBarWithOnePercent"), userInfo: nil, repeats: true)
-
         var counter : Int = 0
         var percentageDone : Float = 0.0
         

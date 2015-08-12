@@ -17,14 +17,19 @@ class ResultViewController: SubViewController {
     var currentGame : Game?
     
     //Results
-    var numberOfCorrectAnswers : Int = 0
-    var totalNumberOfAnswers : Int = 0
-    
+    var exposedStimuli = [Stimulus]()
+    var nrOfTruePositives : Int = 0
+    var nrOfFalsePositives : Int = 0
+    var nrOfTrueNegatives : Int = 0
+    var nrOfFalseNegatives : Int = 0
+    var nrOfCorrectAnswers : Int = 0
+
     var timer : NSTimer = NSTimer()
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.calculateStatistics()
         
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
@@ -42,7 +47,7 @@ class ResultViewController: SubViewController {
         resultsLabel.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - resultsLabelDistanceAboveCenter,labelWidth,labelHeigth)
         resultsLabel.textAlignment = NSTextAlignment.Center
         resultsLabel.font = UIFont(name: "Helvetica",size: 30)
-        resultsLabel.text = "Results: \(self.numberOfCorrectAnswers)/\(self.totalNumberOfAnswers) correct"
+        resultsLabel.text = "Results: \(self.nrOfCorrectAnswers)/\(self.exposedStimuli.count) correct"
         
         self.view.addSubview(resultsLabel)
         
@@ -88,6 +93,48 @@ class ResultViewController: SubViewController {
         }
     }
     
+    func calculateStatistics()
+    {
+        for stimulus in self.exposedStimuli
+        {
+            //If there is no data to this stimulus, it's the example one, which is always correct
+            if stimulus.receivedResponse == nil
+            {
+                self.nrOfTruePositives++
+                continue
+            }
+            
+            if stimulus.requiresResponse
+            {
+                if stimulus.receivedResponse!
+                {
+                    self.nrOfTruePositives++
+                }
+                else
+                {
+                    self.nrOfFalseNegatives++
+                }
+            }
+            else
+            {
+                if stimulus.receivedResponse!
+                {
+                    self.nrOfFalsePositives++
+                }
+                else
+                {
+                    self.nrOfTrueNegatives++
+                }
+            }
+        }
+        
+        self.nrOfCorrectAnswers = self.nrOfTruePositives + self.nrOfTrueNegatives
+        println(self.nrOfTruePositives)
+        println(self.nrOfFalsePositives)
+        println(self.nrOfTrueNegatives)
+        println(self.nrOfFalseNegatives)
+    }
+    
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
@@ -110,13 +157,10 @@ class ResultViewController: SubViewController {
         self.currentGame!.stage = GameStage.Finished
         self.superController!.subControllerFinished(self)
     }
-    
-    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent)
+
+    func pilotModeFinished()
     {
-        if motion == UIEventSubtype.MotionShake
-        {
-            self.currentGame!.autoPilotMode = false
-            self.goBackToTheHomeScreen()
-        }
+        self.currentGame!.autoPilotMode = false
+        self.goBackToTheHomeScreen()
     }
 }

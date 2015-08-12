@@ -9,10 +9,12 @@
 import Foundation
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
+    var server : VSTServer?
+    var vowelSelectionViewController : VowelSelectionViewController = VowelSelectionViewController()
     
     override func viewDidLoad()
     {
@@ -63,12 +65,10 @@ class LoginViewController: UIViewController {
         self.view.addSubview(createAccountLink)
         
         //Create the VSTServer object
-        var vstServer : VSTServer = VSTServer(url: kWebserviceURL)
+        self.server = VSTServer(url: kWebserviceURL)
         
-        vstServer.tryLoggingIn("wessel", password: "hunter2")
-
-        vstServer.getAllVowels()
-        vstServer.createNewUser("Wessel")
+        self.server!.tryLoggingIn("wessel", password: "hunter2")
+        self.server!.createNewUser("Wessel")
         
     }
     
@@ -87,8 +87,48 @@ class LoginViewController: UIViewController {
     func login(#username : String,password : String)
     {
         println("Loggin in");
-        let progressViewController = VowelSelectionViewController();
-        self.presentViewController(progressViewController, animated: false, completion: nil)
+        self.zoomFromVowelTractOverViewToVowelSelection()
+    }
+    
+    func zoomFromVowelTractOverViewToVowelSelection()
+    {
+        println("Showing zooming animation")
+        self.vowelSelectionViewController = VowelSelectionViewController();
+        self.vowelSelectionViewController.superController = self
+        self.vowelSelectionViewController.server = self.server!
+        
+        var oldTransform = vowelSelectionViewController.view.layer.transform;
+        var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
+        var newTransform = CATransform3DTranslate(transformScale, 0, 60, 0)
+        
+        CATransaction.begin()
+        
+        var zoomAnimation = CABasicAnimation(keyPath: "transform")
+        zoomAnimation.speed = 0.1
+        zoomAnimation.fromValue = NSValue(CATransform3D: oldTransform)
+        zoomAnimation.toValue = NSValue(CATransform3D: newTransform)
+        vowelSelectionViewController.view.layer.addAnimation(zoomAnimation, forKey: "to new transform")
+        vowelSelectionViewController.view.layer.transform = newTransform
+        
+        CATransaction.commit()
+        
+        self.view.addSubview(vowelSelectionViewController.view)
+    }
+
+    func subControllerFinished(subController: SubViewController)
+    {
+        //This can only be the vowel selection view controller, and that always want to be restarted
+        subController.view.removeFromSuperview()
+        self.zoomFromVowelTractOverViewToVowelSelection()
+    }
+    
+    //Motions can only be picked up here, because the vowel selection view controller is never officially presented
+    override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent)
+    {
+        if self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
+        {
+            self.vowelSelectionViewController.resultViewController!.pilotModeFinished()
+        }
     }
     
 }

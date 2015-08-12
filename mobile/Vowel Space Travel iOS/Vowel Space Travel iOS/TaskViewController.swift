@@ -14,6 +14,7 @@ class TaskViewController: SubViewController {
     //Layout properties
     var screenWidth: CGFloat?
     var screenHeight: CGFloat?
+    var label : UILabel!
     
     //Sound properties
     var audioPlayer = AVAudioPlayer()
@@ -21,9 +22,9 @@ class TaskViewController: SubViewController {
     //Gameplay properties
     var stimuli = [Stimulus]()
     var currentStimulusIndex : Int = -1 //Increased at the start, so we start at 0
-    var correctResponses = [Bool]()
     var tapDetectedDuringThisStimulus = false
-
+    var exampleFeedbackWasPlayed = false
+    
     var timer = NSTimer()
     
     override func viewDidLoad()
@@ -38,14 +39,14 @@ class TaskViewController: SubViewController {
         self.view.backgroundColor = UIColor.whiteColor()
         
         //Display a label
-        var label = UILabel();
+        self.label = UILabel();
         var labelWidth : CGFloat = 500;
         var labelHeigth : CGFloat = 30;
         var distanceAboveCenter : CGFloat = 0;
         
         label.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
         label.textAlignment = NSTextAlignment.Center
-        label.text = "Tap the screen when you hear a difference"
+        label.text = "Example"
         
         self.view.addSubview(label)
         
@@ -68,10 +69,31 @@ class TaskViewController: SubViewController {
     func processStimulusResponseAndPresentNext()
     {
         //Process stimulus response
-        if self.currentStimulusIndex > -1
+        if self.currentStimulusIndex > 0
         {
             var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
-            self.correctResponses.append(currentStimulus.requiresResponse == self.tapDetectedDuringThisStimulus)
+            currentStimulus.receivedResponse = self.tapDetectedDuringThisStimulus
+        }
+    
+        //If this was the first stimulus, play example feedback and wait till next cycle
+        if self.currentStimulusIndex == 0 && !self.exampleFeedbackWasPlayed
+        {
+            self.playAuditiveTouchFeedback()
+            self.exampleFeedbackWasPlayed = true
+            return
+        }
+
+        //If this was the first stimulus, switch from the example to the real deal
+        if self.currentStimulusIndex == 0 && self.exampleFeedbackWasPlayed
+        {
+            self.label.text = "Tap the screen when you hear the vowel again"
+        }
+        
+        
+        //Debugging option
+        if kOnlyOneStimulus && self.currentStimulusIndex == 1
+        {
+            self.taskIsFinished()
         }
             
         //Present next one
@@ -107,25 +129,15 @@ class TaskViewController: SubViewController {
         self.audioPlayer.prepareToPlay()
         self.audioPlayer.play()
     }
-    
-    func countNumberOfCorrectResponses() -> Int
-    {
-        var numberOfCorrectResponses = 0
         
-        for response in self.correctResponses
-        {
-            if response
-            {
-                numberOfCorrectResponses++
-            }
-        }
-        
-        return numberOfCorrectResponses
-    }
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent)
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent)
     {
         self.tapDetectedDuringThisStimulus = true
+        self.playAuditiveTouchFeedback()
+    }
+
+    func playAuditiveTouchFeedback()
+    {
         self.playSound("click",ofType: "aiff",absolutePath : false)
     }
     

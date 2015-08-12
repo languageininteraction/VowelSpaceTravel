@@ -11,6 +11,7 @@ import Foundation
 class Stimulus : NSObject
 {
     var requiresResponse : Bool
+    var receivedResponse : Bool?
     var sampleID : Int
     var fileLocation : String?
     
@@ -18,5 +19,17 @@ class Stimulus : NSObject
     {
         self.sampleID = sampleID
         self.requiresResponse = requiresResponse
+    }
+    
+    func hasCorrectAnswer() -> Bool?
+    {
+        if receivedResponse != nil
+        {
+            return self.requiresResponse == self.receivedResponse
+        }
+        else
+        {
+            return nil
+        }
     }
 }

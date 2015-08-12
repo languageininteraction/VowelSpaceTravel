@@ -18,13 +18,12 @@ enum GameStage
 {
     case SelectingVowels
     case SettingOtherSettings
-    case Trial
     case Playing
     case ShowingResult
     case Finished
 }
 
-class Game : NSObject
+class Game : NSObject, StimuliRequest
 {
     var stage : GameStage = GameStage.SelectingVowels
     

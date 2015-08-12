@@ -8,16 +8,39 @@
 
 import Foundation
 
+enum VowelPlace : String
+{
+    case back = "back"
+    case near_back = "near_back"
+    case central = "central"
+    case near_front = "near_front"
+    case front = "front"
+}
+
+enum VowelManner : String
+{
+    case open = "open"
+    case near_open = "near_open"
+    case open_mid = "open_mid"
+    case mid = "mid"
+    case close_mid = "close_mid"
+    case near_close = "near_close"
+    case close = "close"
+}
+
+
 class VowelDefinition : NSObject
 {
-    var exampleWord : String
-    var xPositionInMouth : Float
-    var yPositionInMouth : Float
-
-    init(exampleWord : String, xPositionInMouth : Float, yPositionInMouth : Float)
+    var exampleWord : String = ""
+    var place : VowelPlace?
+    var manner : VowelManner?
+    var rounded : Bool?
+    var ipaNotation : String
+    var id : Int
+    
+    init(id : Int, ipaNotation : String)
     {
-        self.exampleWord = exampleWord
-        self.xPositionInMouth = xPositionInMouth
-        self.yPositionInMouth = yPositionInMouth
+        self.id = id
+        self.ipaNotation = ipaNotation
     }
 }
