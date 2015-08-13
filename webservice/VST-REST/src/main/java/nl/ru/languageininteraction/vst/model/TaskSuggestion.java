@@ -17,24 +17,67 @@
  */
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.List;
+import java.util.Random;
+
+
 /**
  *
  * @author Karen
  */
 public class TaskSuggestion {
-    private Task task;
+    final private Task task;
     private Difficulty difficulty;
     private Vowel targetVowel;
     private Vowel standardVowel;
 
-    public TaskSuggestion() {
+    public TaskSuggestion(List<Vowel> allVowels) {
+        task = Task.discrimination;
+        difficulty = Difficulty.veryhard;
+        targetVowel = allVowels.get(new Random().nextInt(allVowels.size()));
+        allVowels.remove(targetVowel);
+        standardVowel = allVowels.get(new Random().nextInt(allVowels.size()));
     }
 
     public TaskSuggestion(Task task, Difficulty difficulty, Vowel targetVowel, Vowel standardVowel) {
         this.task = task;
         this.difficulty = difficulty;
         this.targetVowel = targetVowel;
-        this.standardVowel = standardVowel;
+        if(task == Task.discrimination)
+            
+            if(new Random().nextBoolean())
+                this.standardVowel = standardVowel;
+            else{
+                this.targetVowel = standardVowel;
+                this.standardVowel = targetVowel;
+            }
+    }
+    
+    public TaskSuggestion(Confidence confObject) {
+        this.task = confObject.getTask();
+        this.difficulty = confObject.getDifficulty();
+        this.targetVowel = confObject.getTargetVowel();
+        if(task == Task.discrimination)
+            if(new Random().nextBoolean())
+                this.standardVowel = confObject.getStandardVowel();
+            else{
+                this.targetVowel = confObject.getStandardVowel();
+                this.standardVowel = confObject.getTargetVowel();
+            }
+           
+    }
+    
+    public TaskSuggestion(StimulusResponse response) {
+        this.task = response.getTask();
+        this.difficulty = response.getDifficulty();
+        this.targetVowel = response.getTargetVowel();
+        if(task == Task.discrimination)
+            if(new Random().nextBoolean())
+                this.standardVowel = response.getStandardVowels().get(0);
+            else{
+                this.targetVowel = response.getStandardVowels().get(0);
+                this.standardVowel = response.getTargetVowel();
+            }
     }
 
     public Task getTask() {
@@ -51,6 +94,15 @@ public class TaskSuggestion {
 
     public Vowel getStandardVowel() {
         return standardVowel;
+    }
+
+    public void lowerDifficulty() {
+        if (difficulty == Difficulty.veryhard)
+            difficulty = Difficulty.hard;
+        else if (difficulty == Difficulty.hard)
+            difficulty = Difficulty.medium;
+        else if (difficulty == Difficulty.medium)
+            difficulty = Difficulty.easy;
     }
     
     

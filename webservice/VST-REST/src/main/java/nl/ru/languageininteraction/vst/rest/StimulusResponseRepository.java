@@ -17,13 +17,16 @@
  */
 package nl.ru.languageininteraction.vst.rest;
 
+import java.util.Date;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.Vowel;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -39,10 +42,63 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
     @Override
     List<StimulusResponse> findAll();
 
-    List<StimulusResponse> findTop10ByPlayerOrderByResponseDateDesc(@Param("player") Player player);
+    StimulusResponse findFirstByPlayerOrderByResponseDateDesc(@Param("player") Player player);
+   
+    List<StimulusResponse> findFirstByPlayerAndResponseDateGreaterThan(Player player, Date responseDate);
 
     List<StimulusResponse> findByTargetVowel(@Param("targetVowel") Vowel targetVowel);
-
+    
+    StimulusResponse  findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel,
+            @Param("standardVowel") Vowel standardVowel,
+            @Param("responseDate") Date responseDate);
+    
+     List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
+            Player player,
+            Task task,
+            Difficulty difficulty,
+            Vowel v1,
+            Vowel s1,
+            Player player1,
+            Task task1,
+            Difficulty difficulty1,
+            Vowel v2,
+            Vowel s2);
+           // Pageable pageable);
+     
+    List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
+            Player player,
+            Task task,
+            Difficulty difficulty,
+            Vowel v1,
+            Vowel s1,
+            Player player1,
+            Task task1,
+            Difficulty difficulty1,
+            Vowel v2,
+            Vowel s2,
+            Pageable pageable);
+    
+    
+    List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelOrTargetVowelAndStandardVowelsOrStandardVowelsOrderByResponseDateDesc(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel1,
+            @Param("targetVowel") Vowel targetVowel2,
+            @Param("standardVowel") Vowel standardVowel1,
+            @Param("standardVowel") Vowel standardVowel2,
+            Pageable pageable);
+    
+    List<StimulusResponse> findTop30ByPlayerAndTaskAndDifficultyAndTargetVowelOrderByResponseDateDesc(
+            @Param("player") Player player,
+            @Param("task") Task task,
+            @Param("difficulty") Difficulty difficulty,
+            @Param("targetVowel") Vowel targetVowel);
+            
     List<StimulusResponse> findByStandardVowels(@Param("standardVowel") Vowel standardVowel);
 
     List<StimulusResponse> findByTargetVowelAndStandardVowels(@Param("targetVowel") Vowel targetVowel, @Param("standardVowel") Vowel standardVowel);

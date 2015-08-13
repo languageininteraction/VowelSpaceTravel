@@ -18,15 +18,21 @@
 package nl.ru.languageininteraction.vst.rest;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.Stimulus;
+import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.TaskSuggestion;
-import nl.ru.languageininteraction.vst.model.Vowel;
+import org.apache.commons.math3.distribution.NormalDistribution;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Resources;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.Resource;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +43,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- *
- * @author Karen
+ * @since Jul 10, 2015 11:57:16 AM (creation date)
+ * @author Karen Dijkstra <k.dijkstra@donders.ru.nl>
  */
 @Controller
 @RequestMapping(value = "/suggestion", produces = "application/json")
 public class TaskSuggestionController {
-
+    
+    private final double confidenceTreshold = 0.8;
+    private final int referencePoint = 2;
+    private final int window = 30;
+    private Date referenceDate = null;
     @Autowired
     ConfidenceRepository confidenceRepository;
     @Autowired
@@ -53,16 +63,154 @@ public class TaskSuggestionController {
 
     @RequestMapping(value = "/tasksuggestion/{player}", method = GET)
     @ResponseBody
-    public ResponseEntity<Resources<TaskSuggestion>> getTaskSuggestion(@PathVariable("player") Player player) {
-        ArrayList<TaskSuggestion> suggestions = new ArrayList<>();
-        // todo: add suggestions
-        final List<Vowel> allVowels = vowelRepository.findAll();
-        Vowel targetVowel = allVowels.get(new Random().nextInt((int) vowelRepository.count()));
-        allVowels.remove(targetVowel);
-        Vowel standardVowel = allVowels.get(new Random().nextInt((int) vowelRepository.count()));
-        TaskSuggestion suggestion = new TaskSuggestion(Task.discrimination,Difficulty.veryhard,targetVowel,standardVowel);
-        suggestions.add(suggestion);
-        Resources<TaskSuggestion> wrapped = new Resources<>(suggestions, linkTo(TaskSuggestionController.class).withSelfRel());
+    public ResponseEntity<Resource<TaskSuggestion>> getTaskSuggestion(@PathVariable("player") Player player) {      
+        TaskSuggestion suggestion;
+        if (noCurrentVowelPair(player))
+            suggestion = selectNewVowelPairAndSettings(player); 
+        else 
+            suggestion = determineSettingsforVowelPair(player);
+        Resource<TaskSuggestion> wrapped = new Resource<>(suggestion, linkTo(TaskSuggestionController.class).withSelfRel());
         return new ResponseEntity<>(wrapped, HttpStatus.OK);
     }
-}
+
+    private boolean noCurrentVowelPair(Player player) {
+        //StimulusResponse latestResponse = responseRepository.findTop10ByPlayerOrderByResponseDateDesc(player).get(0);
+        Date sessionDate = getSessionDate();   
+        List<StimulusResponse> recentData = responseRepository.findFirstByPlayerAndResponseDateGreaterThan(player,sessionDate);
+        System.out.println(recentData.isEmpty());
+        return recentData.isEmpty();
+    }
+
+    private TaskSuggestion selectNewVowelPairAndSettings(Player player) {
+        List <Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.discrimination, Difficulty.veryhard);
+        List <Confidence> allConf = confidenceRepository.findAll();
+        if(confList.isEmpty())
+                return new TaskSuggestion(new ArrayList(vowelRepository.findAll()));    // replace with proper (e.g. random?) suggestion
+        Date sessionDate =  getSessionDate();
+        Iterator<Confidence> iterator = confList.iterator();
+        while(iterator.hasNext()){
+            Confidence next = iterator.next();
+            // If stimulus response for this day, this player, this vowel pair in difficulty veryhard exists, move on to next.
+            StimulusResponse response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player, 
+                    next.getTask(),Difficulty.veryhard,next.getStandardVowel(),next.getTargetVowel(),sessionDate);
+            if(response != null)
+                    continue;
+            response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player, 
+                    next.getTask(),Difficulty.veryhard,next.getTargetVowel(),next.getStandardVowel(),sessionDate);
+            if(response == null)
+                    return new TaskSuggestion(next);
+        }
+        referenceDate = new Date();
+        return selectNewVowelPairAndSettings(player);
+        //throw new UnsupportedOperationException("Unsupported");
+    }
+    
+    private TaskSuggestion determineSettingsforVowelPair(Player player) {
+        StimulusResponse lastResponse = responseRepository.findFirstByPlayerOrderByResponseDateDesc(player);
+        if(lastResponse == null)
+                return selectNewVowelPairAndSettings(player);
+        List<StimulusResponse> data = getRecentDataWindow(0,window,lastResponse,player);
+        
+        int correct = positiveCount(data);
+        Confidence confData = new Confidence(correct,data.size() - correct,0,0);   
+        if(confData.getLowerBound() >= confidenceTreshold)
+            return selectNewVowelPairAndSettings(player);
+        
+        if(data.size() < window )
+            return new TaskSuggestion(data.get(0));
+        
+        List<StimulusResponse> referenceData = getRecentDataWindow(referencePoint,window,lastResponse,player);     
+        if((referenceData.size() < window) || detected_improvement(player,data,referenceData))
+            return new TaskSuggestion(data.get(0));
+        else if(lastResponse.getDifficulty() == Difficulty.easy)
+            return selectNewVowelPairAndSettings(player);
+        else {
+            TaskSuggestion task =  new TaskSuggestion(data.get(0));
+            task.lowerDifficulty();
+            return task;
+        }
+    }
+
+    
+    private List<StimulusResponse> getRecentDataWindow(int page,int windowlength,StimulusResponse response,Player player) {
+        List<StimulusResponse> data;
+        if (response.getTask() == Task.discrimination) {
+            
+            // To do: Test if last page 2 is less recent than page 0
+             data = responseRepository.findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
+                    player, Task.discrimination,
+                    response.getDifficulty(),
+                    response.getTargetVowel(),
+                    response.getStandardVowels().get(0),
+                    player, Task.discrimination,
+                    response.getDifficulty(),
+                    response.getStandardVowels().get(0),
+                    response.getTargetVowel(),
+                    new PageRequest(page, windowlength));
+        } else if (response.getTask() == Task.identification)
+              data = responseRepository.findTop30ByPlayerAndTaskAndDifficultyAndTargetVowelOrderByResponseDateDesc(
+                    player, Task.identification,
+                    response.getDifficulty(),
+                    response.getTargetVowel());
+        else
+            throw new UnsupportedOperationException("Unsupported task");
+        return data;
+    }
+
+    private Date getSessionDate() {
+        if (referenceDate == null) {
+            Calendar c = Calendar.getInstance();
+
+        // set the calendar to start of today
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+
+            // and get that as a Date
+            return c.getTime();
+        }
+        else
+            return referenceDate;
+        
+        //c.add(Calendar.DAY_OF_YEAR, 1);
+        //Date today = c.getTime();
+    }
+
+    private boolean detected_improvement(Player player,List<StimulusResponse> currentData, List<StimulusResponse> referenceData) {
+        int totalCurr = currentData.size();
+        int totalRef = referenceData.size();
+        int positiveCurr = positiveCount(currentData);
+        int positiveRef = positiveCount(referenceData);
+        double zScore = getZScore(positiveCurr,positiveRef,totalCurr,totalRef);
+        double pValue = new NormalDistribution(null,0,1).cumulativeProbability(zScore);
+        double alpha = 0.05;
+        return (pValue < alpha);
+    }
+    
+    public double getZScore(double X1, double X2, double n1, double n2) {
+        double p = (X1 + X2)*1.0 / (n1 + n2);  
+        double sError = Math.sqrt(p * (1- p) * ((1/n1) + (1/n2)));
+        return((X1/n1) - (X2/n2)) / sError;
+    }
+
+    private int positiveCount(List<StimulusResponse> data){
+        Iterator<StimulusResponse> iterator = data.iterator();
+        int correct=0; 
+        String std = data.get(0).getStandardVowels().get(0).getDisc();
+        System.out.println("Datawindow dates: " + data.get(0).getTargetVowel().getDisc() + " " + std);
+        while(iterator.hasNext()){
+            StimulusResponse next = iterator.next();
+            System.out.println(next.getResponseDate().toString());
+            if(next.getRelevance() == Stimulus.Relevance.isIrelevant)
+                throw new UnsupportedOperationException("Irrelevant responses cannot be considered");
+            if(next.getResponseRating() == StimulusResponse.ResponseRating.true_negative || 
+                    next.getResponseRating() == StimulusResponse.ResponseRating.true_positive)
+                correct++;
+        }
+        return correct;
+    }
+
+
+
+}   

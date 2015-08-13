@@ -4,7 +4,7 @@
 
     <groupId>nl.ru.languageininteraction.vst-rest</groupId>
     <artifactId>VST-REST</artifactId>
-    <version>0.1.91-testing</version>
+    <version>0.1.94-testing</version>
     <packaging>jar</packaging>
 
     <name>VST-REST</name>
@@ -50,6 +50,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
             <version>3.4.1</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
