@@ -180,6 +180,8 @@ public class StimulusController {
         for (Vowel standardVowel : standardVowels) {
             confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, targetVowel, standardVowel);
             confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, targetVowel, standardVowel));
+            confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, standardVowel, targetVowel);
+            confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, standardVowel, targetVowel));
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

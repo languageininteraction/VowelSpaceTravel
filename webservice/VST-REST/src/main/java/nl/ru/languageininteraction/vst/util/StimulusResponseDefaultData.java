@@ -17,6 +17,7 @@
  */
 package nl.ru.languageininteraction.vst.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
@@ -130,7 +131,9 @@ public class StimulusResponseDefaultData {
 
     private void insertValues(final List<Vowel> allVowels, final Player player, final Task task, final Difficulty difficulty, final Stimulus.Relevance relevance, final boolean playerResponse) {
         for (Vowel targetVowel : allVowels) {
-            for (Vowel standarVowel : allVowels) {
+            List<Vowel> remainingVowels = new ArrayList(allVowels);
+            remainingVowels.remove(targetVowel);
+            for (Vowel standarVowel : remainingVowels) {
                 StimulusResponse response = new StimulusResponse(player, task, difficulty, targetVowel, relevance, playerResponse, 1);
                 response.addStandardVowel(standarVowel);
                 stimulusResultRepository.save(response);
@@ -139,9 +142,14 @@ public class StimulusResponseDefaultData {
     }
 
     private void insertConfidence(final List<Vowel> allVowels, final Player player, final Task task, final Difficulty difficulty) {
+        List<Vowel> remainingVowels = new ArrayList(allVowels);
         for (Vowel targetVowel : allVowels) {
-            for (Vowel standarVowel : allVowels) {
+            remainingVowels.remove(targetVowel);
+            for (Vowel standarVowel : remainingVowels) {
+                //allVowels.remove(standarVowel);
                 Confidence confidence = new Confidence(stimulusResultRepository, player, task, difficulty, targetVowel, standarVowel);
+                confidenceRepository.save(confidence);
+                confidence = new Confidence(stimulusResultRepository, player, task, difficulty, standarVowel, targetVowel);
                 confidenceRepository.save(confidence);
             }
         }
