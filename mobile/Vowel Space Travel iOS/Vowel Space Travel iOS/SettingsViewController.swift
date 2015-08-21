@@ -23,9 +23,12 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
+
+    var downloadBarView : DownloadBarView = DownloadBarView(frame: CGRectMake(14,14,28,715))
     
     var currentGame : Game?
     var availableVowels : [String : VowelDefinition]?
+    var server : VSTServer?
     
     var singleOrMultipleSpeakerSegmentedControl = UISegmentedControl()
     var sameOrDifferentStartingSoundSegmentedControl = UISegmentedControl()
@@ -38,6 +41,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     var numberOfRoundsStepper = UIStepper()
     var numberOfRoundsIndicator = UILabel()
     
+    var readyForTask : Bool = false
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -49,135 +54,163 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         //Make the background white
         self.view.backgroundColor = UIColor.whiteColor()
         
-        //Create the top labels
-        var topLabelWidth : CGFloat = 700;
-        var topLabelHeight : CGFloat = 50;
+        //Show the background image
+        var backgroundImageView = UIImageView(image: UIImage(named: "control_panel_background"))
+        backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
+        self.view.addSubview(backgroundImageView)
         
-        var suggestedSettingsLabel = UILabel();
-        var suggestedSettingsLabelDistanceFromTop : CGFloat = 50;
+        //Create the labels
+        var topLabelWidth : CGFloat = 700
+        var topLabelHeight : CGFloat = 50
+        var difficultyLabelLeft : CGFloat = 325
+        var difficultyLabelWidth : CGFloat = 120
+ 
+        self.showCenterFieldLabel("Adjust settings as required", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,70,topLabelWidth,50), fontSize: 25)
+        self.showCenterFieldLabel("Difficulty", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,135,topLabelWidth,50), fontSize: 20)
+        self.showCenterFieldLabel("Play mode", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth),420,topLabelWidth,50), fontSize: 20)
+
+        self.showCenterFieldLabel("Speakers", frame: CGRectMake(difficultyLabelLeft,210,difficultyLabelWidth,50), fontSize: 14)
+        self.showCenterFieldLabel("Starting sound", frame: CGRectMake(difficultyLabelLeft,310,difficultyLabelWidth,50), fontSize: 14)
+
+        var difficultyOptionLabel1Left : CGFloat = 445
+        var difficultyOptionLabel2Left : CGFloat = 555
         
-        suggestedSettingsLabel.frame = CGRectMake(0.5*(self.screenWidth!-topLabelWidth),suggestedSettingsLabelDistanceFromTop,topLabelWidth,topLabelHeight)
-        suggestedSettingsLabel.textAlignment = NSTextAlignment.Center
-        suggestedSettingsLabel.font = UIFont(name: "Helvetica",size:30)
-        suggestedSettingsLabel.text = "Suggested settings"
-        
-        self.view.addSubview(suggestedSettingsLabel)
-        
-        var youCanChangeThisLabel = UILabel();
-        var youCanChangeThisLabelDistanceFromTop : CGFloat = 100;
-        
-        youCanChangeThisLabel.frame = CGRectMake(0.5*(self.screenWidth!-topLabelWidth),youCanChangeThisLabelDistanceFromTop,topLabelWidth,topLabelHeight)
-        youCanChangeThisLabel.textAlignment = NSTextAlignment.Center
-        youCanChangeThisLabel.text = "(You can change this if you want)"
-        
-        self.view.addSubview(youCanChangeThisLabel)
+        self.showCenterFieldLabel("Single", frame: CGRectMake(difficultyOptionLabel1Left,250,difficultyLabelWidth,50), fontSize: 12)
+        self.showCenterFieldLabel("Multiple", frame: CGRectMake(difficultyOptionLabel2Left,250,difficultyLabelWidth,50), fontSize: 12)
+
+        self.showCenterFieldLabel("Same", frame: CGRectMake(difficultyOptionLabel1Left,350,difficultyLabelWidth,50), fontSize: 12)
+        self.showCenterFieldLabel("Different", frame: CGRectMake(difficultyOptionLabel2Left,350,difficultyLabelWidth,50), fontSize: 12)
+
+        self.showCenterFieldLabel("Single round", frame: CGRectMake(395,530,difficultyLabelWidth,50), fontSize: 12)
+        self.showCenterFieldLabel("Autopilot", frame: CGRectMake(505,530,difficultyLabelWidth,50), fontSize: 12)
         
         //Create the segmented control to select how many speakers you want
-        var speakerSegmentedControlDistanceFromTop : CGFloat = 200
-        var segmentedControlWidth : CGFloat = 300
+        var speakerSegmentedControlDistanceFromTop : CGFloat = 210
+        var segmentedControlWidth : CGFloat = 225
         var segmentedControlHeight : CGFloat = 50
-        
-        self.singleOrMultipleSpeakerSegmentedControl = UISegmentedControl(items: ["Single","Multiple"])
+        var segmentedControlLeft : CGFloat = 450
+
+        self.singleOrMultipleSpeakerSegmentedControl = ReselectableSegmentedControl(items: ["",""])
         self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 0
-        self.singleOrMultipleSpeakerSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: speakerSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.singleOrMultipleSpeakerSegmentedControl.frame = CGRect(x: segmentedControlLeft,y: speakerSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+
+        //Custom appearance of the segmented control
+        self.singleOrMultipleSpeakerSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_background"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        self.singleOrMultipleSpeakerSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_foreground"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
+        self.singleOrMultipleSpeakerSegmentedControl.tintColor = UIColor.clearColor()
+        self.singleOrMultipleSpeakerSegmentedControl.addTarget(self, action: "segmentedControlTouched:", forControlEvents: UIControlEvents.AllEvents)
+        
         self.view.addSubview(self.singleOrMultipleSpeakerSegmentedControl)
         
         //Create the segmented control to select whether you want variation in the starting sound
-        var soundsSegmentedControlDistanceFromTop : CGFloat = 300
+        var soundsSegmentedControlDistanceFromTop : CGFloat = 310
         
-        self.sameOrDifferentStartingSoundSegmentedControl = UISegmentedControl(items: ["Same","Different"])
+        self.sameOrDifferentStartingSoundSegmentedControl = ReselectableSegmentedControl(items: ["",""])
         self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 0
-        self.sameOrDifferentStartingSoundSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: soundsSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.sameOrDifferentStartingSoundSegmentedControl.frame = CGRect(x: segmentedControlLeft,y: soundsSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+
+        self.sameOrDifferentStartingSoundSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_background"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        self.sameOrDifferentStartingSoundSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_foreground"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
+        self.sameOrDifferentStartingSoundSegmentedControl.tintColor = UIColor.clearColor()
+        self.sameOrDifferentStartingSoundSegmentedControl.addTarget(self, action: "segmentedControlTouched:", forControlEvents: UIControlEvents.AllEvents)
+        
         self.view.addSubview(self.sameOrDifferentStartingSoundSegmentedControl)
         
         //Create the autopilot segmented control
-        var autoPilotSegmentedControlDistanceFromTop : CGFloat = 400
+        var autoPilotSegmentedControlDistanceFromTop : CGFloat = 490
         
-        self.autoPilotSegmentedControl = UISegmentedControl(items: ["Single round","Autopilot"])
+        self.autoPilotSegmentedControl = ReselectableSegmentedControl(items: ["",""])
         self.autoPilotSegmentedControl.selectedSegmentIndex = 0
-        self.autoPilotSegmentedControl.frame = CGRect(x: 0.5 * (self.screenWidth!-segmentedControlWidth),y: autoPilotSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.autoPilotSegmentedControl.frame = CGRect(x: 0.5*(self.screenWidth!-segmentedControlWidth),y: autoPilotSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+
+        self.autoPilotSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_background"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        self.autoPilotSegmentedControl.setBackgroundImage(UIImage(named: "playmode_segmented_control_foreground"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
+        self.autoPilotSegmentedControl.tintColor = UIColor.clearColor()
+        self.autoPilotSegmentedControl.addTarget(self, action: "segmentedControlTouched:", forControlEvents: UIControlEvents.AllEvents)
+        
         self.view.addSubview(self.autoPilotSegmentedControl)
         
-        //Create the labels to go with the various options
-        let labelDistanceFromLeft : CGFloat = 100
-        let labelWidth : CGFloat = 300
-        let labelHeight : CGFloat = 100
-        
-        var singleOrMultipleSpeakersLabel : UILabel = UILabel();
-        singleOrMultipleSpeakersLabel.frame = CGRectMake(labelDistanceFromLeft,speakerSegmentedControlDistanceFromTop-25,labelWidth,labelHeight)
-        singleOrMultipleSpeakersLabel.text = "Speakers"
-        self.view.addSubview(singleOrMultipleSpeakersLabel)
-        
-        var startingSoundLabel : UILabel = UILabel();
-        startingSoundLabel.frame = CGRectMake(labelDistanceFromLeft,soundsSegmentedControlDistanceFromTop-25,labelWidth,labelHeight)
-        startingSoundLabel.text = "Starting sound"
-        self.view.addSubview(startingSoundLabel)
-        
-        var autoPilotLabel : UILabel = UILabel();
-        autoPilotLabel.frame = CGRectMake(labelDistanceFromLeft,autoPilotSegmentedControlDistanceFromTop-25,labelWidth,labelHeight)
-        autoPilotLabel.text = "Mode"
-        self.view.addSubview(autoPilotLabel)
-        
-        //Create the area to see the selected vowels and game mode
-        var chosenVowelsLabelDistanceFromTop : CGFloat = 0
-        var selectedSettingsLabelsDistanceFromLeft : CGFloat = 20
-        var selectedSettingsLabelsLabelWidth : CGFloat = 200
-        
-        var chosenVowelsLabel : UILabel = UILabel();
-        chosenVowelsLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,chosenVowelsLabelDistanceFromTop, selectedSettingsLabelsLabelWidth,labelHeight)
-        chosenVowelsLabel.textAlignment = NSTextAlignment.Center
-        chosenVowelsLabel.text = "Chosen vowels"
-        self.view.addSubview(chosenVowelsLabel)
-        
-        self.vowelIndicatorLabel = UILabel();
-        self.vowelIndicatorLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,chosenVowelsLabelDistanceFromTop+20, selectedSettingsLabelsLabelWidth,labelHeight)
-        self.vowelIndicatorLabel.textAlignment = NSTextAlignment.Center
-        
-        var vowelIndicatorText : String = "\(self.currentGame!.selectedBaseVowel!.exampleWord) vs \(self.currentGame!.selectedTargetVowel!.exampleWord)"
-        
-        self.vowelIndicatorLabel.text = vowelIndicatorText
-
-        self.view.addSubview(self.vowelIndicatorLabel)
-        
-        var selectedGameModeLabelDistanceFromTop : CGFloat = 50
-        
-        var selectedGameModeLabel : UILabel = UILabel();
-        selectedGameModeLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,selectedGameModeLabelDistanceFromTop, selectedSettingsLabelsLabelWidth,labelHeight)
-        selectedGameModeLabel.textAlignment = NSTextAlignment.Center
-        selectedGameModeLabel.text = "Chosen gamemode"
-        self.view.addSubview(selectedGameModeLabel)
-
-        var gameModeIndicatorLabelDistanceFromTop : CGFloat = 70
-        
-        var gameModeIndicatorLabel : UILabel = UILabel();
-        gameModeIndicatorLabel.frame = CGRectMake(selectedSettingsLabelsDistanceFromLeft,gameModeIndicatorLabelDistanceFromTop, selectedSettingsLabelsLabelWidth,labelHeight)
-        gameModeIndicatorLabel.textAlignment = NSTextAlignment.Center
-        gameModeIndicatorLabel.text = self.currentGame!.selectedTask.rawValue
-        self.view.addSubview(gameModeIndicatorLabel)
-        
         //Create the buttons
-        let buttonWidth : CGFloat = 200
+        let buttonWidth : CGFloat = 180
         let buttonHeight : CGFloat = 70
-        let distanceFromBottom : CGFloat = 50
         let buttonMargin : CGFloat = buttonWidth/2 + 25
-
-        let anotherSuggestionButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth)-buttonMargin,
-            self.screenHeight!-buttonHeight-distanceFromBottom,buttonWidth,buttonHeight))
-        anotherSuggestionButton.setTitle("Another suggestion", forState: UIControlState.Normal)
-        anotherSuggestionButton.addTarget(self, action: "anotherSuggestionButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(anotherSuggestionButton)
         
-        let readyButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth)+buttonMargin,
-            self.screenHeight!-buttonHeight-distanceFromBottom,buttonWidth,buttonHeight))
-        readyButton.setTitle("Ready", forState: UIControlState.Normal)
+        let readyButton = UIButton(frame: CGRectMake(410,605,buttonWidth,buttonHeight))
+        readyButton.setImage(UIImage(named: "launch_button"), forState: UIControlState.Normal)
         readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        
         self.view.addSubview(readyButton)
+
+        var readyButtonLabel : UILabel = UILabel();
+        readyButtonLabel.frame = CGRectMake(425,598,buttonWidth,buttonHeight)
+        readyButtonLabel.textAlignment = NSTextAlignment.Center
+        readyButtonLabel.text = "Launch"
+        readyButtonLabel.textColor = UIColor.whiteColor()
+        readyButtonLabel.font = UIFont(name: "Muli",size:20)
+        self.view.addSubview(readyButtonLabel)
+        
+        var backWindowButton = UIButton(frame: CGRectMake(750,60,220,220))
+        backWindowButton.addTarget(self, action: "backWindowButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(backWindowButton)
+        
+        //Add the pan gestures
+        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))
+        
+        self.downloadBarView.updatePercentage(0)
+        self.view.addSubview(self.downloadBarView)
         
     }
     
-    func anotherSuggestionButtonPressed()
+    func startDownloadingStimulusFiles()
     {
+        var counter : Int = 0
+        var percentageDone : CGFloat = 0.0
         
+        let backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)
+
+        self.downloadBarView.updatePercentage(0.1)
+        sleep(1)
+        self.downloadBarView.updatePercentage(0.2)
+        
+        dispatch_async(backgroundQueue,
+            {
+                for stimulus in self.currentGame!.stimuli
+                {
+                    stimulus.fileLocation = kCachedStimuliLocation+"\(stimulus.sampleID)"+kSoundFileExtension
+                    self.server!.downloadSampleWithID(stimulus.sampleID,fileSafePath: stimulus.fileLocation!)
+                    
+                    percentageDone = CGFloat(counter) / CGFloat(self.currentGame!.stimuli.count)
+
+                    println(percentageDone)
+                    self.downloadBarView.updatePercentage(percentageDone)
+                    self.view.addSubview(self.downloadBarView)
+                    sleep(1)
+                    
+                    counter++;
+                }
+                
+                dispatch_async(dispatch_get_main_queue(),
+                    {
+                        () -> Void in
+                        self.downloadingCompleted()
+                })
+            })
+        
+        println("Got here")
+        
+    }
+    
+    func showCenterFieldLabel(text : String, frame : CGRect, fontSize : CGFloat)
+    {
+        //Shows text, in the style of the text in the centerfield
+        
+        var label : UILabel = UILabel();
+        label.frame = frame
+        label.text = text
+        label.textColor = UIColor(hue: 0, saturation: 0, brightness: 0.3, alpha: 1)
+        label.font = UIFont(name: "Muli",size:fontSize)
+        label.textAlignment = NSTextAlignment.Center
+        self.view.addSubview(label)
     }
     
     func readyButtonPressed()
@@ -186,8 +219,63 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.currentGame!.multipleSpeakers = self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex == 1
         self.currentGame!.differentStartingSounds = self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex == 1
         self.currentGame!.autoPilotMode = self.autoPilotSegmentedControl.selectedSegmentIndex == 1
+
+        //Collect stimulus info
+        self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame!)
+            {
+                (sampleIDs,expectedAnswers,err) -> Void in
+                
+                var index : Int = 0
+                var expectedAnswer : Bool
+                
+                for sampleID in sampleIDs
+                {
+                    expectedAnswer = expectedAnswers[index]
+                    self.currentGame!.stimuli.append(Stimulus(sampleID: sampleID,requiresResponse: expectedAnswer))
+                    
+                    index++;
+                }
+                
+                //When finished, start the download
+                self.startDownloadingStimulusFiles()
+        }
         
+    }
+    
+    func downloadingCompleted()
+    {
+        self.readyForTask = true
         self.superController!.subControllerFinished(self)
     }
     
+    func backWindowButtonPressed()
+    {
+        self.superController!.subControllerFinished(self)
+    }
+    
+    func segmentedControlTouched(segmentedControl : UISegmentedControl)
+    {
+        if segmentedControl.selectedSegmentIndex == 0
+        {
+            segmentedControl.selectedSegmentIndex = 1
+        }
+        else
+        {
+            segmentedControl.selectedSegmentIndex = 0
+        }
+
+    }
+    
+    func handlePan(recognizer : UIPanGestureRecognizer)
+    {
+        if recognizer.state == UIGestureRecognizerState.Began
+        {
+            var startLocation : CGPoint = recognizer.locationInView(self.view)
+            
+            if kShowTouchLocation
+            {
+                println(startLocation)
+            }
+        }
+    }
 }
