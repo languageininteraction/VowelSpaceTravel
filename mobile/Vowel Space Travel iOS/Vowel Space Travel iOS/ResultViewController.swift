@@ -38,50 +38,75 @@ class ResultViewController: SubViewController {
         //Make the background white
         self.view.backgroundColor = UIColor.whiteColor()
         
+        //Show the background image
+        var backgroundImageView = UIImageView(image: UIImage(named: "results_background"))
+        backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
+        self.view.addSubview(backgroundImageView)
+        
         //Display a label
-        var resultsLabel = UILabel();
-        var labelWidth : CGFloat = 300
-        var labelHeigth : CGFloat = 30
-        var resultsLabelDistanceAboveCenter : CGFloat = 100
+        var labelWidth : CGFloat = 600
         
-        resultsLabel.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - resultsLabelDistanceAboveCenter,labelWidth,labelHeigth)
-        resultsLabel.textAlignment = NSTextAlignment.Center
-        resultsLabel.font = UIFont(name: "Helvetica",size: 30)
-        resultsLabel.text = "Results: \(self.nrOfCorrectAnswers)/\(self.exposedStimuli.count) correct"
+        let proportionCorrect : CGFloat = CGFloat(self.nrOfCorrectAnswers) / CGFloat(self.exposedStimuli.count)
         
-        self.view.addSubview(resultsLabel)
+        self.showCenterFieldLabel("\(Int(100*proportionCorrect))% correct", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,160,labelWidth,60), fontSize: 60)
+        self.showCenterFieldLabel("Target \(self.nrOfTruePositives)/\(self.nrOfTruePositives+self.nrOfFalseNegatives) correct", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,270,labelWidth,30), fontSize: 20, brightness: 0.6)
+        self.showCenterFieldLabel("Non-target \(self.nrOfTrueNegatives)/\(self.nrOfTrueNegatives+self.nrOfFalsePositives) correct", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,290,labelWidth,30), fontSize: 20, brightness: 0.6)
         
         if self.currentGame!.autoPilotMode
         {
             var stopAutoPilotLabel = UILabel();
             var stopAutoPilotLabelDistanceAboveCenter : CGFloat = 0
             
-            stopAutoPilotLabel.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - stopAutoPilotLabelDistanceAboveCenter,labelWidth,labelHeigth)
-            stopAutoPilotLabel.textAlignment = NSTextAlignment.Center
-            stopAutoPilotLabel.text = "Shake your device if you want to stop"
+            self.showCenterFieldLabel("Shake your device if you want to stop", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,400,labelWidth,40), fontSize: 20)
             
             self.view.addSubview(stopAutoPilotLabel)
         }
         else
         {
             //Create the finish button
-            let normalButtonWidth : CGFloat = 300
-            let normalButtonHeight : CGFloat = 70
-            let againButtonWidth : CGFloat = normalButtonWidth * 2;
-            let againButtonHeight : CGFloat = normalButtonHeight * 2;
-            let distanceFromSide : CGFloat = 50;
-            let distanceFromBottom : CGFloat = 50;
+            let backButtonLeft : CGFloat = 220
+            let backButtonWidth : CGFloat = 250
             
-            let againButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-againButtonWidth-distanceFromSide,self.screenHeight!-againButtonHeight-distanceFromBottom,againButtonWidth,againButtonHeight))
-            againButton.setTitle("Again with the same settings", forState: UIControlState.Normal)
+            let againButtonLeft : CGFloat = 500
+            let againButtonWidth : CGFloat = 325
+            
+            let buttonHeight : CGFloat = 70
+            let buttonTop : CGFloat = 385
+            
+            let buttonLabelOffsetLeft : CGFloat = 15
+            let buttonLabelDecreaseHeight : CGFloat = 12
+            
+            let backButton = UIButton(frame: CGRectMake(backButtonLeft,buttonTop,backButtonWidth,buttonHeight))
+            backButton.setTitle("Back to the main menu", forState: UIControlState.Normal)
+            backButton.setImage(UIImage(named: "back_button"), forState: UIControlState.Normal)
+            backButton.addTarget(self, action: "backButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+            self.view.addSubview(backButton)
+            
+            let againButton = UIButton(frame: CGRectMake(againButtonLeft,buttonTop,againButtonWidth,buttonHeight))
+            againButton.setImage(UIImage(named: "retry_button"), forState: UIControlState.Normal)
             againButton.addTarget(self, action: "againButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
             self.view.addSubview(againButton)
 
-            let backButton = TempStyledButton(frame: CGRectMake(distanceFromSide,self.screenHeight!-normalButtonHeight-distanceFromBottom,normalButtonWidth,normalButtonHeight))
-            backButton.setTitle("Back to the main menu", forState: UIControlState.Normal)
-            backButton.addTarget(self, action: "backButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
-            self.view.addSubview(backButton)
+            var backButtonLabel : UILabel = UILabel();
+            backButtonLabel.frame = CGRectMake(backButtonLeft+buttonLabelOffsetLeft,buttonTop,backButtonWidth,buttonHeight-buttonLabelDecreaseHeight)
+            backButtonLabel.textAlignment = NSTextAlignment.Center
+            backButtonLabel.text = "Back to the menu"
+            backButtonLabel.textColor = UIColor.whiteColor()
+            backButtonLabel.font = UIFont(name: "Muli",size:16)
+            self.view.addSubview(backButtonLabel)
+
+            var againButtonLabel : UILabel = UILabel();
+            againButtonLabel.frame = CGRectMake(againButtonLeft+buttonLabelOffsetLeft,buttonTop,againButtonWidth,buttonHeight-buttonLabelDecreaseHeight)
+            againButtonLabel.textAlignment = NSTextAlignment.Center
+            againButtonLabel.text = "Again with the same settings"
+            againButtonLabel.textColor = UIColor.whiteColor()
+            againButtonLabel.font = UIFont(name: "Muli",size:16)
+            self.view.addSubview(againButtonLabel)
+            
         }
+
+        //Add the pan gestures
+        self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))        
         
     }
     
@@ -140,6 +165,19 @@ class ResultViewController: SubViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
+    func showCenterFieldLabel(text : String, frame : CGRect, fontSize : CGFloat, brightness : CGFloat = 0.4)
+    {
+        //Shows text, in the style of the text in the centerfield
+        
+        var label : UILabel = UILabel();
+        label.frame = frame
+        label.text = text
+        label.textColor = UIColor(hue: 0, saturation: 0, brightness: brightness, alpha: 1)
+        label.font = UIFont(name: "Muli",size:fontSize)
+        label.textAlignment = NSTextAlignment.Center
+        self.view.addSubview(label)
+    }
     
     func againButtonPressed()
     {
@@ -163,4 +201,18 @@ class ResultViewController: SubViewController {
         self.currentGame!.autoPilotMode = false
         self.goBackToTheHomeScreen()
     }
+    
+    func handlePan(recognizer : UIPanGestureRecognizer)
+    {
+        if recognizer.state == UIGestureRecognizerState.Began
+        {
+            var startLocation : CGPoint = recognizer.locationInView(self.view)
+            
+            if kShowTouchLocation
+            {
+                println(startLocation)
+            }
+        }
+    }
+    
 }
