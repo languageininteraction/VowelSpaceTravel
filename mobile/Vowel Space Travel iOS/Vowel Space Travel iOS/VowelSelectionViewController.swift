@@ -166,9 +166,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.taskSegmentedControl = UISegmentedControl(items: ["",""])
         self.taskSegmentedControl!.selectedSegmentIndex = 0
  
-        //self.taskSegmentedControl!.setImage(UIImage(named: "distinguish"), forSegmentAtIndex: 0)
-        //self.taskSegmentedControl!.setImage(UIImage(named: "recognize"), forSegmentAtIndex: 1)
-
+        //Custom appearance of the segmented control
         self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControl"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlSelected"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         self.taskSegmentedControl!.tintColor = UIColor.clearColor()
@@ -223,7 +221,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.infoViewController = InfoViewController();
         self.infoViewController!.superController = self
         
-        //Add the pan gestures, possible depricated?
+        //Add the pan gestures
         self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))
     }
     
@@ -450,7 +448,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         if recognizer.state == UIGestureRecognizerState.Began
         {
             var startLocation : CGPoint = recognizer.locationInView(self.view)
-            println(startLocation)
+            
+            if kShowTouchLocation
+            {
+                println(startLocation)
+            }
+                
             var startVowel : VowelDefinition? = self.findVowelForTouchLocation(startLocation)
             
             if startVowel != nil
@@ -504,8 +507,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     func goToSettingsView()
     {
         self.currentGame.stage = GameStage.SettingOtherSettings
+        
+        self.settingsViewController!.server = self.server
         self.settingsViewController!.currentGame = self.currentGame
         self.settingsViewController!.availableVowels = self.availableVowels
+
         self.presentViewController(self.settingsViewController!, animated: false, completion: nil)
     }
     
@@ -540,7 +546,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.presentViewController(infoViewController!, animated: false, completion: nil)
     }
     
-    func collectStimuliForCurrentGameAndGoToDownloadView()
+    //Depricated?
+    func collectStimuliForCurrentGameAndGoToTaskView()
     {
         self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame)
             {
@@ -557,7 +564,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     index++;
                 }
                 
-                self.goToDownloadView()
+                self.goToTaskView()
         }
     }
     
@@ -571,12 +578,21 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             switch subController
             {
                 case self.settingsViewController!:
-                    self.collectStimuliForCurrentGameAndGoToDownloadView();
-                
-                case self.downloadViewController!:
-                                    
-                    self.currentGame.stage = GameStage.Playing
-                    self.goToTaskView()
+                    
+                    if self.settingsViewController!.readyForTask
+                    {
+                        self.goToTaskView();
+                    }
+                    else
+                    {
+                        self.superController!.subControllerFinished(self)
+                    }
+
+// DownloadViewController probably depricated
+//                case self.downloadViewController!:
+//                                    
+//                    self.currentGame.stage = GameStage.Playing
+//                    self.goToTaskView()
 
                 case self.taskViewController!:
                     
@@ -604,7 +620,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         else
                         {
                             self.currentGame = self.createANewGameBasedOnServerSuggestions();
-                            self.collectStimuliForCurrentGameAndGoToDownloadView()
+                            self.goToTaskView()
                         }
                     }
                     else if self.currentGame.stage == GameStage.Playing
