@@ -46,7 +46,7 @@ class TaskViewController: SubViewController {
         
         label.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
         label.textAlignment = NSTextAlignment.Center
-        label.text = "Example"
+        label.text = "Target"
         
         self.view.addSubview(label)
         
@@ -86,7 +86,7 @@ class TaskViewController: SubViewController {
         //If this was the first stimulus, switch from the example to the real deal
         if self.currentStimulusIndex == 0 && self.exampleFeedbackWasPlayed
         {
-            self.label.text = "Tap the screen when you hear the vowel again"
+            self.label.text = "Tap the screen when you hear the target vowel again"
         }
         
         

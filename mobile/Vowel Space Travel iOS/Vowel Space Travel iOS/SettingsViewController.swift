@@ -67,10 +67,11 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
  
         self.showCenterFieldLabel("Adjust settings as required", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,70,topLabelWidth,50), fontSize: 25)
         self.showCenterFieldLabel("Difficulty", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,135,topLabelWidth,50), fontSize: 20)
-        self.showCenterFieldLabel("Play mode", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth),420,topLabelWidth,50), fontSize: 20)
+        self.showCenterFieldLabel("Mission", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth),420,topLabelWidth,50), fontSize: 20)
 
-        self.showCenterFieldLabel("Speakers", frame: CGRectMake(difficultyLabelLeft,210,difficultyLabelWidth,50), fontSize: 14)
-        self.showCenterFieldLabel("Starting sound", frame: CGRectMake(difficultyLabelLeft,310,difficultyLabelWidth,50), fontSize: 14)
+        self.showCenterFieldLabel("Talkers", frame: CGRectMake(difficultyLabelLeft,210,difficultyLabelWidth,50), fontSize: 14)
+        self.showCenterFieldLabel("Word onset", frame: CGRectMake(difficultyLabelLeft,310,difficultyLabelWidth,50), fontSize: 14)
+        self.showCenterFieldLabel("Mode", frame: CGRectMake(difficultyLabelLeft,490,difficultyLabelWidth,50), fontSize: 14)
 
         var difficultyOptionLabel1Left : CGFloat = 445
         var difficultyOptionLabel2Left : CGFloat = 555
@@ -81,8 +82,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.showCenterFieldLabel("Same", frame: CGRectMake(difficultyOptionLabel1Left,350,difficultyLabelWidth,50), fontSize: 12)
         self.showCenterFieldLabel("Different", frame: CGRectMake(difficultyOptionLabel2Left,350,difficultyLabelWidth,50), fontSize: 12)
 
-        self.showCenterFieldLabel("Single round", frame: CGRectMake(395,530,difficultyLabelWidth,50), fontSize: 12)
-        self.showCenterFieldLabel("Autopilot", frame: CGRectMake(505,530,difficultyLabelWidth,50), fontSize: 12)
+        self.showCenterFieldLabel("Manual", frame: CGRectMake(difficultyOptionLabel1Left,530,difficultyLabelWidth,50), fontSize: 12)
+        self.showCenterFieldLabel("Autopilot", frame: CGRectMake(difficultyOptionLabel2Left,530,difficultyLabelWidth,50), fontSize: 12)
         
         //Create the segmented control to select how many speakers you want
         var speakerSegmentedControlDistanceFromTop : CGFloat = 210
@@ -121,7 +122,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         
         self.autoPilotSegmentedControl = ReselectableSegmentedControl(items: ["",""])
         self.autoPilotSegmentedControl.selectedSegmentIndex = 0
-        self.autoPilotSegmentedControl.frame = CGRect(x: 0.5*(self.screenWidth!-segmentedControlWidth),y: autoPilotSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
+        self.autoPilotSegmentedControl.frame = CGRect(x: segmentedControlLeft, y: autoPilotSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
 
         self.autoPilotSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_background"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
         self.autoPilotSegmentedControl.setBackgroundImage(UIImage(named: "playmode_segmented_control_foreground"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)

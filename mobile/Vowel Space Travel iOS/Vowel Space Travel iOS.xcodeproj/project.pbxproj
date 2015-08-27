@@ -40,7 +40,6 @@
 		49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1F5C51AD8097000457411 /* ResultViewController.swift */; };
 		49F383531B2AFE21008C4437 /* click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 49F383521B2AFE21008C4437 /* click.aiff */; };
 		81182D0E1B85C28E0055A277 /* results_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 81182D0D1B85C28E0055A277 /* results_background.png */; };
-		81182D101B85C3130055A277 /* control_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 81182D0F1B85C3130055A277 /* control_panel_background.png */; };
 		81182D141B85C50A0055A277 /* back_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 81182D111B85C50A0055A277 /* back_button.png */; };
 		81182D151B85C50A0055A277 /* launch_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 81182D121B85C50A0055A277 /* launch_button.png */; };
 		81182D161B85C50A0055A277 /* retry_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 81182D131B85C50A0055A277 /* retry_button.png */; };
@@ -50,6 +49,7 @@
 		81182D1E1B85EC470055A277 /* ReselectableSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81182D1D1B85EC470055A277 /* ReselectableSegmentedControl.swift */; };
 		8160464D1B8EEA2C00DF664A /* loginbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8160464C1B8EEA2C00DF664A /* loginbutton.png */; };
 		8160464F1B8EEA6E00DF664A /* login_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 8160464E1B8EEA6E00DF664A /* login_background.png */; };
+		816046511B8F39B400DF664A /* control_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 816046501B8F39B400DF664A /* control_panel_background.png */; };
 		81EAC36F1B87560000D06CAA /* DownloadBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EAC36E1B87560000D06CAA /* DownloadBarView.swift */; };
 /* End PBXBuildFile section */
 
@@ -100,7 +100,6 @@
 		49F1F5C51AD8097000457411 /* ResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		49F383521B2AFE21008C4437 /* click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = click.aiff; sourceTree = "<group>"; };
 		81182D0D1B85C28E0055A277 /* results_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = results_background.png; sourceTree = "<group>"; };
-		81182D0F1B85C3130055A277 /* control_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_panel_background.png; sourceTree = "<group>"; };
 		81182D111B85C50A0055A277 /* back_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_button.png; sourceTree = "<group>"; };
 		81182D121B85C50A0055A277 /* launch_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch_button.png; sourceTree = "<group>"; };
 		81182D131B85C50A0055A277 /* retry_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retry_button.png; sourceTree = "<group>"; };
@@ -110,6 +109,7 @@
 		81182D1D1B85EC470055A277 /* ReselectableSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReselectableSegmentedControl.swift; sourceTree = "<group>"; };
 		8160464C1B8EEA2C00DF664A /* loginbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginbutton.png; sourceTree = "<group>"; };
 		8160464E1B8EEA6E00DF664A /* login_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_background.png; sourceTree = "<group>"; };
+		816046501B8F39B400DF664A /* control_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_panel_background.png; sourceTree = "<group>"; };
 		81EAC36E1B87560000D06CAA /* DownloadBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,9 +149,9 @@
 				499603B71B736CE0004C0D71 /* taskSegmentedControl.png */,
 				499603B81B736CE0004C0D71 /* taskSegmentedControlSelected.png */,
 				8160464E1B8EEA6E00DF664A /* login_background.png */,
+				816046501B8F39B400DF664A /* control_panel_background.png */,
 				8160464C1B8EEA2C00DF664A /* loginbutton.png */,
 				496FCD031B735B5100F08A8F /* startButton.png */,
-				81182D0F1B85C3130055A277 /* control_panel_background.png */,
 				498003501B627490009AC7C1 /* overview_background.png */,
 				81182D171B85E4780055A277 /* playmode_segmented_control_foreground.png */,
 				81182D181B85E4780055A277 /* segmented_control_background.png */,
@@ -352,8 +352,8 @@
 				81182D1B1B85E4780055A277 /* segmented_control_background.png in Resources */,
 				49F383531B2AFE21008C4437 /* click.aiff in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
+				816046511B8F39B400DF664A /* control_panel_background.png in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
-				81182D101B85C3130055A277 /* control_panel_background.png in Resources */,
 				8160464D1B8EEA2C00DF664A /* loginbutton.png in Resources */,
 				49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */,
 				49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */,

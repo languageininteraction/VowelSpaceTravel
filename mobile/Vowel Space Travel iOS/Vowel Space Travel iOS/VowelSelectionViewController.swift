@@ -151,9 +151,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
 //        self.updateVowelButtonColors()
         
         //Create the static buttons
-        self.readyButton = UIButton(frame: CGRectMake(545,475,25,30))
+        self.readyButton = UIButton(frame: CGRectMake(575,475,25,30))
         self.readyButton.setImage(UIImage(named: "startButton"), forState: UIControlState.Normal)
-        self.readyButton.setTitle("Ready", forState: UIControlState.Normal)
         self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(readyButton)
         
@@ -184,7 +183,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.instructionTitle.textAlignment = NSTextAlignment.Center
         self.instructionTitle.font = UIFont(name: "Muli",size:15)
         self.instructionTitle.textColor = UIColor.whiteColor()
-        self.instructionTitle.text = "Pick the vowel to practice by dragging the circles"
+        self.instructionTitle.text = "The suggested vowels are circled, drag to change if you like."
         
         self.view.addSubview(instructionTitle)
         
@@ -204,7 +203,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         self.playLabel.font = UIFont(name: "Muli",size:8)
         self.playLabel.frame = CGRectMake(545,500,labelWidth,labelHeight)
-        self.playLabel.text = "Play"
+        self.playLabel.text = "Prepare for take-off"
         
         self.view.addSubview(playLabel)
         
@@ -252,7 +251,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //Create all views
         for (exampleWord,vowel) in self.availableVowels!
         {
-            println(exampleWord)
             var planetView = self.createPlanetViewBasedOnVowel(vowel)
             
             if self.currentGame.selectedBaseVowel! == vowel

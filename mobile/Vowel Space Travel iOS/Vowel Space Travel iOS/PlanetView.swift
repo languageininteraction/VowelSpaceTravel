@@ -603,8 +603,8 @@ class PlanetView : UIView
     func drawExampleWord()
     {
         var label : UILabel = UILabel();
-        //label.font = UIFont(name: "Muli", size: 150)
-        label.frame = CGRectMake(0,100, 80,20)
+        label.font = UIFont(name: "Muli", size: 23)
+        label.frame = CGRectMake(0,100, 80,40)
         label.textAlignment = NSTextAlignment.Center
         label.text = self.exampleWord
         label.textColor = UIColor.whiteColor()
