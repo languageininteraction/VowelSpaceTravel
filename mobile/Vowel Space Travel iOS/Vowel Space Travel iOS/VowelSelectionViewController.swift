@@ -50,6 +50,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     var readyButton = UIButton()
     var taskSegmentedControl : UISegmentedControl?
+    
+    var circleCurrentlyBeingDragged : CAShapeLayer?
 
     override func viewDidLoad()
     {
@@ -203,7 +205,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         self.playLabel.font = UIFont(name: "Muli",size:8)
         self.playLabel.frame = CGRectMake(545,500,labelWidth,labelHeight)
-        self.playLabel.text = "Prepare for take-off"
+        self.playLabel.text = "Prepare for takeoff"
         
         self.view.addSubview(playLabel)
         
@@ -281,7 +283,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     func drawSelectionCircleAroundVowelView(view : PlanetView)
     {
         var circlePositionCorrection : CGFloat = 3
-        var path = UIBezierPath(arcCenter: CGPoint(x: view.frame.midX-circlePositionCorrection,y: view.frame.midY-circlePositionCorrection),radius: 20,startAngle: CGFloat(0),endAngle: CGFloat(100),clockwise: true)
+        self.drawCircleAroundPoint(CGPoint(x: view.frame.midX-circlePositionCorrection,y: view.frame.midY-circlePositionCorrection))
+    }
+        
+    func drawCircleAroundPoint(point : CGPoint) -> CAShapeLayer
+    {
+        var path = UIBezierPath(arcCenter: point,radius: 20,startAngle: CGFloat(0),endAngle: CGFloat(100),clockwise: true)
         var shapeLayer = CAShapeLayer()
         shapeLayer.path = path.CGPath
         shapeLayer.fillColor = nil
@@ -290,7 +297,9 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.vowelSelectionShapeLayers.append(shapeLayer)
         
         self.view.layer.addSublayer(shapeLayer)
+        return shapeLayer
     }
+    
     
     func drawTravelIndicationLine(startPoint : CGPoint, endPoint : CGPoint)
     {
@@ -469,6 +478,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                 }
             }
         
+        }
+        else if recognizer.state == UIGestureRecognizerState.Changed
+        {
+            self.circleCurrentlyBeingDragged?.removeFromSuperlayer()
+            self.circleCurrentlyBeingDragged = self.drawCircleAroundPoint(recognizer.locationInView(self.view))
         }
         else if recognizer.state == UIGestureRecognizerState.Ended
         {
