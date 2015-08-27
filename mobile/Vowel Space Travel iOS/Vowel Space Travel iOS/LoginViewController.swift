@@ -24,8 +24,10 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
         
-        //Make the background white
-        self.view.backgroundColor = UIColor.whiteColor()
+        //Show the background image
+        var backgroundImageView = UIImageView(image: UIImage(named: "login_background"))
+        backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
+        self.view.addSubview(backgroundImageView)
         
         //Create the text fields
         let inputFieldWidth : CGFloat = 400
@@ -35,22 +37,22 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         loginField.borderStyle = UITextBorderStyle.RoundedRect
         loginField.placeholder = "Login name"
         loginField.font = UIFont(name: "Helvetica", size: 35)
-        self.view.addSubview(loginField)
+        //self.view.addSubview(loginField)
 
         let passwordField = UITextField(frame: CGRectMake(0.5*(self.screenWidth!-inputFieldWidth),0.5*(self.screenHeight!-inputFieldHeight),inputFieldWidth,inputFieldHeight))
         passwordField.borderStyle = UITextBorderStyle.RoundedRect
         passwordField.placeholder = "Password"
         passwordField.font = UIFont(name: "Helvetica", size: 35)
         passwordField.secureTextEntry = true
-        self.view.addSubview(passwordField)
+        //self.view.addSubview(passwordField)
         
         //Create login button
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
         
-        let loginButton = TempStyledButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+100,buttonWidth,buttonHeight))
+        let loginButton = UIButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+180,buttonWidth,buttonHeight))
 
-        loginButton.setTitle("Login", forState: UIControlState.Normal)
+        loginButton.setImage(UIImage(named: "loginbutton"), forState: UIControlState.Normal)
         loginButton.addTarget(self, action: "loginButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(loginButton)
 
@@ -59,10 +61,21 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         var labelWidth : CGFloat = 300;
         var labelHeigth : CGFloat = 30;
         
-        createAccountLink.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) + 200,labelWidth,labelHeigth)
+        createAccountLink.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) + 300,labelWidth,labelHeigth)
         createAccountLink.textAlignment = NSTextAlignment.Center
+        createAccountLink.font = UIFont(name: "Muli",size:20)
         createAccountLink.text = "Create account"
+        createAccountLink.textColor = UIColor.whiteColor()
         self.view.addSubview(createAccountLink)
+
+        var loginButtonText = UILabel();
+        
+        loginButtonText.frame = CGRectMake(0.5*(self.screenWidth!-buttonWidth)+20,0.5*(self.screenHeight!-buttonHeight)+180,buttonWidth,buttonHeight)
+        loginButtonText.textAlignment = NSTextAlignment.Center
+        loginButtonText.font = UIFont(name: "Muli",size:25)
+        loginButtonText.text = "Log in"
+        loginButtonText.textColor = UIColor(hue: 0.87, saturation: 0.3, brightness: 0.3, alpha: 1)
+        self.view.addSubview(loginButtonText)
         
         //Create the VSTServer object
         self.server = VSTServer(url: kWebserviceURL)
