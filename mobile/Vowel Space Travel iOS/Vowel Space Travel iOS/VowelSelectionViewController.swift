@@ -588,12 +588,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         self.superController!.subControllerFinished(self)
                     }
 
-// DownloadViewController probably depricated
-//                case self.downloadViewController!:
-//                                    
-//                    self.currentGame.stage = GameStage.Playing
-//                    self.goToTaskView()
-
                 case self.taskViewController!:
                     
                     //Show the result of the task
@@ -620,7 +614,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         else
                         {
                             self.currentGame = self.createANewGameBasedOnServerSuggestions();
-                            self.goToTaskView()
+                            self.goToSettingsView()
                         }
                     }
                     else if self.currentGame.stage == GameStage.Playing

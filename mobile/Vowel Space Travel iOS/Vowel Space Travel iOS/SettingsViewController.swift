@@ -160,6 +160,15 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.view.addSubview(self.downloadBarView)
         
     }
+
+    override func viewDidAppear(animated: Bool)
+    {
+        if (self.currentGame!.autoPilotMode)
+        {
+            self.readyButtonPressed()
+        }
+    
+    }
     
     func startDownloadingStimulusFiles()
     {
@@ -169,7 +178,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         let backgroundQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)
 
         self.downloadBarView.updatePercentage(0.1)
-        sleep(1)
+        //sleep(1)
         self.downloadBarView.updatePercentage(0.2)
         
         dispatch_async(backgroundQueue,
@@ -184,7 +193,6 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
                     println(percentageDone)
                     self.downloadBarView.updatePercentage(percentageDone)
                     self.view.addSubview(self.downloadBarView)
-                    sleep(1)
                     
                     counter++;
                 }
@@ -196,7 +204,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
                 })
             })
         
-        println("Got here")
+        self.downloadBarView.updatePercentage(1)
         
     }
     
