@@ -464,15 +464,21 @@ public class DefaultData {
         addOrUpdateVowel("$", "$", VowelQuality.Place.back, VowelQuality.Manner.open_mid, VowelQuality.Roundness.rounded);
         addOrUpdateVowel("u", "u", VowelQuality.Place.back, VowelQuality.Manner.close, VowelQuality.Roundness.rounded);
         addOrUpdateVowel("3", "3", VowelQuality.Place.central, VowelQuality.Manner.open_mid, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("1", "1", VowelQuality.Place.near_front, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("2", "2", VowelQuality.Place.near_front, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("4", "4", VowelQuality.Place.near_front, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("5", "5", VowelQuality.Place.near_back, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("6", "6", VowelQuality.Place.near_back, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
         addOrUpdateVowel("1", "1", VowelQuality.Place.front, VowelQuality.Manner.close_mid, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("2", "2", VowelQuality.Place.front, VowelQuality.Manner.open, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("4", "4", VowelQuality.Place.back, VowelQuality.Manner.open_mid, VowelQuality.Roundness.rounded);
-        addOrUpdateVowel("5", "5", VowelQuality.Place.central, VowelQuality.Manner.mid, VowelQuality.Roundness.unrounded);
-        addOrUpdateVowel("6", "6", VowelQuality.Place.front, VowelQuality.Manner.open, VowelQuality.Roundness.unrounded);
+        addOrUpdateVowel("2", "2", VowelQuality.Place.near_front, VowelQuality.Manner.mid, VowelQuality.Roundness.unrounded);
+        addOrUpdateVowel("4", "4", VowelQuality.Place.central, VowelQuality.Manner.close_mid, VowelQuality.Roundness.unrounded);
+        addOrUpdateVowel("5", "5", VowelQuality.Place.near_back, VowelQuality.Manner.close_mid, VowelQuality.Roundness.unrounded);
+        addOrUpdateVowel("6", "6", VowelQuality.Place.near_back, VowelQuality.Manner.open_mid, VowelQuality.Roundness.unrounded);
+
+//        addOrUpdateVowel("1", "1", VowelQuality.Place.near_front, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("2", "2", VowelQuality.Place.near_front, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("4", "4", VowelQuality.Place.near_front, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("5", "5", VowelQuality.Place.near_back, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("6", "6", VowelQuality.Place.near_back, VowelQuality.Manner.near_close, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("1", "1", VowelQuality.Place.front, VowelQuality.Manner.close_mid, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("2", "2", VowelQuality.Place.front, VowelQuality.Manner.open, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("4", "4", VowelQuality.Place.back, VowelQuality.Manner.open_mid, VowelQuality.Roundness.rounded);
+//        addOrUpdateVowel("5", "5", VowelQuality.Place.central, VowelQuality.Manner.mid, VowelQuality.Roundness.unrounded);
+//        addOrUpdateVowel("6", "6", VowelQuality.Place.front, VowelQuality.Manner.open, VowelQuality.Roundness.unrounded);
     }
 }
