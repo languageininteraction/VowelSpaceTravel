@@ -53,7 +53,7 @@ public class TaskSuggestionController {
     private final double confidenceTreshold = 0.8;
     private final int referencePoint = 2;
     private final int window = 30;
-    private Date referenceDate = null;
+   // private Date referenceDate = null;
     @Autowired
     ConfidenceRepository confidenceRepository;
     @Autowired
@@ -83,7 +83,7 @@ public class TaskSuggestionController {
 
     private TaskSuggestion selectNewVowelPairAndSettings(Player player) {
         List <Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.discrimination, Difficulty.veryhard);
-        List <Confidence> allConf = confidenceRepository.findAll();
+       // List <Confidence> allConf = confidenceRepository.findAll();
         if(confList.isEmpty())
                 return new TaskSuggestion(new ArrayList(vowelRepository.findAll()));    // replace with proper (e.g. random?) suggestion
         Date sessionDate =  getSessionDate();
@@ -100,7 +100,7 @@ public class TaskSuggestionController {
             if(response == null)
                     return new TaskSuggestion(next);
         }
-        referenceDate = new Date();
+       // referenceDate = new Date();
         return selectNewVowelPairAndSettings(player);
         //throw new UnsupportedOperationException("Unsupported");
     }
@@ -158,7 +158,7 @@ public class TaskSuggestionController {
     }
 
     private Date getSessionDate() {
-        if (referenceDate == null) {
+       // if (referenceDate == null) {
             Calendar c = Calendar.getInstance();
 
         // set the calendar to start of today
@@ -169,12 +169,10 @@ public class TaskSuggestionController {
 
             // and get that as a Date
             return c.getTime();
-        }
-        else
-            return referenceDate;
+      //  }
+      //  else
+      //      return referenceDate;
         
-        //c.add(Calendar.DAY_OF_YEAR, 1);
-        //Date today = c.getTime();
     }
 
     private boolean detected_improvement(Player player,List<StimulusResponse> currentData, List<StimulusResponse> referenceData) {
