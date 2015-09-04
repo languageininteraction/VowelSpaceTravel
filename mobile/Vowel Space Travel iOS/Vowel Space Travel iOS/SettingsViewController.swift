@@ -230,20 +230,10 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.currentGame!.autoPilotMode = self.autoPilotSegmentedControl.selectedSegmentIndex == 1
 
         //Collect stimulus info
-        self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame!)
+        self.server!.getStimuliForSettings(self.currentGame!)
             {
-                (sampleIDs,expectedAnswers,err) -> Void in
-                
-                var index : Int = 0
-                var expectedAnswer : Bool
-                
-                for sampleID in sampleIDs
-                {
-                    expectedAnswer = expectedAnswers[index]
-                    self.currentGame!.stimuli.append(Stimulus(sampleID: sampleID,requiresResponse: expectedAnswer))
-                    
-                    index++;
-                }
+                (stimuli,err) -> Void in
+                self.currentGame!.stimuli = stimuli
                 
                 //When finished, start the download
                 self.startDownloadingStimulusFiles()

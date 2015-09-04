@@ -52,7 +52,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     var taskSegmentedControl : UISegmentedControl?
     
     var circleCurrentlyBeingDragged : CAShapeLayer?
-
+    var circleAroundBaseVowel : CAShapeLayer?
+    var circleAroundTargetVowel : CAShapeLayer?
+    var travelIndicationLine : CAShapeLayer?
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -257,12 +260,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             
             if self.currentGame.selectedBaseVowel! == vowel
             {
-                self.drawSelectionCircleAroundVowelView(planetView)
+                self.circleAroundBaseVowel = self.drawSelectionCircleAroundVowelView(planetView)
                 travelIndicationLineStartPoint = planetView.center
             }
             else if self.currentGame.selectedTask == Task.Discrimination && self.currentGame.selectedTargetVowel! == vowel
             {
-                self.drawSelectionCircleAroundVowelView(planetView)
+                self.circleAroundTargetVowel = self.drawSelectionCircleAroundVowelView(planetView)
                 travelIndicationLineEndPoint = planetView.center
             }
             
@@ -280,10 +283,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         }
     }
     
-    func drawSelectionCircleAroundVowelView(view : PlanetView)
+    func drawSelectionCircleAroundVowelView(view : PlanetView) -> CAShapeLayer
     {
         var circlePositionCorrection : CGFloat = 3
-        self.drawCircleAroundPoint(CGPoint(x: view.frame.midX-circlePositionCorrection,y: view.frame.midY-circlePositionCorrection))
+        return self.drawCircleAroundPoint(CGPoint(x: view.frame.midX-circlePositionCorrection,y: view.frame.midY-circlePositionCorrection))
     }
         
     func drawCircleAroundPoint(point : CGPoint) -> CAShapeLayer
@@ -314,6 +317,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         shapeLayer.lineDashPattern = [1,15]
         
         self.vowelSelectionShapeLayers.append(shapeLayer)
+        self.travelIndicationLine = shapeLayer
         self.view.layer.addSublayer(shapeLayer)
     }
     
@@ -481,8 +485,25 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         }
         else if recognizer.state == UIGestureRecognizerState.Changed
         {
+            var currentTouchLocation : CGPoint = recognizer.locationInView(self.view)
+            
             self.circleCurrentlyBeingDragged?.removeFromSuperlayer()
-            self.circleCurrentlyBeingDragged = self.drawCircleAroundPoint(recognizer.locationInView(self.view))
+            self.travelIndicationLine!.removeFromSuperlayer()
+            var travelIndicationLineStartPosition : CGPoint!
+            
+            if self.currentVowelDraggingType! == VowelDraggingType.BaseVowel
+            {
+                self.circleAroundBaseVowel!.removeFromSuperlayer()
+                travelIndicationLineStartPosition = self.vowelViews[self.currentGame.selectedTargetVowel!.exampleWord]!.center
+            }
+            else if self.currentVowelDraggingType! == VowelDraggingType.TargetVowel
+            {
+                self.circleAroundTargetVowel!.removeFromSuperlayer()
+                travelIndicationLineStartPosition = self.vowelViews[self.currentGame.selectedBaseVowel!.exampleWord]!.center
+            }
+            
+            self.drawTravelIndicationLine(travelIndicationLineStartPosition, endPoint: currentTouchLocation)
+            self.circleCurrentlyBeingDragged = self.drawCircleAroundPoint(currentTouchLocation)
         }
         else if recognizer.state == UIGestureRecognizerState.Ended
         {
@@ -561,20 +582,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     //Depricated?
     func collectStimuliForCurrentGameAndGoToTaskView()
     {
-        self.server!.getSampleIDsAndExpectedAnswersForSettings(self.currentGame)
+        self.server!.getStimuliForSettings(self.currentGame)
             {
-                (sampleIDs,expectedAnswers,err) -> Void in
+                (stimuli,err) -> Void in
 
-                var index : Int = 0
-                var expectedAnswer : Bool
-                
-                for sampleID in sampleIDs
-                {
-                    expectedAnswer = expectedAnswers[index]
-                    self.currentGame.stimuli.append(Stimulus(sampleID: sampleID,requiresResponse: expectedAnswer))
-                    
-                    index++;
-                }
+                self.currentGame.stimuli = stimuli
                 
                 self.goToTaskView()
         }
@@ -611,6 +623,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     self.taskViewController!.superController = self
                 
                 case self.resultViewController!:
+                    //Save the results online
+                    self.server?.saveStimulusResults(self.resultViewController!.exposedStimuli,stimuliRequestUsedToGenerateTheseStimuli: self.currentGame)
+                    
+                    //View flow
                     if self.currentGame.stage == GameStage.Finished
                     {
                         if !self.currentGame.autoPilotMode
@@ -682,7 +698,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         }
         
         var waterOpacity : CGFloat = 0
-        var craters : Bool = false
+        var craterFrequency : CraterFrequency = CraterFrequency.none
         
         switch(vowel.place!)
         {
@@ -693,14 +709,14 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                 waterOpacity = 0.5
                 break
             case VowelPlace.near_front:
-                craters = true
+                craterFrequency = CraterFrequency.low
             case VowelPlace.front:
-                craters = true
+                craterFrequency = CraterFrequency.high
             default: break
         }
                 
         return PlanetView(frame : self.planetLocationsForIpaNotation[vowel.ipaNotation]!,
-            exampleWord: vowel.exampleWord, hue: hue, ringOpacity: ringOpacity, waterOpacity : waterOpacity, craters : craters)
+            exampleWord: vowel.exampleWord, hue: hue, ringOpacity: ringOpacity, waterOpacity : waterOpacity, craterFrequency : craterFrequency)
         
     }
     
