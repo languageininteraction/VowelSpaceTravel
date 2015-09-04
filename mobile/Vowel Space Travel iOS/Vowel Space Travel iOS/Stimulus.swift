@@ -11,14 +11,20 @@ import Foundation
 class Stimulus : NSObject
 {
     var requiresResponse : Bool
+    var relevance : String //unclear what this is, but the server requires it
     var receivedResponse : Bool?
     var sampleID : Int
+    var vowelID : Int
+    var speakerLabel : String
     var fileLocation : String?
     
-    init(sampleID : Int, requiresResponse : Bool)
+    init(sampleID : Int, requiresResponse : Bool, relevance : String, vowelID : Int, speakerLabel : String)
     {
         self.sampleID = sampleID
         self.requiresResponse = requiresResponse
+        self.relevance = relevance
+        self.vowelID = vowelID
+        self.speakerLabel = speakerLabel
     }
     
     func hasCorrectAnswer() -> Bool?
@@ -31,5 +37,20 @@ class Stimulus : NSObject
         {
             return nil
         }
+    }
+    
+    func packageToDictionary() -> Dictionary<String,AnyObject>
+    {
+        println("Received response \(receivedResponse) \(self.receivedResponse != nil && self.receivedResponse! == false)")
+        
+        var result : Dictionary<String,AnyObject> = ["responseTimeMs":"1",
+                                                    "relevance":self.relevance,
+                                                    "playerResponse":self.receivedResponse != nil && self.receivedResponse! == false,
+                                                    "vowelID":self.vowelID,
+                                                    "sampleID":self.sampleID,
+                                                    "speakerLabel":self.speakerLabel,
+                                                    "wordString":""]
+        
+        return result
     }
 }
