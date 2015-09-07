@@ -40,7 +40,7 @@ public class CreatePlayerService {
         if (player.getEmail() == null || player.getEmail().isEmpty()) {
             throw new IllegalArgumentException("The 'email' parameter is required");
         }
-        if (player.getToken() == null || player.getToken().isEmpty()) {
+        if (player.getHiddenToken() == null || player.getHiddenToken().isEmpty()) {
             throw new IllegalArgumentException("The 'token' parameter is required");
         }
 
