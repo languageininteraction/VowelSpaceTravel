@@ -34,6 +34,34 @@ public class CreatePlayerService {
     @Autowired
     private PlayerRepository participantRepository;
 
+    @RequestMapping(value = "/createuser", method = RequestMethod.GET)
+    public String defaultResponse() {
+        return "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js\"></script>"
+                + "<script>\n"
+                + "            addUser = function (endpointUrl, postData) {\n"
+                + "                $.ajax({\n"
+                + "                    url: endpointUrl,\n"
+                + "                    type: \"POST\",\n"
+                + "                    contentType: \"application/json; charset=utf-8\",\n"
+                + "                    data: postData,\n"
+                + "                    async: true,\n"
+                + "                    cache: false,\n"
+                + "                    processData: false,\n"
+                + "                    success: function (data, status) {\n"
+                + "                    }\n"
+                + "                })\n"
+                + "            };\n"
+                + "        </script>"
+                + "<textarea id=\"userData\">{\n"
+                + "\"firstName\": \"fred\",\n"
+                + "\"lastName\": \"blogs\",\n"
+                + "\"email\": \"fred@blogs\",\n"
+                + "\"token\": \"12345\"\n"
+                + "}</textarea>\n"
+                + "        <button onclick=\"addUser('createuser', $('#userData').val())\">add user</button>"
+                + "<br/>Please note that there can only be one user for a given email address, so clicking this button twice will fail the second time unless you change the email string.";
+    }
+
     @RequestMapping(value = "/createuser", method = RequestMethod.POST)
     public String createuser(@RequestBody Player player) {
 
