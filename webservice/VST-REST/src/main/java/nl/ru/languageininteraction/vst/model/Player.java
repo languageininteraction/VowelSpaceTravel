@@ -42,7 +42,6 @@ public class Player {
     private String lastName;
     @Column(unique = true)
     private String email;
-    @JsonIgnore
     private String token; // user password that has been hashed in the mobile app
 
     @OneToOne
@@ -87,8 +86,13 @@ public class Player {
         this.email = email;
     }
 
-    public String getToken() {
+    @JsonIgnore
+    public String getHiddenToken() {
         return token;
+    }
+
+    public String getToken() {
+        return null;
     }
 
     public void setToken(String token) {

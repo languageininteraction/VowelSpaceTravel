@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+enum CraterFrequency
+{
+    case none
+    case low
+    case high
+}
+
 class PlanetView : UIView
 {
     let generalDownScaleRatio : CGFloat = 0.3
@@ -24,7 +31,7 @@ class PlanetView : UIView
         super.init(coder: aDecoder)
     }
     
-    init(frame: CGRect, exampleWord : String, hue : CGFloat, ringOpacity : CGFloat, waterOpacity : CGFloat, craters : Bool)
+    init(frame: CGRect, exampleWord : String, hue : CGFloat, ringOpacity : CGFloat, waterOpacity : CGFloat, craterFrequency : CraterFrequency)
     {
         super.init(frame : frame)
         
@@ -32,16 +39,16 @@ class PlanetView : UIView
         self.hue = hue
         self.planetColor = UIColor(hue: self.hue, saturation: 0.32, brightness: 0.78, alpha: 1)
 
-        if craters
+        if craterFrequency != CraterFrequency.none
         {
-            self.drawExternalCraters()
+            self.drawExternalCraters(craterFrequency)
         }
         
         self.drawBasePlanet(CGPoint(x: 40,y: 40))
 
-        if craters
+        if craterFrequency != CraterFrequency.none
         {
-            self.drawInternalCraters()
+            self.drawInternalCraters(craterFrequency)
         }
         
         if waterOpacity != 0
@@ -172,7 +179,7 @@ class PlanetView : UIView
         
     }
 
-    func drawExternalCraters()
+    func drawExternalCraters(frequency : CraterFrequency)
     {
         var myBezier : UIBezierPath
         
@@ -252,6 +259,12 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 0.2376, y:0.30334))
         
         drawFilledInPath(myBezier, color: self.planetColor,position: CGPoint(x: 30,y: -16),scale: 25)
+
+        //The craters below will only be drawn when the crater frequency is high
+        if frequency != CraterFrequency.high
+        {
+            return
+        }        
         
         myBezier = UIBezierPath()
         myBezier.moveToPoint(CGPoint(x: 0.31355, y:1.17041))
@@ -282,7 +295,7 @@ class PlanetView : UIView
         
     }
     
-    func drawInternalCraters()
+    func drawInternalCraters(frequency : CraterFrequency)
     {
         
         var myBezier = self.createCircularPath(CGPoint(x: 0,y: 0), size: 10)
@@ -293,8 +306,11 @@ class PlanetView : UIView
         myBezier = self.createCircularPath(CGPoint(x: 0,y: 0), size: 6)
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 50,y: 60),scale: 1)
-        
+        if frequency == CraterFrequency.high
+        {
+            drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 50,y: 60),scale: 1)
+        }
+            
         myBezier = UIBezierPath()
         
         myBezier.moveToPoint(CGPoint(x: 0.34581, y:0.64149))
@@ -315,8 +331,11 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 0.50182, y:0.59336))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 8,y: 15),scale: 18)
-
+        if frequency == CraterFrequency.high
+        {
+            drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 8,y: 15),scale: 18)
+        }
+            
         myBezier = UIBezierPath()
         
         myBezier.moveToPoint(CGPoint(x: 0.34581, y:0.64149))
@@ -337,8 +356,11 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 0.50182, y:0.59336))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 60,y: 65),scale: 20)
-        
+        if frequency == CraterFrequency.high
+        {
+            drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 60,y: 65),scale: 20)
+        }
+            
         myBezier = UIBezierPath()
         myBezier.moveToPoint(CGPoint(x: 1.21951, y:0.49615))
         myBezier.addCurveToPoint(CGPoint(x: 0.97507, y: 0.65548),
@@ -397,8 +419,11 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 1.2339, y:0.4674))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 30,y: 74),scale: 16)
-        
+        if frequency == CraterFrequency.high
+        {
+            drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 30,y: 74),scale: 16)
+        }
+            
         myBezier = UIBezierPath()
         myBezier.moveToPoint(CGPoint(x: 0.92123, y:0.37473))
         myBezier.addCurveToPoint(CGPoint(x: 0.99553, y: 1.076),
@@ -445,7 +470,10 @@ class PlanetView : UIView
             controlPoint2: CGPoint(x: 0.51425, y:0.35299))
         
         //The values below were found by trial and error
-        drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 5,y: 45),scale: 28)
+        if frequency == CraterFrequency.high
+        {
+            drawFilledInPath(myBezier, color: self.shadowColor,position: CGPoint(x: 5,y: 45),scale: 28)
+        }
     }
     
     func drawOcean(opacity : CGFloat)

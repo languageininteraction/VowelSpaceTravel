@@ -32,12 +32,12 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().fullyAuthenticated().and().
-                httpBasic().and()
-                .formLogin()
-                .loginPage("/createuser")
-                .permitAll().and().
-                csrf().disable();
+        http.authorizeRequests()
+                .antMatchers("/createuser").permitAll()
+                .anyRequest().fullyAuthenticated()
+                .and().httpBasic()
+                //                .and().formLogin().loginPage("/login").permitAll() // neither login nor logout are currently implemented in the html demo page
+                //                .and().logout().permitAll()
+                .and().csrf().disable();
     }
-
 }

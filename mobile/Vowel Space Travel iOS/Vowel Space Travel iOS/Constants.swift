@@ -14,6 +14,8 @@ let kOnlyOneStimulus = kDevelopmentMode ? true : false
 let kShowTouchLocation = kDevelopmentMode ? true : false
 
 let kWebserviceURL = kDevelopmentMode ? "http://applejack.science.ru.nl:8080/" : ""
+let kWebserviceUsername = kDevelopmentMode ? "jane@bsmoth.none" : ""
+let kWebserviceUserPassword = kDevelopmentMode ? "1234" : ""
 
 let kTimeBetweenStimuli : Double = 2
 let kPauseBetweenRounds : Double = 6
