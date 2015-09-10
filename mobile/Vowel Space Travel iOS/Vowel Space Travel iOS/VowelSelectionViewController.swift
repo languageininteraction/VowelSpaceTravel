@@ -64,6 +64,15 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         var exampleWordsForIpaNotation : [String : String] = ["i":"bean","E":"pet","1":"bay","I":"pit","{":"pat","2":"bike","3":"burn","4":"boy","U":"push","6":"brow","5":"boat","V":"putt","u":"boot","Q":"pop","$":"born",
             "#":"bark"]
         
+        //Get the confidences for vowel combinations
+        self.server!.loadAllConfidenceValuesForCurrentUserID()
+        {
+            (confidencesForVowelPairsByTargetVowelId,err) -> Void in
+            
+            addMixingWeightToConfidences(confidencesForVowelPairsByTargetVowelId)
+            adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(self.availableVowels!["bark"]!,self.availableVowels!, confidencesForVowelPairsByTargetVowelId )
+        }
+        
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
@@ -360,7 +369,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     {
         //self.server!.loadAvailableVowels()
         var vowelsFromTheServer : [VowelDefinition] = self.server!.availableVowels
-        println(self.server!.availableVowels)
         var currentExampleWord : String
         var availableVowels = [String: VowelDefinition]()
         

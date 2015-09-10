@@ -29,9 +29,11 @@ class VSTServer : NSObject
     var url : String
 
     var availableVowels : [VowelDefinition] = []
+    var confidencesForVowelPairsByTargetVowelId = Dictionary<Int,[ConfidenceForVowelPair]>()
     
     var userName : String?
     var userID : Int?
+    var genericToken : String = kWebserviceUserPassword
     var userLoggedInSuccesfully : Bool = false
     
     var latestResponse : NSArray?
@@ -47,10 +49,11 @@ class VSTServer : NSObject
     {
         //Set up the credentials
         var loggedIn : Bool = self.userID != nil
-        var username : String = loggedIn ? "\(self.userID!)" : kWebserviceUsername
-        var password : String = loggedIn ? "\(self.userID!)" : kWebserviceUserPassword
+        var username : String = loggedIn ? "\(self.userName!)" : kWebserviceUsername
         
-        let loginString = NSString(format: "%@:%@", kWebserviceUsername, kWebserviceUserPassword)
+        println("Using credentials with un \(username) and password \(self.genericToken)")
+        
+        let loginString = NSString(format: "%@:%@", username, self.genericToken)
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
         let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
     
@@ -88,7 +91,8 @@ class VSTServer : NSObject
         //Create the request
         var jsonData : NSDictionary?
         var request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+urlExtension)!)
-
+        request.setValue("Basic \(self.createCredentialString())", forHTTPHeaderField : "Authorization")
+        
         //Add the POST data
         var jsonString = NSString(data: NSJSONSerialization.dataWithJSONObject(data, options: NSJSONWritingOptions(0), error: nil)!,encoding: NSASCIIStringEncoding)!
         request.HTTPBody = jsonString.dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion:true)
@@ -101,9 +105,7 @@ class VSTServer : NSObject
             if error == nil
             {
                 jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
-                
-                println("Response to POST \(jsonData)")
-                
+                                
                 completionHandler(jsonData,error);
                 
             }
@@ -130,22 +132,21 @@ class VSTServer : NSObject
         }
     }
 
-    func createUserIfItDoesNotExist(firstName : String,lastName : String)
+    func createUserIfItDoesNotExistAndLogin(firstName : String,lastName : String)
     {
-        print(1)
         self.HTTPGetToJSON("players/search/findByFirstName?firstName=\(firstName)")
         {
             (jsonData,err) -> Void in
-            print(2)            
             if jsonData!.count == 0
             {
-                self.createNewUser(firstName,lastName : lastName, email : firstName,token : "1234")
+                self.createNewUser(firstName,lastName : lastName, email : firstName,token : self.genericToken)
             }
             else
             {
                 self.getUserIDFromResponseToSearchByFirstName(jsonData!)
             }
-            print(3)
+            
+            self.userName = firstName
         }
     }
     
@@ -269,7 +270,8 @@ class VSTServer : NSObject
                         var newStimulus : Stimulus = Stimulus(sampleID: stimulus["sampleId"] as! Int,requiresResponse: stimulus["relevance"] as! String == "isTarget",
                             relevance: stimulus["relevance"] as! String,
                             vowelID: stimulus["vowelId"] as! Int,
-                            speakerLabel: stimulus["speakerLabel"] as! String)
+                            speakerLabel: stimulus["speakerLabel"] as! String,
+                            wordString : stimulus["wordString"] as! String)
                         stimuli.append(newStimulus)
                     }
                     
@@ -295,7 +297,6 @@ class VSTServer : NSObject
         
         let fileManager = NSFileManager.defaultManager()
         var result = fileManager.createFileAtPath(fileSafePath, contents: dataFromURL, attributes: nil)
-        println(result)
         
         println("Saved at \(fileSafePath)")
     }
@@ -311,10 +312,61 @@ class VSTServer : NSObject
         
         var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequestUsedToGenerateTheseStimuli.multipleSpeakers, differentStartingSounds: stimuliRequestUsedToGenerateTheseStimuli.differentStartingSounds);
         
-        self.HTTPPostToJSON("stimulus/response/"+stimuliRequestUsedToGenerateTheseStimuli.selectedTask.rawValue+"/"+difficulty+"/1",data: postData)
+        self.HTTPPostToJSON("stimulus/response/"+stimuliRequestUsedToGenerateTheseStimuli.selectedTask.rawValue+"/"+difficulty+"/\(self.userID!)",data: postData)
             {
                 (jsonData,err) -> Void in
         }
         
+    }
+    
+    func loadAllConfidenceValuesForCurrentUserID(completionHandler: ((Dictionary<Int,[ConfidenceForVowelPair]>,NSError?) -> Void))
+    {
+        var urlExtensionToGetConfidenceValues : String = "confidence/search/findByPlayer?player=\(self.userID)"
+        
+        self.HTTPGetToJSON(urlExtensionToGetConfidenceValues)
+        {
+            (jsonData,err) -> Void in
+            var embeddedData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+            var confidences : NSArray = embeddedData["confidence"] as! NSArray
+            
+            var currentConfidenceObject : ConfidenceForVowelPair
+            
+            for confidence in confidences
+            {
+                var targetVowelId : Int = confidence["targetId"] as! Int
+                
+                currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["confidenceLevel"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
+                
+                if self.confidencesForVowelPairsByTargetVowelId[targetVowelId] != nil
+                {
+                    self.confidencesForVowelPairsByTargetVowelId[targetVowelId]!.append(currentConfidenceObject)
+                }
+                else
+                {
+                    self.confidencesForVowelPairsByTargetVowelId[targetVowelId] = [ConfidenceForVowelPair(raw: 0,targetVowelId: targetVowelId,standardVowelId: targetVowelId),currentConfidenceObject]
+                }
+            }
+            
+            completionHandler(self.confidencesForVowelPairsByTargetVowelId,nil)
+        }
+    }
+}
+
+class ConfidenceForVowelPair
+{
+    var raw : Float
+    var inverted : Float
+
+    var targetVowelId : Int
+    var standardVowelId : Int
+
+    var mixingWeigth : Float?
+    
+    init(raw : Float, targetVowelId : Int, standardVowelId : Int)
+    {
+        self.raw = raw
+        self.inverted = 1 - raw
+        self.targetVowelId = targetVowelId
+        self.standardVowelId = standardVowelId
     }
 }
