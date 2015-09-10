@@ -16,15 +16,17 @@ class Stimulus : NSObject
     var sampleID : Int
     var vowelID : Int
     var speakerLabel : String
+    var wordString : String
     var fileLocation : String?
     
-    init(sampleID : Int, requiresResponse : Bool, relevance : String, vowelID : Int, speakerLabel : String)
+    init(sampleID : Int, requiresResponse : Bool, relevance : String, vowelID : Int, speakerLabel : String, wordString : String)
     {
         self.sampleID = sampleID
         self.requiresResponse = requiresResponse
         self.relevance = relevance
         self.vowelID = vowelID
         self.speakerLabel = speakerLabel
+        self.wordString = wordString
     }
     
     func hasCorrectAnswer() -> Bool?
@@ -40,16 +42,21 @@ class Stimulus : NSObject
     }
     
     func packageToDictionary() -> Dictionary<String,AnyObject>
-    {
-        println("Received response \(receivedResponse) \(self.receivedResponse != nil && self.receivedResponse! == false)")
+    {        
+        var relevance : String = self.relevance
+        
+        if relevance == "isIrelevant"
+        {
+            relevance = "isStandard"
+        }
         
         var result : Dictionary<String,AnyObject> = ["responseTimeMs":"1",
-                                                    "relevance":self.relevance,
+                                                    "relevance":relevance,
                                                     "playerResponse":self.receivedResponse != nil && self.receivedResponse! == false,
-                                                    "vowelID":self.vowelID,
-                                                    "sampleID":self.sampleID,
+                                                    "vowelId":self.vowelID,
+                                                    "sampleId":self.sampleID,
                                                     "speakerLabel":self.speakerLabel,
-                                                    "wordString":""]
+                                                    "wordString":self.wordString]
         
         return result
     }
