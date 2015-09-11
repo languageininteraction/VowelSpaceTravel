@@ -120,6 +120,8 @@ class VSTServer : NSObject
     
     func createNewUser(firstName : String,lastName: String, email: String,token: String)
     {
+        println("Creating new user")
+        
         self.HTTPPostToJSON("players",data: ["firstName":firstName,"lastName":lastName, "token":token, "email":email])
         {
             (jsonData,err) -> Void in
@@ -134,9 +136,14 @@ class VSTServer : NSObject
 
     func createUserIfItDoesNotExistAndLogin(firstName : String,lastName : String)
     {
+        println("Trying to log in")
+        
         self.HTTPGetToJSON("players/search/findByFirstName?firstName=\(firstName)")
         {
             (jsonData,err) -> Void in
+            
+            println(jsonData)
+            
             if jsonData!.count == 0
             {
                 self.createNewUser(firstName,lastName : lastName, email : firstName,token : self.genericToken)
@@ -319,31 +326,68 @@ class VSTServer : NSObject
         
     }
     
-    func loadAllConfidenceValuesForCurrentUserID(completionHandler: ((Dictionary<Int,[ConfidenceForVowelPair]>,NSError?) -> Void))
+    func loadAllConfidenceValuesForCurrentUserID(allVowels : Dictionary<String,VowelDefinition>,completionHandler: ((Dictionary<Int,[ConfidenceForVowelPair]>,NSError?) -> Void))
     {
-        var urlExtensionToGetConfidenceValues : String = "confidence/search/findByPlayer?player=\(self.userID)"
+        //Make sure there is at least a key for every targetID
+        for (exampleWord, vowel) in allVowels
+        {
+            self.confidencesForVowelPairsByTargetVowelId[vowel.id] = []
+        }
+        
+        //Load what confidences there are on the server
+        var playerIdToUse : Int
+        
+        if kShowPlanetsForExampleUser
+        {
+            playerIdToUse = 2
+        }
+        else
+        {
+            playerIdToUse = self.userID!
+        }
+        
+        var urlExtensionToGetConfidenceValues : String = "confidence/search/findByPlayer?player=\(playerIdToUse)"
         
         self.HTTPGetToJSON(urlExtensionToGetConfidenceValues)
         {
             (jsonData,err) -> Void in
-            var embeddedData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
-            var confidences : NSArray = embeddedData["confidence"] as! NSArray
-            
-            var currentConfidenceObject : ConfidenceForVowelPair
-            
-            for confidence in confidences
+
+            if (jsonData!["_embedded"] != nil)
             {
-                var targetVowelId : Int = confidence["targetId"] as! Int
+                var embeddedData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                var confidences : NSArray = embeddedData["confidence"] as! NSArray
                 
-                currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["confidenceLevel"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
+                var currentConfidenceObject : ConfidenceForVowelPair
                 
-                if self.confidencesForVowelPairsByTargetVowelId[targetVowelId] != nil
+                for confidence in confidences
                 {
+                    var targetVowelId : Int = confidence["targetId"] as! Int
+                    
+                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["confidenceLevel"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
                     self.confidencesForVowelPairsByTargetVowelId[targetVowelId]!.append(currentConfidenceObject)
+                    
                 }
-                else
+            }
+
+            //Add confidences not present
+            for (targetID, confidences) in self.confidencesForVowelPairsByTargetVowelId
+            {
+                for (exampleWord, vowel) in allVowels
                 {
-                    self.confidencesForVowelPairsByTargetVowelId[targetVowelId] = [ConfidenceForVowelPair(raw: 0,targetVowelId: targetVowelId,standardVowelId: targetVowelId),currentConfidenceObject]
+                    var foundVowel : Bool = false
+                    for confidence in confidences
+                    {
+                        if confidence.standardVowelId == vowel.id
+                        {
+                            foundVowel = true
+                            break
+                        }
+                    }
+                    
+                    if !foundVowel
+                    {
+                        self.confidencesForVowelPairsByTargetVowelId[targetID]!.append(ConfidenceForVowelPair(raw: 0, targetVowelId: targetID, standardVowelId: vowel.id) )
+                    }
                 }
             }
             

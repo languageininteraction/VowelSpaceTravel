@@ -63,15 +63,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //Set the example words... is there a better place for this?
         var exampleWordsForIpaNotation : [String : String] = ["i":"bean","E":"pet","1":"bay","I":"pit","{":"pat","2":"bike","3":"burn","4":"boy","U":"push","6":"brow","5":"boat","V":"putt","u":"boot","Q":"pop","$":"born",
             "#":"bark"]
+
+        self.availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
         
         //Get the confidences for vowel combinations
-        self.server!.loadAllConfidenceValuesForCurrentUserID()
-        {
-            (confidencesForVowelPairsByTargetVowelId,err) -> Void in
-            
-            addMixingWeightToConfidences(confidencesForVowelPairsByTargetVowelId)
-            adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(self.availableVowels!["bark"]!,self.availableVowels!, confidencesForVowelPairsByTargetVowelId )
-        }
+        self.updateConfidencesAndDrawVowelViews()
         
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
@@ -88,8 +84,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //Set the suggested vowels
         var suggestedBaseVowelExampleWord : String = self.server!.getSuggestedBaseVowelExampleWord()
         var suggestedTargetVowelExampleWord : String = self.server!.getSuggestedTargetVowelExampleWord()
-
-        self.availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
         
         self.suggestedBaseVowel = self.availableVowels![suggestedBaseVowelExampleWord]
         self.suggestedTargetVowel = self.availableVowels![suggestedTargetVowelExampleWord]
@@ -130,7 +124,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
         self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
         
-        self.drawVowelViews()
         
         //Show the vowelbuttons
         let buttonWidth : CGFloat = 200
@@ -244,6 +237,17 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         // Dispose of any resources that can be recreated.
     }
     
+    func updateConfidencesAndDrawVowelViews()
+    {
+        self.server!.loadAllConfidenceValuesForCurrentUserID(self.availableVowels!)
+            {
+                (confidencesForVowelPairsByTargetVowelId,err) -> Void in
+                
+                addMixingWeightToConfidences(confidencesForVowelPairsByTargetVowelId)
+                self.drawVowelViews()
+        }
+    }
+    
     func drawVowelViews()
     {
         //Remove what you had before (will be skipped first time)
@@ -265,7 +269,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //Create all views
         for (exampleWord,vowel) in self.availableVowels!
         {
-            var planetView = self.createPlanetViewBasedOnVowel(vowel)
+            var planetView = self.createPlanetViewBasedOnVowelAndConfidences(vowel)
             
             if self.currentGame.selectedBaseVowel! == vowel
             {
@@ -530,7 +534,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                 }
             }
             
-            self.drawVowelViews()
+            self.updateConfidencesAndDrawVowelViews()
             
             //Remove the suggestion views
             self.suggestionViewForBaseVowel!.removeFromSuperview()
@@ -678,22 +682,18 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         return newGame
     }
     
-    func createPlanetViewBasedOnVowel(vowel : VowelDefinition) -> PlanetView
+    func createPlanetViewBasedOnVowelAndConfidences(vowel : VowelDefinition) -> PlanetView
     {
-        var ringOpacity : CGFloat
+        //The things commented out here are the way it was originally done, when the planets showed 
+        // the end state of the vowels
         
-        if vowel.rounded!
-        {
-            ringOpacity = 1.0
-        }
-        else
-        {
-            ringOpacity = 0.0
-        }
-
-        var hue : CGFloat = 0
+        var featuresAdjustedForThisUser : (place : Float, manner : Float, roundedness : Float) = adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(self.availableVowels![vowel.exampleWord]!,self.availableVowels!, self.server!.confidencesForVowelPairsByTargetVowelId )
         
-        switch(vowel.manner!)
+        var ringOpacity : CGFloat = CGFloat(featuresAdjustedForThisUser.roundedness)
+        
+        var hue : CGFloat = CGFloat(featuresAdjustedForThisUser.manner)
+        
+        /*switch(vowel.manner!)
         {
             case VowelManner.close: hue = 0; break
             case VowelManner.near_close: hue = 0.2; break
@@ -703,12 +703,27 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             case VowelManner.near_open : hue = 0.7; break
             case VowelManner.open : hue = 0.8; break
             default : println("Warning: your planet corresponds to a vowel with an unknown manner of articulation")
+        }*/
+        
+        var waterOpacity : CGFloat = CGFloat(1 - featuresAdjustedForThisUser.place * 2)
+        
+        if waterOpacity < 0
+        {
+            waterOpacity = 0
         }
         
-        var waterOpacity : CGFloat = 0
         var craterFrequency : CraterFrequency = CraterFrequency.none
         
-        switch(vowel.place!)
+        if featuresAdjustedForThisUser.place > 0.75
+        {
+            craterFrequency = CraterFrequency.high
+        }
+        else if featuresAdjustedForThisUser.place > 0.5
+        {
+            craterFrequency = CraterFrequency.low
+        }
+        
+        /*switch(vowel.place!)
         {
             case VowelPlace.back:
                 waterOpacity = 1
@@ -721,7 +736,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             case VowelPlace.front:
                 craterFrequency = CraterFrequency.high
             default: break
-        }
+        }*/
                 
         return PlanetView(frame : self.planetLocationsForIpaNotation[vowel.ipaNotation]!,
             exampleWord: vowel.exampleWord, hue: hue, ringOpacity: ringOpacity, waterOpacity : waterOpacity, craterFrequency : craterFrequency)

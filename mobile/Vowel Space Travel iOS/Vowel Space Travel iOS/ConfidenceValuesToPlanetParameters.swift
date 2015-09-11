@@ -31,17 +31,26 @@ func addMixingWeightToConfidences(confidencesForVowelPairsByTargetVowelId : Dict
     {
         confidenceValue.mixingWeigth = confidenceValue.inverted / summedInvertedConfidenceValuesPerTargetId[confidenceValue.targetVowelId]!
     }
+    
+    println("Added confidences")
 }
 
-func adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(vowel : VowelDefinition, allVowels : Dictionary<String,VowelDefinition>,confidencesForVowelPairsByTargetVowelId : Dictionary<Int,[ConfidenceForVowelPair]>) -> Float
+func adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(vowel : VowelDefinition, allVowels : Dictionary<String,VowelDefinition>,confidencesForVowelPairsByTargetVowelId : Dictionary<Int,[ConfidenceForVowelPair]>) -> (place : Float, manner : Float, roundedness : Float)
 {
-    var endFeatureValueForThisVowel : Float
     var mixingWeightForThisVowel : Float = 0
-    var result : Float = 0
+    
+    var endPlaceValueForThisVowel : Float
+    var resultPlace : Float = 0
+    var endMannerValueForThisVowel : Float
+    var resultManner : Float = 0
+    var endRoundednessValueForThisVowel : Float
+    var resultRoundedness : Float = 0
     
     for (exampleWord, otherVowel) in allVowels
     {
-        endFeatureValueForThisVowel = otherVowel.mannerAsFloat()
+        endPlaceValueForThisVowel = otherVowel.placeAsFloat()
+        endMannerValueForThisVowel = otherVowel.mannerAsFloat()
+        endRoundednessValueForThisVowel = otherVowel.roundednessAsFloat()
         
         for confidence in confidencesForVowelPairsByTargetVowelId[vowel.id]!
         {
@@ -51,12 +60,11 @@ func adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(vowel : VowelDefinit
                 break
             }
         }
-        
-        result += endFeatureValueForThisVowel * mixingWeightForThisVowel
+                
+        resultPlace += endPlaceValueForThisVowel * mixingWeightForThisVowel
+        resultManner += endMannerValueForThisVowel * mixingWeightForThisVowel
+        resultRoundedness += endRoundednessValueForThisVowel * mixingWeightForThisVowel
     }
-    
-    println("Starting with \(vowel.mannerAsFloat())")
-    println("Changed to \(result)")
-    
-    return result
+        
+    return (place: resultPlace, manner: resultManner, roundedness: resultRoundedness)
 }
