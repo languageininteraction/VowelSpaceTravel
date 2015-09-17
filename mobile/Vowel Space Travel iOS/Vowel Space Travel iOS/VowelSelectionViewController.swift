@@ -437,6 +437,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func readyButtonPressed()
     {
+        self.currentGame.stage = GameStage.SettingOtherSettings
         self.goToSettingsView()
     }
     
@@ -562,8 +563,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func goToSettingsView()
     {
-        self.currentGame.stage = GameStage.SettingOtherSettings
-        
         self.settingsViewController!.server = self.server
         self.settingsViewController!.currentGame = self.currentGame
         self.settingsViewController!.availableVowels = self.availableVowels
@@ -673,13 +672,16 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         }
                         else
                         {
-                            self.currentGame = self.createANewGameBasedOnServerSuggestions();
+                            self.currentGame = self.createANewGameBasedOnServerSuggestions()
+                            self.currentGame.stage = GameStage.Playing
                             self.goToSettingsView()
                         }
                     }
                     else if self.currentGame.stage == GameStage.Playing
                     {
-                        self.goToTaskView()
+                        self.currentGame = self.createANewGameWithTheSameSettings(self.currentGame)
+                        self.currentGame.stage = GameStage.Playing
+                        self.goToSettingsView()
                     }
                 
                     //Reset the result view for later use
@@ -698,6 +700,18 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         newGame.selectedBaseVowel = self.availableVowels!["pet"]
         newGame.selectedTargetVowel = self.availableVowels!["putt"]
         newGame.autoPilotMode = true
+        
+        return newGame
+    }
+    
+    func createANewGameWithTheSameSettings(game : Game) -> Game
+    {
+        var newGame : Game = Game()
+        newGame.selectedBaseVowel = game.selectedBaseVowel!
+        newGame.selectedTargetVowel = game.selectedTargetVowel!
+        newGame.multipleSpeakers = game.multipleSpeakers
+        newGame.differentStartingSounds = game.differentStartingSounds
+        newGame.selectedTask = game.selectedTask
         
         return newGame
     }
