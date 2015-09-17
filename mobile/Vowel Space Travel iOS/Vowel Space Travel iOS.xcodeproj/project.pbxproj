@@ -52,6 +52,7 @@
 		816046511B8F39B400DF664A /* control_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 816046501B8F39B400DF664A /* control_panel_background.png */; };
 		81EAC36F1B87560000D06CAA /* DownloadBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EAC36E1B87560000D06CAA /* DownloadBarView.swift */; };
 		81EE90E41BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */; };
+		81F396081BAAF25B00D769A1 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 81F396071BAAF25B00D769A1 /* click.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,8 @@
 		816046501B8F39B400DF664A /* control_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_panel_background.png; sourceTree = "<group>"; };
 		81EAC36E1B87560000D06CAA /* DownloadBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBarView.swift; sourceTree = "<group>"; };
 		81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfidenceValuesToPlanetParameters.swift; sourceTree = "<group>"; };
+		81F396061BAAF1FE00D769A1 /* click.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = click.m4a; sourceTree = "<group>"; };
+		81F396071BAAF25B00D769A1 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +166,8 @@
 				81182D131B85C50A0055A277 /* retry_button.png */,
 				81182D0D1B85C28E0055A277 /* results_background.png */,
 				49F383521B2AFE21008C4437 /* click.aiff */,
+				81F396071BAAF25B00D769A1 /* click.wav */,
+				81F396061BAAF1FE00D769A1 /* click.m4a */,
 				49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */,
 				49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */,
 			);
@@ -345,6 +350,7 @@
 				8160464F1B8EEA6E00DF664A /* login_background.png in Resources */,
 				499603B91B736CE0004C0D71 /* taskSegmentedControl.png in Resources */,
 				496FCD041B735B5100F08A8F /* startButton.png in Resources */,
+				81F396081BAAF25B00D769A1 /* click.wav in Resources */,
 				81182D141B85C50A0055A277 /* back_button.png in Resources */,
 				498003511B627490009AC7C1 /* overview_background.png in Resources */,
 				81182D161B85C50A0055A277 /* retry_button.png in Resources */,
