@@ -21,6 +21,7 @@ import nl.ru.languageininteraction.vst.model.Player;
 import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
+import nl.ru.languageininteraction.vst.rest.ScoreRepository;
 import nl.ru.languageininteraction.vst.rest.SettingsRepository;
 import nl.ru.languageininteraction.vst.rest.SpeakerRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
@@ -60,6 +61,8 @@ public class Application implements CommandLineRunner {
     @Autowired
     private ConfidenceRepository confidenceRepository;
     @Autowired
+    private ScoreRepository scoreRepository;
+    @Autowired
     private WordRepository wordsRepository;
     @Autowired
     private SpeakerRepository speakerRepository;
@@ -83,6 +86,7 @@ public class Application implements CommandLineRunner {
             stimulusResultRepository.deleteAll();
             consonantRepository.deleteAll();
             speakerRepository.deleteAll();
+           
 
             DefaultData defaultData = new DefaultData(vowelRepository, vowelQualityRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository);
             defaultData.insertVowels();
@@ -95,7 +99,7 @@ public class Application implements CommandLineRunner {
                 System.out.println(currentPlayer);
             }
             System.out.println();
-            new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, confidenceRepository).insertDummyData();
+            new StimulusResponseDefaultData(vowelRepository, playerRepository, stimulusResultRepository, wordsRepository, consonantRepository, confidenceRepository, scoreRepository).insertDummyData();
         }
     }
 }

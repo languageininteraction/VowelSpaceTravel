@@ -19,9 +19,11 @@ package nl.ru.languageininteraction.vst.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.Score;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Task;
@@ -29,6 +31,7 @@ import nl.ru.languageininteraction.vst.model.Vowel;
 import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
+import nl.ru.languageininteraction.vst.rest.ScoreRepository;
 import nl.ru.languageininteraction.vst.rest.StimulusResponseRepository;
 import nl.ru.languageininteraction.vst.rest.VowelRepository;
 import nl.ru.languageininteraction.vst.rest.WordRepository;
@@ -45,14 +48,16 @@ public class StimulusResponseDefaultData {
     private final WordRepository wordsRepository;
     private final ConsonantRepository consonantRepository;
     private final ConfidenceRepository confidenceRepository;
+    private final ScoreRepository scoreRepository;
 
-    public StimulusResponseDefaultData(VowelRepository vowelRepository, PlayerRepository playerRepository, StimulusResponseRepository stimulusResultRepository, WordRepository wordsRepository, ConsonantRepository consonantRepository, ConfidenceRepository confidenceRepository) {
+    public StimulusResponseDefaultData(VowelRepository vowelRepository, PlayerRepository playerRepository, StimulusResponseRepository stimulusResultRepository, WordRepository wordsRepository, ConsonantRepository consonantRepository, ConfidenceRepository confidenceRepository, ScoreRepository scoreRepository) {
         this.vowelRepository = vowelRepository;
         this.playerRepository = playerRepository;
         this.stimulusResultRepository = stimulusResultRepository;
         this.wordsRepository = wordsRepository;
         this.consonantRepository = consonantRepository;
         this.confidenceRepository = confidenceRepository;
+        this.scoreRepository = scoreRepository;
     }
 
     public void insertDummyData() {
@@ -151,6 +156,11 @@ public class StimulusResponseDefaultData {
                 confidenceRepository.save(confidence);
                 confidence = new Confidence(stimulusResultRepository, player, task, difficulty, standarVowel, targetVowel);
                 confidenceRepository.save(confidence);
+                
+                Score score = new Score(confidenceRepository,player,standarVowel,targetVowel);
+                scoreRepository.save(score);
+                score = new Score(confidenceRepository,player,targetVowel,standarVowel);
+                scoreRepository.save(score);
             }
         }
     }
