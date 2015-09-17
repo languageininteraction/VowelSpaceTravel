@@ -46,7 +46,7 @@ class ResultViewController: SubViewController {
         //Display a label
         var labelWidth : CGFloat = 600
         
-        let proportionCorrect : CGFloat = CGFloat(self.nrOfCorrectAnswers) / CGFloat(self.exposedStimuli.count)
+        let proportionCorrect : CGFloat = CGFloat(self.nrOfCorrectAnswers) / CGFloat(self.exposedStimuli.count - 1)
         
         self.showCenterFieldLabel("\(Int(100*proportionCorrect))% correct", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,160,labelWidth,60), fontSize: 60)
         self.showCenterFieldLabel("Target \(self.nrOfTruePositives)/\(self.nrOfTruePositives+self.nrOfFalseNegatives) correct", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,270,labelWidth,30), fontSize: 20, brightness: 0.6)
@@ -120,8 +120,19 @@ class ResultViewController: SubViewController {
     
     func calculateStatistics()
     {
+        var counter : Int = 0
+        
         for stimulus in self.exposedStimuli
         {
+            //This feels weird, but I can't figure out a more elegant way to do it
+            counter++
+            
+            if counter == 1
+            {
+                println("Skipping one")
+                continue
+            }
+            
             //If there is no data to this stimulus, it's the example one, which is always correct
             if stimulus.receivedResponse == nil
             {
