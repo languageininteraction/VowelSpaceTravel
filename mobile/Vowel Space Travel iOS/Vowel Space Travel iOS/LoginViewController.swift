@@ -100,15 +100,19 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     func login(#username : String,password : String)
     {
         println("Loggin in");
-        self.zoomFromVowelTractOverViewToVowelSelection()
+        self.zoomFromVowelTractOverViewToVowelSelection(nil)
     }
     
-    func zoomFromVowelTractOverViewToVowelSelection()
+    func zoomFromVowelTractOverViewToVowelSelection(game : Game?)
     {
-        println("Showing zooming animation")
         self.vowelSelectionViewController = VowelSelectionViewController();
         self.vowelSelectionViewController.superController = self
         self.vowelSelectionViewController.server = self.server!
+
+        if game != nil
+        {
+            self.vowelSelectionViewController.currentGame = game!
+        }
         
         var oldTransform = vowelSelectionViewController.view.layer.transform;
         var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
@@ -131,8 +135,9 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     func subControllerFinished(subController: SubViewController)
     {
         //This can only be the vowel selection view controller, and that always want to be restarted
+        var oldVowelSelectionViewController : VowelSelectionViewController = subController as! VowelSelectionViewController
         subController.view.removeFromSuperview()
-        self.zoomFromVowelTractOverViewToVowelSelection()
+        self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
     }
     
     //Motions can only be picked up here, because the vowel selection view controller is never officially presented
