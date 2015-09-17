@@ -143,9 +143,16 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     //Motions can only be picked up here, because the vowel selection view controller is never officially presented
     override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent)
     {
-        if self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
+        println("Detected shake")
+        
+        if self.vowelSelectionViewController.currentGame.autoPilotMode && self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
         {
             self.vowelSelectionViewController.resultViewController!.pilotModeFinished()
+        }
+        else if self.vowelSelectionViewController.currentGame.stage == GameStage.Playing
+        {
+            println("Got inside")
+            self.vowelSelectionViewController.taskViewController!.quit()
         }
     }
     

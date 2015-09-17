@@ -505,7 +505,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             var currentTouchLocation : CGPoint = recognizer.locationInView(self.view)
             
             self.circleCurrentlyBeingDragged?.removeFromSuperlayer()
-            self.travelIndicationLine!.removeFromSuperlayer()
+            self.travelIndicationLine?.removeFromSuperlayer()
             var travelIndicationLineStartPosition : CGPoint!
             
             if self.currentVowelDraggingType != nil
@@ -628,6 +628,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     
                     if self.settingsViewController!.readyForTask
                     {
+                        self.currentGame.stage = GameStage.Playing
                         self.goToTaskView();
                     }
                     else
@@ -637,9 +638,17 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
 
                 case self.taskViewController!:
                     
-                    //Show the result of the task
-                    self.currentGame.stage = GameStage.ShowingResult
-                    self.goToResultView(self.taskViewController!.stimuli)
+                    if self.taskViewController!.finished
+                    {
+                        //Show the result of the task
+                        self.currentGame.stage = GameStage.ShowingResult
+                        self.goToResultView(self.taskViewController!.stimuli)
+                    }
+                    else
+                    {
+                        //Go back to vowelselection
+                        self.superController!.subControllerFinished(self)
+                    }
                 
                     //Reset the task view for later use
                     self.taskViewController = TaskViewController()
