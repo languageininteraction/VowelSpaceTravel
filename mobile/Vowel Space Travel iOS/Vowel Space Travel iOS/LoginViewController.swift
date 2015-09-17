@@ -79,6 +79,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         
         //Create the VSTServer object
         self.server = VSTServer(url: kWebserviceURL)
+        self.server!.showAlert = self.showAlert
         
         var uudid : String = UIDevice.currentDevice().identifierForVendor.UUIDString
         self.server!.createUserIfItDoesNotExistAndLogin(uudid,lastName: uudid)
@@ -130,6 +131,19 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         CATransaction.commit()
         
         self.view.addSubview(vowelSelectionViewController.view)
+    }
+    
+    func showAlert(title : String,message : String)
+    {
+        var alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Close app", style : UIAlertActionStyle.Default,handler:
+            {
+                action -> Void in
+                exit(0)
+            })
+        )
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
     func subControllerFinished(subController: SubViewController)
