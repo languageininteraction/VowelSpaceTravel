@@ -43,4 +43,42 @@ class VowelDefinition : NSObject
         self.id = id
         self.ipaNotation = ipaNotation
     }
+    
+    func placeAsFloat() -> Float
+    {
+        switch(self.place!)
+        {
+            case VowelPlace.back: return 0
+            case VowelPlace.near_back: return 0.25
+            case VowelPlace.central: return 0.5
+            case VowelPlace.near_front: return 0.75
+            case VowelPlace.front: return 1
+        }
+    }
+    
+    func mannerAsFloat() -> Float
+    {
+        switch(self.manner!)
+        {
+            case VowelManner.close : return 0
+            case VowelManner.near_close : return 0.16
+            case VowelManner.close_mid : return 0.33
+            case VowelManner.mid : return 0.5
+            case VowelManner.open_mid : return 0.66
+            case VowelManner.near_open : return 0.85
+            case VowelManner.open : return 1
+        }
+    }
+    
+    func roundednessAsFloat() -> Float
+    {
+        if self.rounded!
+        {
+            return 1
+        }
+        else
+        {
+            return 0
+        }
+    }
 }

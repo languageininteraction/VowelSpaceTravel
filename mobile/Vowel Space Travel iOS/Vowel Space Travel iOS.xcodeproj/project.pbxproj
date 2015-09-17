@@ -51,6 +51,7 @@
 		8160464F1B8EEA6E00DF664A /* login_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 8160464E1B8EEA6E00DF664A /* login_background.png */; };
 		816046511B8F39B400DF664A /* control_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 816046501B8F39B400DF664A /* control_panel_background.png */; };
 		81EAC36F1B87560000D06CAA /* DownloadBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EAC36E1B87560000D06CAA /* DownloadBarView.swift */; };
+		81EE90E41BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,7 @@
 		8160464E1B8EEA6E00DF664A /* login_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_background.png; sourceTree = "<group>"; };
 		816046501B8F39B400DF664A /* control_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_panel_background.png; sourceTree = "<group>"; };
 		81EAC36E1B87560000D06CAA /* DownloadBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBarView.swift; sourceTree = "<group>"; };
+		81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfidenceValuesToPlanetParameters.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 				4996A49D1AD7C9CE000437CF /* TempObjects.swift */,
 				4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */,
 				81182D1D1B85EC470055A277 /* ReselectableSegmentedControl.swift */,
+				81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */,
 				4996A4A11AD7E4B1000437CF /* Resources */,
 				49C653DC1ACE9FF100CA2803 /* Main.storyboard */,
 				49C653B81ACE9CB400CA2803 /* AppDelegate.swift */,
@@ -395,6 +398,7 @@
 				495359281AE91A88009E870A /* VSTServer.swift in Sources */,
 				499FAB341AFCB3CC0020A90C /* Game.swift in Sources */,
 				4996A4A01AD7E480000437CF /* Constants.swift in Sources */,
+				81EE90E41BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift in Sources */,
 				49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */,
 				49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */,
 			);

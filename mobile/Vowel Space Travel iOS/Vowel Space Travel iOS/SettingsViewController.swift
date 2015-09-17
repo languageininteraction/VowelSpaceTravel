@@ -191,7 +191,6 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
                     
                     percentageDone = CGFloat(counter) / CGFloat(self.currentGame!.stimuli.count)
 
-                    println(percentageDone)
                     self.downloadBarView.updatePercentage(percentageDone)
                     self.view.addSubview(self.downloadBarView)
                     

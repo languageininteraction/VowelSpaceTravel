@@ -121,7 +121,6 @@ class TaskViewController: SubViewController {
         }
         else
         {
-            println(soundFileName)
             soundPath = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: ofType)!)!
         }
             

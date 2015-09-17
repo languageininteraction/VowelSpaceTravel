@@ -81,8 +81,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         self.server = VSTServer(url: kWebserviceURL)
         
         var uudid : String = UIDevice.currentDevice().identifierForVendor.UUIDString
-        self.server!.createUserIfItDoesNotExist(uudid,lastName: uudid)
-        //self.server!.createNewUser("Wessel")
+        self.server!.createUserIfItDoesNotExistAndLogin(uudid,lastName: uudid)
         
     }
     

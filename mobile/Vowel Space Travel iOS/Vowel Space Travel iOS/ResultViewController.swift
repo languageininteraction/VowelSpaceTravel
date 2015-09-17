@@ -154,10 +154,6 @@ class ResultViewController: SubViewController {
         }
         
         self.nrOfCorrectAnswers = self.nrOfTruePositives + self.nrOfTrueNegatives
-        println(self.nrOfTruePositives)
-        println(self.nrOfFalsePositives)
-        println(self.nrOfTrueNegatives)
-        println(self.nrOfFalseNegatives)
     }
     
     override func didReceiveMemoryWarning()
