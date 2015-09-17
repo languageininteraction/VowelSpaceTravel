@@ -24,6 +24,7 @@ import java.util.List;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.Score;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
@@ -74,6 +75,8 @@ public class StimulusController {
     ConfidenceRepository confidenceRepository;
     @Autowired
     VowelRepository vowelRepository;
+    @Autowired
+    ScoreRepository scoreRepository;
 //    @RequestMapping(method = RequestMethod.GET)
 //    @ResponseBody
 //    public ResponseEntity getLinks() {
@@ -182,6 +185,11 @@ public class StimulusController {
             confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, targetVowel, standardVowel));
             confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, standardVowel, targetVowel);
             confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, standardVowel, targetVowel));
+            
+            scoreRepository.deleteByPlayerAndTargetVowelAndStandardVowel(player, targetVowel, standardVowel);
+            scoreRepository.save(new Score(confidenceRepository,player,targetVowel,standardVowel));
+            scoreRepository.deleteByPlayerAndTargetVowelAndStandardVowel(player, standardVowel, targetVowel);
+            scoreRepository.save(new Score(confidenceRepository,player,standardVowel,targetVowel));
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
