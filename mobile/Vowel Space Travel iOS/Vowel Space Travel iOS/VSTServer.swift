@@ -262,7 +262,7 @@ class VSTServer : NSObject
         
         var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequest.multipleSpeakers, differentStartingSounds: stimuliRequest.differentStartingSounds);
         
-        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
+        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=\(kNumberOfStimuliInRound)&maxTargetCount=\(kMaxNumberOfTargetsInRound)&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
         
         var stimuli = [Stimulus]()
         

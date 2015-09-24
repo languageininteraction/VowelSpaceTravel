@@ -37,7 +37,7 @@ class TaskViewController: SubViewController {
         self.screenHeight = self.view.frame.size.height;
         
         //Make the background white
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor(hue: 0.83, saturation: 0.2, brightness: 0.57, alpha: 1)
         
         //Display a label
         self.label = UILabel();
@@ -45,9 +45,11 @@ class TaskViewController: SubViewController {
         var labelHeigth : CGFloat = 30;
         var distanceAboveCenter : CGFloat = 0;
         
-        label.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
+        label.frame = CGRectMake(0,0,screenWidth!,screenHeight!)
         label.textAlignment = NSTextAlignment.Center
         label.text = "Target"
+        label.textColor = UIColor.whiteColor()
+        label.font = UIFont(name: "Muli", size: 30)
         
         self.view.addSubview(label)
         
