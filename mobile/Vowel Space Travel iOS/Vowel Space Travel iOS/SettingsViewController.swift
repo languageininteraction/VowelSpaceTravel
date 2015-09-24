@@ -94,7 +94,16 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         var segmentedControlLeft : CGFloat = 450
 
         self.singleOrMultipleSpeakerSegmentedControl = ReselectableSegmentedControl(items: ["",""])
-        self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 0
+        
+        if self.currentGame!.multipleSpeakers
+        {
+            self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 1
+        }
+        else
+        {
+            self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 0
+        }
+        
         self.singleOrMultipleSpeakerSegmentedControl.frame = CGRect(x: segmentedControlLeft,y: speakerSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
 
         //Custom appearance of the segmented control
@@ -109,7 +118,16 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         var soundsSegmentedControlDistanceFromTop : CGFloat = 310
         
         self.sameOrDifferentStartingSoundSegmentedControl = ReselectableSegmentedControl(items: ["",""])
-        self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 0
+
+        if self.currentGame!.differentStartingSounds
+        {
+            self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 1
+        }
+        else
+        {
+            self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 0
+        }
+        
         self.sameOrDifferentStartingSoundSegmentedControl.frame = CGRect(x: segmentedControlLeft,y: soundsSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
 
         self.sameOrDifferentStartingSoundSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_background"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)

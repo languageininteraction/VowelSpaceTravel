@@ -71,9 +71,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
 
         self.availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
         
-        //Get the confidences for vowel combinations
-        self.updateConfidencesAndDrawVowelViews()
-        
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
@@ -87,11 +84,26 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.view.addSubview(backgroundImageView)
         
         //Set the suggested vowels
-        var suggestedBaseVowelExampleWord : String = self.server!.getSuggestedBaseVowelExampleWord()
-        var suggestedTargetVowelExampleWord : String = self.server!.getSuggestedTargetVowelExampleWord()
-        
-        self.suggestedBaseVowel = self.availableVowels![suggestedBaseVowelExampleWord]
-        self.suggestedTargetVowel = self.availableVowels![suggestedTargetVowelExampleWord]
+        self.server!.getSuggestionForGame()
+        {
+            (gameSuggestion) -> Void in
+            
+            self.suggestedBaseVowel = gameSuggestion.targetVowel //This is because of a mix-up in terminology
+            self.suggestedTargetVowel = gameSuggestion.standardVowel
+            
+            //Preselect the suggestions
+            if self.currentGame.selectedBaseVowel == nil || self.currentGame.selectedTargetVowel == nil
+            {
+                self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
+                self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
+                self.currentGame.multipleSpeakers = gameSuggestion.multipleSpeakers
+                self.currentGame.differentStartingSounds = gameSuggestion.differentStartingSounds
+            }
+            
+            //Get the confidences for vowel combinations
+            self.updateConfidencesAndDrawVowelViews()
+            
+        }
         
         self.planetLocationsForIpaNotation = ["i" : CGRect(x: 350,y: 140,width: 100,height: 100),
                                             "E" : CGRect(x: 305,y: 250,width: 100,height: 100),
@@ -115,13 +127,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                                             "$" : CGRect(x: 690,y: 360,width: 100,height: 100),
             "#" : CGRect(x: 670,y: 430,width: 100,height: 100)]
         
-        //Preselect the suggestions
-        if self.currentGame.selectedBaseVowel == nil || self.currentGame.selectedTargetVowel == nil
-        {
-            self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
-            self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
-        }
-            
         //Show the vowelbuttons
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
@@ -472,6 +477,14 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func readyButtonPressed()
     {
+        //Sometimes randomly flip target and base vowel
+        if arc4random()%2 == 0
+        {
+            var saveTargetVowel : VowelDefinition? = self.currentGame.selectedTargetVowel
+            self.currentGame.selectedTargetVowel = self.currentGame.selectedBaseVowel
+            self.currentGame.selectedBaseVowel = saveTargetVowel
+        }
+        
         self.currentGame.stage = GameStage.SettingOtherSettings
         self.goToSettingsView()
     }
@@ -716,9 +729,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         }
                         else
                         {
-                            self.currentGame = self.createANewGameBasedOnServerSuggestions()
-                            self.currentGame.stage = GameStage.Playing
-                            self.goToSettingsView()
+                            self.createANewGameBasedOnServerSuggestionsAndGoToSettingsView()
                         }
                     }
                     else if self.currentGame.stage == GameStage.Playing
@@ -738,14 +749,25 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         })
     }
     
-    func createANewGameBasedOnServerSuggestions() -> Game
+    func createANewGameBasedOnServerSuggestionsAndGoToSettingsView()
     {
-        var newGame : Game = Game()
-        newGame.selectedBaseVowel = self.availableVowels!["pet"]
-        newGame.selectedTargetVowel = self.availableVowels!["putt"]
-        newGame.autoPilotMode = true
-        
-        return newGame
+        self.server!.getSuggestionForGame()
+        {
+            (gameSuggestion) -> Void in
+
+            var newGame : Game = Game()
+            newGame.selectedBaseVowel = gameSuggestion.targetVowel
+            newGame.selectedTargetVowel = gameSuggestion.standardVowel
+            newGame.multipleSpeakers = gameSuggestion.multipleSpeakers
+            newGame.differentStartingSounds = gameSuggestion.differentStartingSounds
+            
+            newGame.autoPilotMode = true
+            
+            self.currentGame = newGame
+            self.currentGame.stage = GameStage.Playing
+            self.goToSettingsView()
+            
+        }
     }
     
     func createANewGameWithTheSameSettings(game : Game) -> Game
