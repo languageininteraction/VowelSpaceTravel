@@ -143,8 +143,11 @@ class TaskViewController: SubViewController {
         
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent)
     {
-        self.tapDetectedDuringThisStimulus = true
-        self.playAuditiveTouchFeedback()
+        if !self.tapDetectedDuringThisStimulus
+        {
+            self.tapDetectedDuringThisStimulus = true
+            self.playAuditiveTouchFeedback()            
+        }
     }
 
     func playAuditiveTouchFeedback()
