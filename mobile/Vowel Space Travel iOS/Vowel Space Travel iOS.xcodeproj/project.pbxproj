@@ -21,7 +21,6 @@
 		4996A4A31AD7F829000437CF /* PassControlBackAndForth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */; };
 		499FAB341AFCB3CC0020A90C /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 499FAB331AFCB3CC0020A90C /* Game.swift */; };
 		49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */; };
-		49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */; };
 		49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653B81ACE9CB400CA2803 /* AppDelegate.swift */; };
 		49C653BB1ACE9CB400CA2803 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BA1ACE9CB400CA2803 /* RootViewController.swift */; };
 		49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C31ACE9CB400CA2803 /* Images.xcassets */; };
@@ -56,6 +55,13 @@
 		81EC45371BB4041000AA797C /* splash.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45361BB4041000AA797C /* splash.jpg */; };
 		81EC45391BB40CB300AA797C /* infobutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45381BB40CB300AA797C /* infobutton.png */; };
 		81EC453B1BB40CCC00AA797C /* question_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC453A1BB40CCC00AA797C /* question_button.png */; };
+		81EC453E1BB42E5C00AA797C /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EC453C1BB42E5C00AA797C /* InfoViewController.swift */; };
+		81EC453F1BB42E5C00AA797C /* htmlInfo.html in Resources */ = {isa = PBXBuildFile; fileRef = 81EC453D1BB42E5C00AA797C /* htmlInfo.html */; };
+		81EC45411BB42EC000AA797C /* JvHGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EC45401BB42EC000AA797C /* JvHGradientView.swift */; };
+		81EC45441BB4321E00AA797C /* LiL logo diapositief 1000x194.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45421BB4321E00AA797C /* LiL logo diapositief 1000x194.png */; };
+		81EC45451BB4321E00AA797C /* LiL logo diapositief 1000x194@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45431BB4321E00AA797C /* LiL logo diapositief 1000x194@2x.png */; };
+		81EC45481BB4323A00AA797C /* Cross 22x22.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45461BB4323A00AA797C /* Cross 22x22.png */; };
+		81EC45491BB4323A00AA797C /* Cross 22x22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45471BB4323A00AA797C /* Cross 22x22@2x.png */; };
 		81EE90E41BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */; };
 		81F396081BAAF25B00D769A1 /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 81F396071BAAF25B00D769A1 /* click.wav */; };
 /* End PBXBuildFile section */
@@ -85,7 +91,6 @@
 		4996A4A21AD7F829000437CF /* PassControlBackAndForth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassControlBackAndForth.swift; sourceTree = "<group>"; };
 		499FAB331AFCB3CC0020A90C /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		49C653B31ACE9CB300CA2803 /* Vowel Space Travel iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vowel Space Travel iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C653B71ACE9CB400CA2803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49C653B81ACE9CB400CA2803 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +128,13 @@
 		81EC45361BB4041000AA797C /* splash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = splash.jpg; sourceTree = "<group>"; };
 		81EC45381BB40CB300AA797C /* infobutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infobutton.png; sourceTree = "<group>"; };
 		81EC453A1BB40CCC00AA797C /* question_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question_button.png; sourceTree = "<group>"; };
+		81EC453C1BB42E5C00AA797C /* InfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		81EC453D1BB42E5C00AA797C /* htmlInfo.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = htmlInfo.html; sourceTree = "<group>"; };
+		81EC45401BB42EC000AA797C /* JvHGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JvHGradientView.swift; sourceTree = "<group>"; };
+		81EC45421BB4321E00AA797C /* LiL logo diapositief 1000x194.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LiL logo diapositief 1000x194.png"; sourceTree = "<group>"; };
+		81EC45431BB4321E00AA797C /* LiL logo diapositief 1000x194@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LiL logo diapositief 1000x194@2x.png"; sourceTree = "<group>"; };
+		81EC45461BB4323A00AA797C /* Cross 22x22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cross 22x22.png"; sourceTree = "<group>"; };
+		81EC45471BB4323A00AA797C /* Cross 22x22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cross 22x22@2x.png"; sourceTree = "<group>"; };
 		81EE90E31BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfidenceValuesToPlanetParameters.swift; sourceTree = "<group>"; };
 		81F396061BAAF1FE00D769A1 /* click.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = click.m4a; sourceTree = "<group>"; };
 		81F396071BAAF25B00D769A1 /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
@@ -175,10 +187,14 @@
 				81EC452C1BB3EDBC00AA797C /* taskSegmentedControlSelectedv3.png */,
 				81EC452E1BB3EE2100AA797C /* taskSegmentedControlv3.png */,
 				81EC45191BB3E91000AA797C /* taskSegmentedControlSelected.png */,
+				81EC45421BB4321E00AA797C /* LiL logo diapositief 1000x194.png */,
+				81EC45431BB4321E00AA797C /* LiL logo diapositief 1000x194@2x.png */,
 				81EC451C1BB3E99600AA797C /* back_button.png */,
 				81EC451D1BB3E99600AA797C /* launch_button.png */,
 				81EC45361BB4041000AA797C /* splash.jpg */,
 				81EC451E1BB3E99600AA797C /* retry_button.png */,
+				81EC45461BB4323A00AA797C /* Cross 22x22.png */,
+				81EC45471BB4323A00AA797C /* Cross 22x22@2x.png */,
 				81182D0D1B85C28E0055A277 /* results_background.png */,
 				49F383521B2AFE21008C4437 /* click.aiff */,
 				81F396071BAAF25B00D769A1 /* click.wav */,
@@ -264,7 +280,8 @@
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
 				49C653E01ACEA4D100CA2803 /* TaskViewController.swift */,
 				49F1F5C51AD8097000457411 /* ResultViewController.swift */,
-				49AEA13F1ADFC291001A82A1 /* InfoViewController.swift */,
+				81EC453C1BB42E5C00AA797C /* InfoViewController.swift */,
+				81EC453D1BB42E5C00AA797C /* htmlInfo.html */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -272,6 +289,7 @@
 		49E8B70F1B05DD84006CD1BE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				81EC45401BB42EC000AA797C /* JvHGradientView.swift */,
 				49E8B7101B05DDAE006CD1BE /* SuggestionView.swift */,
 				4965A4EC1B6222AA0059FDB6 /* PlanetView.swift */,
 				81EAC36E1B87560000D06CAA /* DownloadBarView.swift */,
@@ -369,18 +387,23 @@
 				81EC45351BB3EFD100AA797C /* control_panel_background.png in Resources */,
 				81F396081BAAF25B00D769A1 /* click.wav in Resources */,
 				81EC45201BB3E99600AA797C /* launch_button.png in Resources */,
+				81EC453F1BB42E5C00AA797C /* htmlInfo.html in Resources */,
 				81EC45391BB40CB300AA797C /* infobutton.png in Resources */,
 				81EC45371BB4041000AA797C /* splash.jpg in Resources */,
+				81EC45441BB4321E00AA797C /* LiL logo diapositief 1000x194.png in Resources */,
 				498003511B627490009AC7C1 /* overview_background.png in Resources */,
 				499603BC1B737272004C0D71 /* Muli.ttf in Resources */,
 				81EC452D1BB3EDBC00AA797C /* taskSegmentedControlSelectedv3.png in Resources */,
 				49C653C71ACE9CB400CA2803 /* LaunchScreen.xib in Resources */,
 				81EC45211BB3E99600AA797C /* retry_button.png in Resources */,
 				49F383531B2AFE21008C4437 /* click.aiff in Resources */,
+				81EC45451BB4321E00AA797C /* LiL logo diapositief 1000x194@2x.png in Resources */,
 				49C653DD1ACE9FF100CA2803 /* Main.storyboard in Resources */,
 				49C653C41ACE9CB400CA2803 /* Images.xcassets in Resources */,
 				81EC45271BB3EAEC00AA797C /* segmented_control_foreground.png in Resources */,
+				81EC45481BB4323A00AA797C /* Cross 22x22.png in Resources */,
 				8160464D1B8EEA2C00DF664A /* loginbutton.png in Resources */,
+				81EC45491BB4323A00AA797C /* Cross 22x22@2x.png in Resources */,
 				81EC453B1BB40CCC00AA797C /* question_button.png in Resources */,
 				49E8B7151B0607F9006CD1BE /* bag_sp_1.wav in Resources */,
 				49E8B7131B0607BA006CD1BE /* babe_sp_1.wav in Resources */,
@@ -405,6 +428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81182D1E1B85EC470055A277 /* ReselectableSegmentedControl.swift in Sources */,
+				81EC45411BB42EC000AA797C /* JvHGradientView.swift in Sources */,
 				4996A49A1AD7B4D0000437CF /* LoginViewController.swift in Sources */,
 				49C653DE1ACEA20800CA2803 /* Main.storyboard in Sources */,
 				49C653E11ACEA4D100CA2803 /* TaskViewController.swift in Sources */,
@@ -420,13 +444,13 @@
 				49CD8F0D1ACED40500DD3A5F /* DownloadViewController.swift in Sources */,
 				49C653B91ACE9CB400CA2803 /* AppDelegate.swift in Sources */,
 				4947A75E1B03652200AF5A96 /* VowelSelectionTableViewController.swift in Sources */,
-				49AEA1401ADFC291001A82A1 /* InfoViewController.swift in Sources */,
 				495359281AE91A88009E870A /* VSTServer.swift in Sources */,
 				499FAB341AFCB3CC0020A90C /* Game.swift in Sources */,
 				4996A4A01AD7E480000437CF /* Constants.swift in Sources */,
 				81EE90E41BA061D10093CF7E /* ConfidenceValuesToPlanetParameters.swift in Sources */,
 				49F1F5C61AD8097000457411 /* ResultViewController.swift in Sources */,
 				49AEA13E1ADFBEF5001A82A1 /* SettingsViewController.swift in Sources */,
+				81EC453E1BB42E5C00AA797C /* InfoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

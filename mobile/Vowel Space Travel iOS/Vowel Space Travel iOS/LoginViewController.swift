@@ -156,10 +156,19 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
 
     func subControllerFinished(subController: SubViewController)
     {
-        //This can only be the vowel selection view controller, and that always want to be restarted
+        //This can only be the vowel selection view controller, and that almost always want to be restarted
         var oldVowelSelectionViewController : VowelSelectionViewController = subController as! VowelSelectionViewController
+        
         subController.view.removeFromSuperview()
-        self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
+        
+        if oldVowelSelectionViewController.viewingHelp
+        {
+            oldVowelSelectionViewController.viewingHelp = false
+        }
+        else
+        {            
+            self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
+        }
     }
     
     //Motions can only be picked up here, because the vowel selection view controller is never officially presented

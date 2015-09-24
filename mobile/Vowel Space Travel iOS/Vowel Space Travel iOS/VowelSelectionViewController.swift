@@ -32,7 +32,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     var instructionTitle : UILabel = UILabel()
     var taskDescription : UILabel = UILabel()
+
     var playLabel : UILabel = UILabel()
+    var helpLabel : UILabel = UILabel()
+    var aboutLabel : UILabel = UILabel()
     
     var availableVowels : [String : VowelDefinition]?
     var vowelButtons : [String : UIButton]?
@@ -48,6 +51,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     var readyButton = UIButton()
     var helpButton = UIButton()
     var infoButton = UIButton()
+    
+    var viewingHelp : Bool = false
     
     var taskSegmentedControl : UISegmentedControl?
     
@@ -195,17 +200,34 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.instructionTitle.text = "The suggested vowels are circled, drag to change."
         
         self.view.addSubview(instructionTitle)
-        
-        self.taskDescription = UILabel();
-        self.taskDescription.textColor = UIColor.whiteColor()
+
         var labelWidth : CGFloat = 500;
         var labelHeight : CGFloat = 30;
+        
+        self.helpLabel = UILabel();
+        self.helpLabel.textColor = UIColor.whiteColor()
+        
+        self.helpLabel.font = UIFont(name: "Muli",size:8)
+        self.helpLabel.frame = CGRectMake(299,500,labelWidth,labelHeight)
+        self.helpLabel.text = "Help"
+        
+        self.aboutLabel = UILabel();
+        self.aboutLabel.textColor = UIColor.whiteColor()
 
+        self.aboutLabel.font = UIFont(name: "Muli",size:8)
+        self.aboutLabel.frame = CGRectMake(267,500,labelWidth,labelHeight)
+        self.aboutLabel.text = "About"
+
+        self.taskDescription = UILabel();
+        self.taskDescription.textColor = UIColor.whiteColor()
+        
         self.taskDescription.font = UIFont(name: "Muli",size:8)
         self.taskDescription.frame = CGRectMake(420,500,labelWidth,labelHeight)
-        self.taskDescription.text = "Distinguish   Recognize"
-        
-        self.view.addSubview(taskDescription)
+        self.taskDescription.text = "Distinguish      Recognize"
+
+        self.view.addSubview(self.aboutLabel)
+        self.view.addSubview(self.helpLabel)
+        self.view.addSubview(self.taskDescription)
 
         self.playLabel = UILabel();
         self.playLabel.textColor = UIColor.whiteColor()
@@ -460,6 +482,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.goToInfoView()
     }
     
+    func helpButtonPressed()
+    {
+        self.viewingHelp = true
+        self.superController!.subControllerFinished(self)
+    }
+    
     func taskSegmentedControlPressed(sender : UISegmentedControl)
     {
         switch(sender.selectedSegmentIndex)
@@ -648,6 +676,9 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         self.superController!.subControllerFinished(self)
                     }
 
+                case self.infoViewController!:
+                    self.superController!.subControllerFinished(self)
+                
                 case self.taskViewController!:
                     
                     if self.taskViewController!.finished
