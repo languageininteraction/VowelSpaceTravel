@@ -46,6 +46,9 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     var currentVowelDraggingType : VowelDraggingType? = nil
     
     var readyButton = UIButton()
+    var helpButton = UIButton()
+    var infoButton = UIButton()
+    
     var taskSegmentedControl : UISegmentedControl?
     
     var circleCurrentlyBeingDragged : CAShapeLayer?
@@ -151,6 +154,16 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.readyButton.setImage(UIImage(named: "startButton"), forState: UIControlState.Normal)
         self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(readyButton)
+
+        self.infoButton = UIButton(frame: CGRectMake(265,475,25,30))
+        self.infoButton.setImage(UIImage(named: "infobutton"), forState: UIControlState.Normal)
+        self.infoButton.addTarget(self, action: "infoButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(infoButton)
+
+        self.helpButton = UIButton(frame: CGRectMake(295,475,25,30))
+        self.helpButton.setImage(UIImage(named: "question_button"), forState: UIControlState.Normal)
+        self.helpButton.addTarget(self, action: "helpButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(helpButton)
         
 //        let infoButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)+150,buttonWidth,buttonHeight))
 //        infoButton.setTitle("Info", forState: UIControlState.Normal)
@@ -162,8 +175,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.taskSegmentedControl!.selectedSegmentIndex = 0
  
         //Custom appearance of the segmented control
-        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControl"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlSelected"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
+        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlv3"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlSelectedv3"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         self.taskSegmentedControl!.tintColor = UIColor.clearColor()
        
         self.taskSegmentedControl!.frame =  CGRect(x: 425,y: 475,width: 75,height: 30)
@@ -179,7 +192,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.instructionTitle.textAlignment = NSTextAlignment.Center
         self.instructionTitle.font = UIFont(name: "Muli",size:15)
         self.instructionTitle.textColor = UIColor.whiteColor()
-        self.instructionTitle.text = "The suggested vowels are circled, drag to change if you like."
+        self.instructionTitle.text = "The suggested vowels are circled, drag to change."
         
         self.view.addSubview(instructionTitle)
         
@@ -294,11 +307,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         circle.frame = CGRectMake(0,0,40,40)
         
         var pulsatingAnimation : CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
-        pulsatingAnimation.duration = 1.2
+        pulsatingAnimation.duration = 0.6
         pulsatingAnimation.repeatCount = Float.infinity
         pulsatingAnimation.autoreverses = true
         pulsatingAnimation.fromValue = 1
-        pulsatingAnimation.toValue = 1.09
+        pulsatingAnimation.toValue = 1.2
         
         circle.addAnimation(pulsatingAnimation, forKey: "scale")
         
