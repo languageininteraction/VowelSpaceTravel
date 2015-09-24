@@ -65,6 +65,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         var difficultyLabelLeft : CGFloat = 325
         var difficultyLabelWidth : CGFloat = 120
  
+        self.showCenterFieldLabel("Back", frame: CGRectMake(800,322,difficultyLabelWidth,50), fontSize: 12)
+        
         self.showCenterFieldLabel("Adjust settings as required", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,70,topLabelWidth,50), fontSize: 25)
         self.showCenterFieldLabel("Difficulty", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,135,topLabelWidth,50), fontSize: 20)
         self.showCenterFieldLabel("Mission", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth),420,topLabelWidth,50), fontSize: 20)
