@@ -164,7 +164,9 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
 
     override func viewDidAppear(animated: Bool)
     {
-        if (self.currentGame!.autoPilotMode)
+        println("\(self.currentGame!.stage.rawValue)")
+        
+        if (self.currentGame!.stage == GameStage.Playing)
         {
             self.readyButtonPressed()
         }

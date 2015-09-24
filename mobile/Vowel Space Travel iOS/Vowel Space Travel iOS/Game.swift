@@ -14,13 +14,13 @@ enum Task : String
     case Identification = "identification"
 }
 
-enum GameStage
+enum GameStage : String
 {
-    case SelectingVowels
-    case SettingOtherSettings
-    case Playing
-    case ShowingResult
-    case Finished
+    case SelectingVowels = "vowels"
+    case SettingOtherSettings = "settings"
+    case Playing = "playing"
+    case ShowingResult = "results"
+    case Finished = "finished"
 }
 
 class Game : NSObject, StimuliRequest

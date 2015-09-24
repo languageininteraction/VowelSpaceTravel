@@ -38,6 +38,8 @@ class VSTServer : NSObject
     
     var latestResponse : NSArray?
     
+    var showAlert : ((String,String) -> ())?
+    
     init(url: String)
     {
         self.url = url
@@ -79,7 +81,7 @@ class VSTServer : NSObject
             }
             else
             {
-                println("Error: \(error.localizedDescription)")
+                self.presentErrorMessage()
             }
             
         })
@@ -111,7 +113,7 @@ class VSTServer : NSObject
             }
             else
             {
-                println("Error: \(error.localizedDescription)")
+                self.presentErrorMessage()
             }
             
         })
@@ -394,6 +396,12 @@ class VSTServer : NSObject
             completionHandler(self.confidencesForVowelPairsByTargetVowelId,nil)
         }
     }
+    
+    func presentErrorMessage()
+    {
+        self.showAlert!("Problem connecting to the server","An internet connection is required for this app.")
+    }
+    
 }
 
 class ConfidenceForVowelPair

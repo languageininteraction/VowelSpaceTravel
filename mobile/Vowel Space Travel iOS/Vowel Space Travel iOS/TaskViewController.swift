@@ -24,6 +24,7 @@ class TaskViewController: SubViewController {
     var currentStimulusIndex : Int = -1 //Increased at the start, so we start at 0
     var tapDetectedDuringThisStimulus = false
     var exampleFeedbackWasPlayed = false
+    var finished = false
     
     var timer = NSTimer()
     
@@ -60,35 +61,42 @@ class TaskViewController: SubViewController {
     
     func startTask()
     {
-        //Start the timer
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(kTimeBetweenStimuli, target: self, selector: Selector("processStimulusResponseAndPresentNext"), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(kTimeBeforeStimuli, target: self, selector: Selector("startStimuli"), userInfo: nil, repeats: false)
+    }
+    
+    func startStimuli()
+    {
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(kTimeBetweenStimuliWhenShowingTheExample, target: self, selector: Selector("processStimulusResponseAndPresentNext"), userInfo: nil, repeats: true)
         
         self.processStimulusResponseAndPresentNext()
     }
     
     func processStimulusResponseAndPresentNext()
     {
-        //Process stimulus response
-        if self.currentStimulusIndex > 0
+        //If this is the first time, make sure the auditive feedback will be played, and the instructions will be changed
+        if self.currentStimulusIndex == -1
+        {
+            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector:Selector("playAuditiveTouchFeedback"), userInfo : nil, repeats: false)
+            
+            NSTimer.scheduledTimerWithTimeInterval(1.4, target:self, selector:Selector("showInstructions"), userInfo : nil, repeats: false)
+            
+        }
+
+        else if self.currentStimulusIndex == 0
+        {
+            //And from now on, the stimuli will come faster
+            self.timer.invalidate()
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(kTimeBetweenStimuli, target: self, selector: Selector("processStimulusResponseAndPresentNext"), userInfo: nil, repeats: true)
+            
+        }
+        
+        //Process stimulus response if this is not the example
+        else if self.currentStimulusIndex > 0
         {
             var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
             currentStimulus.receivedResponse = self.tapDetectedDuringThisStimulus
-        }
-    
-        //If this was the first stimulus, play example feedback and wait till next cycle
-        if self.currentStimulusIndex == 0 && !self.exampleFeedbackWasPlayed
-        {
-            self.playAuditiveTouchFeedback()
-            self.exampleFeedbackWasPlayed = true
-            return
-        }
 
-        //If this was the first stimulus, switch from the example to the real deal
-        if self.currentStimulusIndex == 0 && self.exampleFeedbackWasPlayed
-        {
-            self.label.text = "Tap the screen when you hear the target vowel again"
         }
-        
         
         //Debugging option
         if kOnlyOneStimulus && self.currentStimulusIndex == 1
@@ -102,8 +110,9 @@ class TaskViewController: SubViewController {
         
         if self.currentStimulusIndex < self.stimuli.count
         {
+            println(self.currentStimulusIndex)
             var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
-            self.playSound(currentStimulus.fileLocation!)
+            self.playSound(currentStimulus.fileLocation!,volume: 1)
         }
         else
         {
@@ -111,7 +120,7 @@ class TaskViewController: SubViewController {
         }
     }
     
-    func playSound(soundFileName : String, ofType: String = "wav", absolutePath : Bool = true)
+    func playSound(soundFileName : String, volume : Float,ofType: String = "wav", absolutePath : Bool = true)
     {
         var soundPath : NSURL
         
@@ -125,6 +134,7 @@ class TaskViewController: SubViewController {
         }
             
         self.audioPlayer = AVAudioPlayer(contentsOfURL: soundPath, error: nil)
+        self.audioPlayer.volume = volume
         self.audioPlayer.prepareToPlay()
         self.audioPlayer.play()
     }
@@ -137,13 +147,25 @@ class TaskViewController: SubViewController {
 
     func playAuditiveTouchFeedback()
     {
-        self.playSound("click",ofType: "aiff",absolutePath : false)
+        self.playSound("click",volume: kFeedbackSoundVolume, absolutePath : false)
     }
     
     func taskIsFinished()
     {
+        self.finished = true
         self.timer.invalidate()
         self.superController!.subControllerFinished(self)
     }
     
+    func showInstructions()
+    {
+        self.label.text = "Tap the screen when you hear the target vowel again"
+    }
+    
+    func quit()
+    {
+        println("Quiting")
+        self.timer.invalidate()
+        self.superController!.subControllerFinished(self)
+    }
 }

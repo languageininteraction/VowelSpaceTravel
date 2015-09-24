@@ -79,6 +79,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         
         //Create the VSTServer object
         self.server = VSTServer(url: kWebserviceURL)
+        self.server!.showAlert = self.showAlert
         
         var uudid : String = UIDevice.currentDevice().identifierForVendor.UUIDString
         self.server!.createUserIfItDoesNotExistAndLogin(uudid,lastName: uudid)
@@ -100,15 +101,19 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     func login(#username : String,password : String)
     {
         println("Loggin in");
-        self.zoomFromVowelTractOverViewToVowelSelection()
+        self.zoomFromVowelTractOverViewToVowelSelection(nil)
     }
     
-    func zoomFromVowelTractOverViewToVowelSelection()
+    func zoomFromVowelTractOverViewToVowelSelection(game : Game?)
     {
-        println("Showing zooming animation")
         self.vowelSelectionViewController = VowelSelectionViewController();
         self.vowelSelectionViewController.superController = self
         self.vowelSelectionViewController.server = self.server!
+
+        if game != nil
+        {
+            self.vowelSelectionViewController.currentGame = game!
+        }
         
         var oldTransform = vowelSelectionViewController.view.layer.transform;
         var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
@@ -127,20 +132,41 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         
         self.view.addSubview(vowelSelectionViewController.view)
     }
+    
+    func showAlert(title : String,message : String)
+    {
+        var alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Close app", style : UIAlertActionStyle.Default,handler:
+            {
+                action -> Void in
+                exit(0)
+            })
+        )
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
 
     func subControllerFinished(subController: SubViewController)
     {
         //This can only be the vowel selection view controller, and that always want to be restarted
+        var oldVowelSelectionViewController : VowelSelectionViewController = subController as! VowelSelectionViewController
         subController.view.removeFromSuperview()
-        self.zoomFromVowelTractOverViewToVowelSelection()
+        self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
     }
     
     //Motions can only be picked up here, because the vowel selection view controller is never officially presented
     override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent)
     {
-        if self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
+        println("Detected shake")
+        
+        if self.vowelSelectionViewController.currentGame.autoPilotMode && self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
         {
             self.vowelSelectionViewController.resultViewController!.pilotModeFinished()
+        }
+        else if self.vowelSelectionViewController.currentGame.stage == GameStage.Playing
+        {
+            println("Got inside")
+            self.vowelSelectionViewController.taskViewController!.quit()
         }
     }
     
