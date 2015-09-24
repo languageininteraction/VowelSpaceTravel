@@ -365,7 +365,7 @@ class VSTServer : NSObject
                 {
                     var targetVowelId : Int = confidence["targetId"] as! Int
                     
-                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["confidenceLevel"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
+                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["targetId"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
                     self.confidencesForVowelPairsByTargetVowelId[targetVowelId]!.append(currentConfidenceObject)
                     
                 }
