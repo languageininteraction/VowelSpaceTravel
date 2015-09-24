@@ -18,6 +18,7 @@
 
 package nl.ru.languageininteraction.vst.model;
 
+import java.util.List;
 import java.util.Random;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,10 +52,11 @@ public class Score {
     public Score(ConfidenceRepository confidenceRepository,Player player, Vowel targetVowel, Vowel standardVowel)
     {
         this.player = player;
-        score = new Random().nextDouble();
+        //score = new Random().nextDouble();
         this.standardVowel = standardVowel;
         this.targetVowel = targetVowel;
-        
+        List<Confidence> retrievedConfidences= confidenceRepository.findByPlayerAndTargetVowelAndStandardVowel(player,targetVowel,standardVowel);
+        calculateScore(retrievedConfidences);
         // TODO: add code to calculate score from confidence values.
     }
 
@@ -66,14 +68,98 @@ public class Score {
         return score;
     }
 
-    public Vowel getTargetVowel() {
-        return targetVowel;
+    public long getTargetId() {
+        return targetVowel.getId();
     }
 
-    public Vowel getStandardVowel() {
-        return standardVowel;
+    public long getStandardId() {
+        return standardVowel.getId();
+    }
+
+    private void calculateScore(List<Confidence> retrievedConfidences) {
+        double weight = 0.25;
+        TaskScoreCalculator identificationCalculator = new TaskScoreCalculator(weight);
+        TaskScoreCalculator discriminationCalculator = new TaskScoreCalculator(weight);
+        
+        for (Confidence element:retrievedConfidences){
+            if(element.getTask() == Task.identification)
+                identificationCalculator.setScore(element.getPerformance(),element.getDifficulty());
+            if(element.getTask() == Task.discrimination)
+            {    
+                discriminationCalculator.setScore(element.getPerformance(),element.getDifficulty());
+                discriminationCalculator.inheritFromCalculator(identificationCalculator);
+            }
+            score = (identificationCalculator.getTaskScore() + discriminationCalculator.getTaskScore()) /2;
+        }
     }
    
-    
+    class TaskScoreCalculator {
+        
+        double easyScore;
+        double mediumScore;
+        double veryhardScore;
+        double hardScore;
+        double weight;
+        double taskScore;
+
+        public double getTaskScore() {
+            calculateScore();
+            return taskScore;
+        }
+        double task;
+        
+        public TaskScoreCalculator(double weight)
+        {
+            easyScore = 0;
+            mediumScore = 0;
+            hardScore = 0;
+            veryhardScore = 0;
+            this.weight = weight;
+        }
+                     
+        public void inheritFromCalculator(TaskScoreCalculator calculator)
+        {
+            if(calculator.veryhardScore > veryhardScore)
+                veryhardScore = calculator.veryhardScore;
+            if(calculator.hardScore > hardScore )
+                hardScore = calculator.hardScore;
+            if(calculator.mediumScore > mediumScore )
+                mediumScore = calculator.mediumScore;
+            if(calculator.easyScore > easyScore )
+                easyScore = calculator.easyScore;
+        }
+        
+        private void inheritScore()
+        {
+            if(veryhardScore > hardScore)
+                hardScore = veryhardScore;
+            if(hardScore > mediumScore)
+                mediumScore = hardScore;
+            if(mediumScore > easyScore)
+                easyScore = mediumScore;      
+        }
+        
+        public void calculateScore()
+        {
+            inheritScore();
+            taskScore = weight * easyScore + weight * mediumScore + weight * hardScore + weight * veryhardScore;
+        }
+        
+        public void setScore(double score, Difficulty difficulty) {
+            switch(difficulty)
+            {
+                case easy:
+                    easyScore = score; break;
+                case medium:
+                    mediumScore = score; break;
+                case hard:
+                    hardScore = score; break;
+                case veryhard:
+                    veryhardScore = score; break;
+            }
+                    
+        }
+
+    }
     
 }

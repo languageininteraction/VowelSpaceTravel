@@ -46,6 +46,11 @@ public interface ConfidenceRepository extends PagingAndSortingRepository<Confide
             @Param("player") Player player,
             @Param("task") Task task,
             @Param("difficulty") Difficulty difficulty);
+    
+    public List<Confidence>findByPlayerAndTargetVowelAndStandardVowel(
+            @Param("player") Player player,
+            @Param("targetVowel") Vowel targetVowel,
+            @Param("standardVowel") Vowel standardVowel);
 
     public List<Confidence> findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(
             @Param("player") Player player,

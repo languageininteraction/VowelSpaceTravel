@@ -46,7 +46,12 @@ public class Confidence {
     private Vowel standardVowel;
     private double confidenceLevel;
     private double lowerBound;
+
+    public double getPerformance() {
+        return performance;
+    }
     private double upperBound;
+    private double performance;
     private boolean hasValidConfidence = false;
     private Task task;
     private Difficulty difficulty;
@@ -85,6 +90,7 @@ public class Confidence {
             confidenceLevel = currentInterval.getConfidenceLevel();
             lowerBound = currentInterval.getLowerBound();
             upperBound = currentInterval.getUpperBound();
+            performance = numberOfSuccesses/(numberOfTrials * 1.0);
             hasValidConfidence = true;
         }
     }

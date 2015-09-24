@@ -66,7 +66,19 @@ public class StimulusResponseDefaultData {
         final Player player = playerRepository.findOne(2L);
         final List<Vowel> allVowels = vowelRepository.findAll();
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
-        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, false);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, true);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
+        insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
+        /*insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, false);
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, true);
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, false);
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, true);
@@ -130,6 +142,7 @@ public class StimulusResponseDefaultData {
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, true);
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isTarget, false);
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, true);
+                */
         insertValues(allVowels, player, task, difficulty, Stimulus.Relevance.isStandard, false);
         insertConfidence(allVowels, player, task, difficulty);
     }
