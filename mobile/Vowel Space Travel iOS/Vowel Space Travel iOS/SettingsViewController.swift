@@ -65,6 +65,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         var difficultyLabelLeft : CGFloat = 325
         var difficultyLabelWidth : CGFloat = 120
  
+        self.showCenterFieldLabel("Back", frame: CGRectMake(800,322,difficultyLabelWidth,50), fontSize: 12)
+        
         self.showCenterFieldLabel("Adjust settings as required", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,70,topLabelWidth,50), fontSize: 25)
         self.showCenterFieldLabel("Difficulty", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth)-10,135,topLabelWidth,50), fontSize: 20)
         self.showCenterFieldLabel("Mission", frame: CGRectMake(0.5*(self.screenWidth!-topLabelWidth),420,topLabelWidth,50), fontSize: 20)
@@ -92,7 +94,16 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         var segmentedControlLeft : CGFloat = 450
 
         self.singleOrMultipleSpeakerSegmentedControl = ReselectableSegmentedControl(items: ["",""])
-        self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 0
+        
+        if self.currentGame!.multipleSpeakers
+        {
+            self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 1
+        }
+        else
+        {
+            self.singleOrMultipleSpeakerSegmentedControl.selectedSegmentIndex = 0
+        }
+        
         self.singleOrMultipleSpeakerSegmentedControl.frame = CGRect(x: segmentedControlLeft,y: speakerSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
 
         //Custom appearance of the segmented control
@@ -107,7 +118,16 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         var soundsSegmentedControlDistanceFromTop : CGFloat = 310
         
         self.sameOrDifferentStartingSoundSegmentedControl = ReselectableSegmentedControl(items: ["",""])
-        self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 0
+
+        if self.currentGame!.differentStartingSounds
+        {
+            self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 1
+        }
+        else
+        {
+            self.sameOrDifferentStartingSoundSegmentedControl.selectedSegmentIndex = 0
+        }
+        
         self.sameOrDifferentStartingSoundSegmentedControl.frame = CGRect(x: segmentedControlLeft,y: soundsSegmentedControlDistanceFromTop,width: segmentedControlWidth,height: segmentedControlHeight)
 
         self.sameOrDifferentStartingSoundSegmentedControl.setBackgroundImage(UIImage(named: "segmented_control_background"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)

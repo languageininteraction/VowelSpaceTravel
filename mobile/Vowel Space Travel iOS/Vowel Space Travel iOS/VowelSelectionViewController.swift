@@ -32,7 +32,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     var instructionTitle : UILabel = UILabel()
     var taskDescription : UILabel = UILabel()
+
     var playLabel : UILabel = UILabel()
+    var helpLabel : UILabel = UILabel()
+    var aboutLabel : UILabel = UILabel()
     
     var availableVowels : [String : VowelDefinition]?
     var vowelButtons : [String : UIButton]?
@@ -46,6 +49,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     var currentVowelDraggingType : VowelDraggingType? = nil
     
     var readyButton = UIButton()
+    var helpButton = UIButton()
+    var infoButton = UIButton()
+    
+    var viewingHelp : Bool = false
+    
     var taskSegmentedControl : UISegmentedControl?
     
     var circleCurrentlyBeingDragged : CAShapeLayer?
@@ -63,9 +71,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
 
         self.availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
         
-        //Get the confidences for vowel combinations
-        self.updateConfidencesAndDrawVowelViews()
-        
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
@@ -79,11 +84,26 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.view.addSubview(backgroundImageView)
         
         //Set the suggested vowels
-        var suggestedBaseVowelExampleWord : String = self.server!.getSuggestedBaseVowelExampleWord()
-        var suggestedTargetVowelExampleWord : String = self.server!.getSuggestedTargetVowelExampleWord()
-        
-        self.suggestedBaseVowel = self.availableVowels![suggestedBaseVowelExampleWord]
-        self.suggestedTargetVowel = self.availableVowels![suggestedTargetVowelExampleWord]
+        self.server!.getSuggestionForGame()
+        {
+            (gameSuggestion) -> Void in
+            
+            self.suggestedBaseVowel = gameSuggestion.targetVowel //This is because of a mix-up in terminology
+            self.suggestedTargetVowel = gameSuggestion.standardVowel
+            
+            //Preselect the suggestions
+            if self.currentGame.selectedBaseVowel == nil || self.currentGame.selectedTargetVowel == nil
+            {
+                self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
+                self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
+                self.currentGame.multipleSpeakers = gameSuggestion.multipleSpeakers
+                self.currentGame.differentStartingSounds = gameSuggestion.differentStartingSounds
+            }
+            
+            //Get the confidences for vowel combinations
+            self.updateConfidencesAndDrawVowelViews()
+            
+        }
         
         self.planetLocationsForIpaNotation = ["i" : CGRect(x: 350,y: 140,width: 100,height: 100),
                                             "E" : CGRect(x: 305,y: 250,width: 100,height: 100),
@@ -107,13 +127,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                                             "$" : CGRect(x: 690,y: 360,width: 100,height: 100),
             "#" : CGRect(x: 670,y: 430,width: 100,height: 100)]
         
-        //Preselect the suggestions
-        if self.currentGame.selectedBaseVowel == nil || self.currentGame.selectedTargetVowel == nil
-        {
-            self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
-            self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
-        }
-            
         //Show the vowelbuttons
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
@@ -151,6 +164,16 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.readyButton.setImage(UIImage(named: "startButton"), forState: UIControlState.Normal)
         self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(readyButton)
+
+        self.infoButton = UIButton(frame: CGRectMake(265,475,25,30))
+        self.infoButton.setImage(UIImage(named: "infobutton"), forState: UIControlState.Normal)
+        self.infoButton.addTarget(self, action: "infoButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(infoButton)
+
+        self.helpButton = UIButton(frame: CGRectMake(295,475,25,30))
+        self.helpButton.setImage(UIImage(named: "question_button"), forState: UIControlState.Normal)
+        self.helpButton.addTarget(self, action: "helpButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(helpButton)
         
 //        let infoButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)+150,buttonWidth,buttonHeight))
 //        infoButton.setTitle("Info", forState: UIControlState.Normal)
@@ -162,8 +185,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.taskSegmentedControl!.selectedSegmentIndex = 0
  
         //Custom appearance of the segmented control
-        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControl"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
-        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlSelected"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
+        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlv3"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
+        self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlSelectedv3"), forState: UIControlState.Selected, barMetrics: UIBarMetrics.Default)
         self.taskSegmentedControl!.tintColor = UIColor.clearColor()
        
         self.taskSegmentedControl!.frame =  CGRect(x: 425,y: 475,width: 75,height: 30)
@@ -179,20 +202,37 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.instructionTitle.textAlignment = NSTextAlignment.Center
         self.instructionTitle.font = UIFont(name: "Muli",size:15)
         self.instructionTitle.textColor = UIColor.whiteColor()
-        self.instructionTitle.text = "The suggested vowels are circled, drag to change if you like."
+        self.instructionTitle.text = "The suggested vowels are circled, drag to change."
         
         self.view.addSubview(instructionTitle)
-        
-        self.taskDescription = UILabel();
-        self.taskDescription.textColor = UIColor.whiteColor()
+
         var labelWidth : CGFloat = 500;
         var labelHeight : CGFloat = 30;
+        
+        self.helpLabel = UILabel();
+        self.helpLabel.textColor = UIColor.whiteColor()
+        
+        self.helpLabel.font = UIFont(name: "Muli",size:8)
+        self.helpLabel.frame = CGRectMake(299,500,labelWidth,labelHeight)
+        self.helpLabel.text = "Help"
+        
+        self.aboutLabel = UILabel();
+        self.aboutLabel.textColor = UIColor.whiteColor()
 
+        self.aboutLabel.font = UIFont(name: "Muli",size:8)
+        self.aboutLabel.frame = CGRectMake(267,500,labelWidth,labelHeight)
+        self.aboutLabel.text = "About"
+
+        self.taskDescription = UILabel();
+        self.taskDescription.textColor = UIColor.whiteColor()
+        
         self.taskDescription.font = UIFont(name: "Muli",size:8)
         self.taskDescription.frame = CGRectMake(420,500,labelWidth,labelHeight)
-        self.taskDescription.text = "Distinguish   Recognize"
-        
-        self.view.addSubview(taskDescription)
+        self.taskDescription.text = "Distinguish      Recognize"
+
+        self.view.addSubview(self.aboutLabel)
+        self.view.addSubview(self.helpLabel)
+        self.view.addSubview(self.taskDescription)
 
         self.playLabel = UILabel();
         self.playLabel.textColor = UIColor.whiteColor()
@@ -294,11 +334,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         circle.frame = CGRectMake(0,0,40,40)
         
         var pulsatingAnimation : CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
-        pulsatingAnimation.duration = 1.2
+        pulsatingAnimation.duration = 0.6
         pulsatingAnimation.repeatCount = Float.infinity
         pulsatingAnimation.autoreverses = true
         pulsatingAnimation.fromValue = 1
-        pulsatingAnimation.toValue = 1.09
+        pulsatingAnimation.toValue = 1.2
         
         circle.addAnimation(pulsatingAnimation, forKey: "scale")
         
@@ -437,6 +477,14 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func readyButtonPressed()
     {
+        //Sometimes randomly flip target and base vowel
+        if arc4random()%2 == 0
+        {
+            var saveTargetVowel : VowelDefinition? = self.currentGame.selectedTargetVowel
+            self.currentGame.selectedTargetVowel = self.currentGame.selectedBaseVowel
+            self.currentGame.selectedBaseVowel = saveTargetVowel
+        }
+        
         self.currentGame.stage = GameStage.SettingOtherSettings
         self.goToSettingsView()
     }
@@ -445,6 +493,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     func infoButtonPressed()
     {
         self.goToInfoView()
+    }
+    
+    func helpButtonPressed()
+    {
+        self.viewingHelp = true
+        self.superController!.subControllerFinished(self)
     }
     
     func taskSegmentedControlPressed(sender : UISegmentedControl)
@@ -635,6 +689,9 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         self.superController!.subControllerFinished(self)
                     }
 
+                case self.infoViewController!:
+                    self.superController!.subControllerFinished(self)
+                
                 case self.taskViewController!:
                     
                     if self.taskViewController!.finished
@@ -672,9 +729,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         }
                         else
                         {
-                            self.currentGame = self.createANewGameBasedOnServerSuggestions()
-                            self.currentGame.stage = GameStage.Playing
-                            self.goToSettingsView()
+                            self.createANewGameBasedOnServerSuggestionsAndGoToSettingsView()
                         }
                     }
                     else if self.currentGame.stage == GameStage.Playing
@@ -694,14 +749,25 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         })
     }
     
-    func createANewGameBasedOnServerSuggestions() -> Game
+    func createANewGameBasedOnServerSuggestionsAndGoToSettingsView()
     {
-        var newGame : Game = Game()
-        newGame.selectedBaseVowel = self.availableVowels!["pet"]
-        newGame.selectedTargetVowel = self.availableVowels!["putt"]
-        newGame.autoPilotMode = true
-        
-        return newGame
+        self.server!.getSuggestionForGame()
+        {
+            (gameSuggestion) -> Void in
+
+            var newGame : Game = Game()
+            newGame.selectedBaseVowel = gameSuggestion.targetVowel
+            newGame.selectedTargetVowel = gameSuggestion.standardVowel
+            newGame.multipleSpeakers = gameSuggestion.multipleSpeakers
+            newGame.differentStartingSounds = gameSuggestion.differentStartingSounds
+            
+            newGame.autoPilotMode = true
+            
+            self.currentGame = newGame
+            self.currentGame.stage = GameStage.Playing
+            self.goToSettingsView()
+            
+        }
     }
     
     func createANewGameWithTheSameSettings(game : Game) -> Game

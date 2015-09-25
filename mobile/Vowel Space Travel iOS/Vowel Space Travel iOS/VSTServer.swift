@@ -222,16 +222,6 @@ class VSTServer : NSObject
             
         }
     }
-    
-    func getSuggestedBaseVowelExampleWord() -> String
-    {
-        return "pet"
-    }
-    
-    func getSuggestedTargetVowelExampleWord() -> String
-    {
-        return "putt"
-    }
 
     func translateSettingsToDifficultyString(multipleSpeakers : Bool, differentStartingSounds : Bool) -> String
     {
@@ -262,7 +252,7 @@ class VSTServer : NSObject
         
         var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequest.multipleSpeakers, differentStartingSounds: stimuliRequest.differentStartingSounds);
         
-        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=10&maxTargetCount=3&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
+        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=\(kNumberOfStimuliInRound)&maxTargetCount=\(kMaxNumberOfTargetsInRound)&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
         
         var stimuli = [Stimulus]()
         
@@ -365,7 +355,7 @@ class VSTServer : NSObject
                 {
                     var targetVowelId : Int = confidence["targetId"] as! Int
                     
-                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["confidenceLevel"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
+                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["targetId"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
                     self.confidencesForVowelPairsByTargetVowelId[targetVowelId]!.append(currentConfidenceObject)
                     
                 }
@@ -395,6 +385,62 @@ class VSTServer : NSObject
             
             completionHandler(self.confidencesForVowelPairsByTargetVowelId,nil)
         }
+    }
+    
+    func getSuggestionForGame(completionHandler: ((GameSuggestion) -> Void))
+    {
+        var urlExtensionToGetSuggestion : String = "suggestion/tasksuggestion/\(self.userID!)"
+        
+        self.HTTPGetToJSON(urlExtensionToGetSuggestion)
+        {
+            (jsonData,err) -> Void in
+            
+            println(jsonData)
+            
+            var targetVowelInfo : NSDictionary = jsonData!["targetVowel"] as! NSDictionary
+            var standardVowelInfo : NSDictionary = jsonData!["standardVowel"] as! NSDictionary
+            
+            var targetVowelID : String = targetVowelInfo["disc"] as! String
+            var standardVowelID : String = standardVowelInfo["disc"] as! String
+            
+            var targetVowel : VowelDefinition?
+            var standardVowel : VowelDefinition?
+            
+            for vowel in self.availableVowels
+            {
+                println(vowel.ipaNotation)
+                println(targetVowelID)
+                
+                if vowel.ipaNotation == targetVowelID
+                {
+                    targetVowel = vowel
+                }
+                else if vowel.ipaNotation == standardVowelID
+                {
+                    standardVowel = vowel
+                }
+            }
+            
+            var task : Task = Task(rawValue: jsonData!["task"] as! String)!
+            var difficulty : String = jsonData!["difficulty"] as! String
+
+            var multipleSpeakers : Bool
+            var differentStartingSounds : Bool
+            
+            switch(difficulty)
+            {
+                case "easy": multipleSpeakers = false; differentStartingSounds = false; break;
+                case "medium": multipleSpeakers = true; differentStartingSounds = false; break;
+                case "hard": multipleSpeakers = false; differentStartingSounds = true; break;
+                case "veryhard": multipleSpeakers = true; differentStartingSounds = true; break;
+                default : multipleSpeakers = false; differentStartingSounds = false; break;
+            }
+            
+            var gameSuggestion = GameSuggestion(targetVowel: targetVowel!, standardVowel: standardVowel!, task: task, multipleSpeakers: multipleSpeakers, differentStartingSounds:differentStartingSounds)
+            
+            completionHandler(gameSuggestion)
+        }
+        
     }
     
     func presentErrorMessage()

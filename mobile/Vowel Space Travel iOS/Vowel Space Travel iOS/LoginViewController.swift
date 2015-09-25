@@ -49,33 +49,41 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         //Create login button
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
+        let buttonTop : CGFloat = 200
         
-        let loginButton = UIButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+180,buttonWidth,buttonHeight))
+        let loginButton = UIButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+buttonTop,buttonWidth,buttonHeight))
 
         loginButton.setImage(UIImage(named: "loginbutton"), forState: UIControlState.Normal)
         loginButton.addTarget(self, action: "loginButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(loginButton)
 
-        //Show account creation label
-        var createAccountLink = UILabel();
         var labelWidth : CGFloat = 300;
         var labelHeigth : CGFloat = 30;
         
-        createAccountLink.frame = CGRectMake(0.5*(self.screenWidth!-labelWidth),0.5*(self.screenHeight!-labelHeigth) + 300,labelWidth,labelHeigth)
-        createAccountLink.textAlignment = NSTextAlignment.Center
-        createAccountLink.font = UIFont(name: "Muli",size:20)
-        createAccountLink.text = "Create account"
-        createAccountLink.textColor = UIColor.whiteColor()
-        self.view.addSubview(createAccountLink)
-
         var loginButtonText = UILabel();
         
-        loginButtonText.frame = CGRectMake(0.5*(self.screenWidth!-buttonWidth)+20,0.5*(self.screenHeight!-buttonHeight)+180,buttonWidth,buttonHeight)
+        loginButtonText.frame = CGRectMake(0.5*(self.screenWidth!-buttonWidth)+15,0.5*(self.screenHeight!-buttonHeight-2)+buttonTop,buttonWidth,buttonHeight)
         loginButtonText.textAlignment = NSTextAlignment.Center
         loginButtonText.font = UIFont(name: "Muli",size:25)
-        loginButtonText.text = "Log in"
+        loginButtonText.text = "Start"
         loginButtonText.textColor = UIColor(hue: 0.87, saturation: 0.3, brightness: 0.3, alpha: 1)
         self.view.addSubview(loginButtonText)
+        
+        //Show the text
+        var instructionText = UILabel()
+        var padding : CGFloat = 120
+        
+        instructionText.frame = CGRectMake(padding,padding+10,screenWidth!-(padding*2),350)
+        instructionText.textAlignment = NSTextAlignment.Center
+        instructionText.font = UIFont(name: "Muli",size:28)
+        instructionText.text = "In this app, you will learn to distinguish and recognize vowels in English. Each vowel is represented by a planet. The better get at keeping these vowels apart, the more distinct the planets will look.\n\n Good luck finding your way around the English \n vowel space!"
+        instructionText.textAlignment = NSTextAlignment.Center
+        instructionText.numberOfLines = 0
+        //instructionText.backgroundColor = UIColor.blackColor()
+        
+        instructionText.textColor = UIColor.whiteColor()
+        self.view.addSubview(instructionText)
+        
         
         //Create the VSTServer object
         self.server = VSTServer(url: kWebserviceURL)
@@ -148,10 +156,19 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
 
     func subControllerFinished(subController: SubViewController)
     {
-        //This can only be the vowel selection view controller, and that always want to be restarted
+        //This can only be the vowel selection view controller, and that almost always want to be restarted
         var oldVowelSelectionViewController : VowelSelectionViewController = subController as! VowelSelectionViewController
+        
         subController.view.removeFromSuperview()
-        self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
+        
+        if oldVowelSelectionViewController.viewingHelp
+        {
+            oldVowelSelectionViewController.viewingHelp = false
+        }
+        else
+        {            
+            self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
+        }
     }
     
     //Motions can only be picked up here, because the vowel selection view controller is never officially presented

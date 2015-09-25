@@ -23,6 +23,24 @@ enum GameStage : String
     case Finished = "finished"
 }
 
+class GameSuggestion
+{
+    var targetVowel: VowelDefinition
+    var standardVowel : VowelDefinition
+    var task : Task
+    var multipleSpeakers : Bool
+    var differentStartingSounds : Bool
+    
+    init(targetVowel : VowelDefinition, standardVowel : VowelDefinition, task : Task, multipleSpeakers : Bool, differentStartingSounds : Bool)
+    {
+        self.targetVowel = targetVowel
+        self.standardVowel = standardVowel
+        self.task = task
+        self.multipleSpeakers = multipleSpeakers
+        self.differentStartingSounds = differentStartingSounds
+    }
+}
+
 class Game : NSObject, StimuliRequest
 {
     var stage : GameStage = GameStage.SelectingVowels
