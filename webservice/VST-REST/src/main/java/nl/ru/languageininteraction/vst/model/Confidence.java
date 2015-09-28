@@ -65,10 +65,14 @@ public class Confidence {
         this.task = task;
         this.difficulty = difficulty;
         this.player = player;
-        final int truePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
-        final int falsePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
-        final int trueNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
-        final int falseNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        int truePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        int falsePositiveCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        int trueNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isStandard);
+        int falseNegativeCount = responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, targetVowel, standardVowel, Stimulus.Relevance.isTarget);
+        truePositiveCount += responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, standardVowel, targetVowel, Stimulus.Relevance.isTarget);
+        falsePositiveCount += responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseTrue(player, task, difficulty, standardVowel, targetVowel, Stimulus.Relevance.isStandard);
+        trueNegativeCount += responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, standardVowel, targetVowel, Stimulus.Relevance.isStandard);
+        falseNegativeCount += responseRepository.countByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndRelevanceAndPlayerResponseFalse(player, task, difficulty, standardVowel, targetVowel, Stimulus.Relevance.isTarget);
         calculateConfidence(truePositiveCount, falsePositiveCount, trueNegativeCount, falseNegativeCount);
     }
 

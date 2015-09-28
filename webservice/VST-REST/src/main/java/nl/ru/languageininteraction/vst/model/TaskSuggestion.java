@@ -31,12 +31,12 @@ public class TaskSuggestion {
     private Vowel targetVowel;
     private Vowel standardVowel;
 
-    public TaskSuggestion(List<Vowel> allVowels) {
+    public TaskSuggestion(List<VowelPair> vowelPairs) {
         task = Task.discrimination;
-        difficulty = Difficulty.veryhard;
-        targetVowel = allVowels.get(new Random().nextInt(allVowels.size()));
-        allVowels.remove(targetVowel);
-        standardVowel = allVowels.get(new Random().nextInt(allVowels.size()));
+        difficulty = Difficulty.veryhard;            
+        VowelPair vowelPair = vowelPairs.get(new Random().nextInt(vowelPairs.size()));
+        targetVowel = vowelPair.getVowelA();
+        standardVowel = vowelPair.getVowelB();
     }
 
     public TaskSuggestion(Task task, Difficulty difficulty, Vowel targetVowel, Vowel standardVowel) {
@@ -94,6 +94,17 @@ public class TaskSuggestion {
 
     public Vowel getStandardVowel() {
         return standardVowel;
+    }
+    
+    public long getTargetId() {
+        return targetVowel.getId();
+    }
+
+    public long getStandardId() {
+        if (standardVowel !=null)
+            return standardVowel.getId();
+        else
+            return -1;
     }
 
     public void lowerDifficulty() {

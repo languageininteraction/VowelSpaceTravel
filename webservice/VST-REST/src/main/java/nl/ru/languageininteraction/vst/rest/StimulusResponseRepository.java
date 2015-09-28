@@ -56,7 +56,7 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
             @Param("standardVowel") Vowel standardVowel,
             @Param("responseDate") Date responseDate);
     
-     List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
+ /*    List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
             Player player,
             Task task,
             Difficulty difficulty,
@@ -67,7 +67,7 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
             Difficulty difficulty1,
             Vowel v2,
             Vowel s2);
-           // Pageable pageable);
+           // Pageable pageable);*/
      
     List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
             Player player,
