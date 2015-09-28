@@ -77,9 +77,10 @@ public class Score {
     }
 
     private void calculateScore(List<Confidence> retrievedConfidences) {
-        double weight = 0.25;
-        TaskScoreCalculator identificationCalculator = new TaskScoreCalculator(weight);
-        TaskScoreCalculator discriminationCalculator = new TaskScoreCalculator(weight);
+        final double identificationWeight = 0.5;
+        final double discriminationWeight = 1 - identificationWeight;
+        TaskScoreCalculator identificationCalculator = new TaskScoreCalculator();
+        TaskScoreCalculator discriminationCalculator = new TaskScoreCalculator();
         
         for (Confidence element:retrievedConfidences){
             if(element.getTask() == Task.identification)
@@ -89,7 +90,8 @@ public class Score {
                 discriminationCalculator.setScore(element.getPerformance(),element.getDifficulty());
                 discriminationCalculator.inheritFromCalculator(identificationCalculator);
             }
-            score = (identificationCalculator.getTaskScore() + discriminationCalculator.getTaskScore()) /2;
+            score = identificationCalculator.getTaskScore() * identificationWeight +
+                     discriminationCalculator.getTaskScore() * discriminationWeight;
         }
     }
    
@@ -99,7 +101,7 @@ public class Score {
         double mediumScore;
         double veryhardScore;
         double hardScore;
-        double weight;
+        final double weight = 0.25;
         double taskScore;
 
         public double getTaskScore() {
@@ -108,13 +110,12 @@ public class Score {
         }
         double task;
         
-        public TaskScoreCalculator(double weight)
+        public TaskScoreCalculator()
         {
             easyScore = 0;
             mediumScore = 0;
             hardScore = 0;
             veryhardScore = 0;
-            this.weight = weight;
         }
                      
         public void inheritFromCalculator(TaskScoreCalculator calculator)
@@ -145,17 +146,20 @@ public class Score {
             taskScore = weight * easyScore + weight * mediumScore + weight * hardScore + weight * veryhardScore;
         }
         
-        public void setScore(double score, Difficulty difficulty) {
+        public void setScore(double performance, Difficulty difficulty) {
+            Double rawScore =  performance >= 0.5 ? (performance - 0.5) *2 : 0;  // deduct chance level from perfomance, then multiply to get a score between 0..1
+            Double normScore = 2/(1+Math.exp(-(rawScore*6)))-1;
+            
             switch(difficulty)
             {
                 case easy:
-                    easyScore = score; break;
+                    easyScore = normScore; break;
                 case medium:
-                    mediumScore = score; break;
+                    mediumScore = normScore; break;
                 case hard:
-                    hardScore = score; break;
+                    hardScore = normScore; break;
                 case veryhard:
-                    veryhardScore = score; break;
+                    veryhardScore = normScore; break;
             }
                     
         }
