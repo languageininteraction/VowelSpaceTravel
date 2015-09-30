@@ -22,9 +22,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
+import nl.ru.languageininteraction.vst.model.Score;
 import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Task;
@@ -62,6 +64,8 @@ public class TaskSuggestionController {
     StimulusResponseRepository responseRepository;
     @Autowired
     VowelRepository vowelRepository;
+    @Autowired
+    ScoreRepository scoreRepository;
 
     @RequestMapping(value = "/tasksuggestion/{player}", method = GET)
     @ResponseBody
@@ -80,52 +84,23 @@ public class TaskSuggestionController {
         //StimulusResponse latestResponse = responseRepository.findTop10ByPlayerOrderByResponseDateDesc(player).get(0);
         Date sessionDate = getSessionDate();
         List<StimulusResponse> recentData = responseRepository.findFirstByPlayerAndResponseDateGreaterThan(player, sessionDate);
-        System.out.println(recentData.isEmpty());
         return recentData.isEmpty();
     }
 
     private TaskSuggestion selectNewVowelPairAndSettings(Player player) {
-        List<Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.discrimination, Difficulty.veryhard);
-        // List <Confidence> allConf = confidenceRepository.findAll();
-        List<Vowel> allVowels = vowelRepository.findAll();
-        List<VowelPair> vowelPairs = new ArrayList();
-        for (Vowel vowelA : allVowels) {
-            List<Vowel> remainingVowels = new ArrayList(allVowels);
-            remainingVowels.remove(vowelA);
-            for (Vowel vowelB : remainingVowels) {
-                vowelPairs.add(new VowelPair(vowelA, vowelB));
-            }
+
+        List<Score> scores = scoreRepository.findByPlayer(player);
+        Double scoreTotal = 0.0;
+        for (Score score : scores) {
+            scoreTotal += score.getScore();
         }
-        List<VowelPair> currentVowelPairs = new ArrayList(vowelPairs);
-        
-        if (confList.isEmpty()) {
-            return new TaskSuggestion(vowelPairs);
-        }
-      
-        Date sessionDate = getSessionDate();
-        Iterator<Confidence> iterator = confList.iterator();
-        while (iterator.hasNext()) {
-            Confidence next = iterator.next();
-            // If stimulus response for this day, this player, this vowel pair in difficulty veryhard exists, move on to next.
-            StimulusResponse response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player,
-                    next.getTask(), Difficulty.veryhard, next.getStandardVowel(), next.getTargetVowel(), sessionDate);
-            if (response != null) {
-                currentVowelPairs.remove(new VowelPair(next.getTargetVowel(), next.getStandardVowel()));
-                continue;
-            }
-            response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player,
-                    next.getTask(), Difficulty.veryhard, next.getTargetVowel(), next.getStandardVowel(), sessionDate);
-            if (response == null) {
-                return new TaskSuggestion(next);
-            }
-            currentVowelPairs.remove(new VowelPair(next.getTargetVowel(), next.getStandardVowel()));
-        }
-        // referenceDate = new Date();
-        if (currentVowelPairs.isEmpty()) {
-            return new TaskSuggestion(vowelPairs);
+        Double identificationProb = scoreTotal / 120;
+        if (new Random().nextDouble() < identificationProb) {
+            return selectNewIdentificationTask(player);
         } else {
-            return new TaskSuggestion(currentVowelPairs);
+            return selectNewDiscriminationTask(player);
         }
+
         //throw new UnsupportedOperationException("Unsupported");
     }
 
@@ -208,7 +183,8 @@ public class TaskSuggestionController {
         int positiveCurr = positiveCount(currentData);
         int positiveRef = positiveCount(referenceData);
         double zScore = getZScore(positiveCurr, positiveRef, totalCurr, totalRef);
-        double pValue = new NormalDistribution(null, 0, 1).cumulativeProbability(zScore);
+        double pValue = 1 - new NormalDistribution(null, 0, 1).cumulativeProbability(zScore);
+        //double tresholdValue = new NormalDistribution(null, 0, 1).inverseCumulativeProbability(0.95);
         double alpha = 0.05;
         return (pValue < alpha);
     }
@@ -223,10 +199,8 @@ public class TaskSuggestionController {
         Iterator<StimulusResponse> iterator = data.iterator();
         int correct = 0;
         String std = data.get(0).getStandardVowels().get(0).getDisc();
-        System.out.println("Datawindow dates: " + data.get(0).getTargetVowel().getDisc() + " " + std);
         while (iterator.hasNext()) {
             StimulusResponse next = iterator.next();
-            System.out.println(next.getResponseDate().toString());
             if (next.getRelevance() == Stimulus.Relevance.isIrelevant) {
                 throw new UnsupportedOperationException("Irrelevant responses cannot be considered");
             }
@@ -236,6 +210,82 @@ public class TaskSuggestionController {
             }
         }
         return correct;
+    }
+
+    private TaskSuggestion selectNewIdentificationTask(Player player) {
+        List<Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.identification, Difficulty.veryhard);
+        List<Vowel> allVowels = vowelRepository.findAll();
+        List<Vowel> currentVowels = new ArrayList(allVowels);
+        if (confList.isEmpty()) {
+            return new TaskSuggestion(allVowels, Task.identification);
+        }
+
+        Date sessionDate = getSessionDate();
+        Iterator<Confidence> iterator = confList.iterator();
+        while (iterator.hasNext()) {
+            Confidence next = iterator.next();
+            // If stimulus response for this day, this player, this vowel pair in difficulty veryhard exists, move on to next.
+            StimulusResponse response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndResponseDateGreaterThan(player,
+                    next.getTask(), Difficulty.veryhard, next.getTargetVowel(), sessionDate);
+            if (response != null) {
+                currentVowels.remove(next.getTargetVowel());
+            } else {
+                return new TaskSuggestion(next);
+            }
+        }
+
+        if (currentVowels.isEmpty()) {
+            return new TaskSuggestion(allVowels, Task.identification);
+        } else {
+            return new TaskSuggestion(currentVowels, Task.identification);
+        }
+
+    }
+
+    private TaskSuggestion selectNewDiscriminationTask(Player player) {
+        List<Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.discrimination, Difficulty.veryhard);
+        //List<Confidence> confListIdentification = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.identification, Difficulty.veryhard);
+        //confList.addAll(confListIdentification);
+        // List <Confidence> allConf = confidenceRepository.findAll();
+        List<Vowel> allVowels = vowelRepository.findAll();
+        List<VowelPair> vowelPairs = new ArrayList();
+        for (Vowel vowelA : allVowels) {
+            List<Vowel> remainingVowels = new ArrayList(allVowels);
+            remainingVowels.remove(vowelA);
+            for (Vowel vowelB : remainingVowels) {
+                vowelPairs.add(new VowelPair(vowelA, vowelB));
+            }
+        }
+        List<VowelPair> currentVowelPairs = new ArrayList(vowelPairs);
+
+        if (confList.isEmpty()) {
+            return new TaskSuggestion(vowelPairs, Task.discrimination);
+        }
+
+        Date sessionDate = getSessionDate();
+        Iterator<Confidence> iterator = confList.iterator();
+        while (iterator.hasNext()) {
+            Confidence next = iterator.next();
+            // If stimulus response for this day, this player, this vowel pair in difficulty veryhard exists, move on to next.
+            StimulusResponse response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player,
+                    next.getTask(), Difficulty.veryhard, next.getStandardVowel(), next.getTargetVowel(), sessionDate);
+            if (response != null) {
+                currentVowelPairs.remove(new VowelPair(next.getTargetVowel(), next.getStandardVowel()));
+                continue;
+            }
+            response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player,
+                    next.getTask(), Difficulty.veryhard, next.getTargetVowel(), next.getStandardVowel(), sessionDate);
+            if (response == null) {
+                return new TaskSuggestion(next);
+            }
+            currentVowelPairs.remove(new VowelPair(next.getTargetVowel(), next.getStandardVowel()));
+        }
+        // referenceDate = new Date();
+        if (currentVowelPairs.isEmpty()) {
+            return selectNewIdentificationTask(player);
+        } else {
+            return new TaskSuggestion(currentVowelPairs, Task.discrimination);
+        }
     }
 
 }

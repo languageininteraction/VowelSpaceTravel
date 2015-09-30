@@ -77,7 +77,7 @@ public class Score {
     }
 
     private void calculateScore(List<Confidence> retrievedConfidences) {
-        final double identificationWeight = 0.5;
+        final double identificationWeight = 0.3;
         final double discriminationWeight = 1 - identificationWeight;
         TaskScoreCalculator identificationCalculator = new TaskScoreCalculator();
         TaskScoreCalculator discriminationCalculator = new TaskScoreCalculator();
@@ -88,10 +88,12 @@ public class Score {
             if(element.getTask() == Task.discrimination)
             {    
                 discriminationCalculator.setScore(element.getPerformance(),element.getDifficulty());
-                discriminationCalculator.inheritFromCalculator(identificationCalculator);
             }
+            discriminationCalculator.inheritFromCalculator(identificationCalculator);
             score = identificationCalculator.getTaskScore() * identificationWeight +
                      discriminationCalculator.getTaskScore() * discriminationWeight;
+            if (score<0.9)
+                System.out.println(score);
         }
     }
    
