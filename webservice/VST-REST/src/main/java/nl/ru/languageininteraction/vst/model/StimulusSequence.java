@@ -52,7 +52,6 @@ public class StimulusSequence extends ResourceSupport {
         final IntStream randomInts = new Random().ints(1, availableCount + 1);
         final IntStream distinctInts = randomInts.distinct();
         distinctInts.limit(availableCount).forEach((int value) -> {
-            System.out.println("distinctInt: " + value);
             // todo: select relevant Stimuli and set the Stimulus.Relevance correctly
             stimulusList.add(new Stimulus(sampleRepository.findOne((long) value), Stimulus.Relevance.isIrelevant));
         });
