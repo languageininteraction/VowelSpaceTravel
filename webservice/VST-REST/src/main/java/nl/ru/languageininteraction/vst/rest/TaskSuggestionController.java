@@ -89,7 +89,7 @@ public class TaskSuggestionController {
 
     private TaskSuggestion selectNewVowelPairAndSettings(Player player) {
 
-        List<Score> scores = scoreRepository.findByPlayer(player);
+        /*List<Score> scores = scoreRepository.findByPlayer(player);
         Double scoreTotal = 0.0;
         for (Score score : scores) {
             scoreTotal += score.getScore();
@@ -97,16 +97,16 @@ public class TaskSuggestionController {
         Double identificationProb = scoreTotal / 120;
         if (new Random().nextDouble() < identificationProb) {
             return selectNewIdentificationTask(player);
-        } else {
+        } else {*/
             return selectNewDiscriminationTask(player);
-        }
+       // }
 
         //throw new UnsupportedOperationException("Unsupported");
     }
 
     private TaskSuggestion determineSettingsforVowelPair(Player player) {
         StimulusResponse lastResponse = responseRepository.findFirstByPlayerOrderByResponseDateDesc(player);
-        if (lastResponse == null) {
+        if (lastResponse == null || lastResponse.getTask() == Task.identification) {
             return selectNewVowelPairAndSettings(player);
         }
         List<StimulusResponse> data = getRecentDataWindow(0, window, lastResponse, player);
@@ -282,7 +282,7 @@ public class TaskSuggestionController {
         }
         // referenceDate = new Date();
         if (currentVowelPairs.isEmpty()) {
-            return selectNewIdentificationTask(player);
+            return new TaskSuggestion(vowelPairs,Task.discrimination);// return selectNewIdentificationTask(player);
         } else {
             return new TaskSuggestion(currentVowelPairs, Task.discrimination);
         }
