@@ -27,5 +27,5 @@ let kPauseBetweenRounds : Double = 6
 let kNumberOfStimuliInRound : Int = 15
 let kMaxNumberOfTargetsInRound : Int = 6
 
-let kCachedStimuliLocation : String = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomainMask.UserDomainMask,true)[0] as! String + "/Caches/"
+let kCachedStimuliLocation : String = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomainMask.UserDomainMask,true)[0] + "/Caches/"
 let kSoundFileExtension = ".wav"

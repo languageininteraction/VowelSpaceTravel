@@ -30,7 +30,7 @@ class JvHGradientView: UIView {
 			locations.append(CGFloat(self.locations[i].floatValue))
 			
 			let color = self.colors[i]
-			var colorComponents = CGColorGetComponents(color.CGColor)
+			let colorComponents = CGColorGetComponents(color.CGColor)
 			
 			components.append(colorComponents[0])
 			components.append(colorComponents[1])
@@ -51,7 +51,7 @@ class JvHGradientView: UIView {
 		let currentBounds = self.bounds
 		let startPointInPoints = CGPointMake(self.startPoint.x * currentBounds.size.width, self.startPoint.y * currentBounds.size.height)
 		let endPointInPoints = CGPointMake(self.endPoint.x * currentBounds.size.width, self.endPoint.y * currentBounds.size.height)
-		CGContextDrawLinearGradient(currentContext, gradient, startPointInPoints, endPointInPoints, 0)
+		CGContextDrawLinearGradient(currentContext, gradient, startPointInPoints, endPointInPoints, CGGradientDrawingOptions(rawValue: 0))
 
 	}
 }

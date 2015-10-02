@@ -41,9 +41,6 @@ class TaskViewController: SubViewController {
         
         //Display a label
         self.label = UILabel();
-        var labelWidth : CGFloat = 500;
-        var labelHeigth : CGFloat = 30;
-        var distanceAboveCenter : CGFloat = 0;
         
         label.frame = CGRectMake(0,0,screenWidth!,screenHeight!)
         label.textAlignment = NSTextAlignment.Center
@@ -95,7 +92,7 @@ class TaskViewController: SubViewController {
         //Process stimulus response if this is not the example
         else if self.currentStimulusIndex > 0
         {
-            var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
+            let currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
             currentStimulus.receivedResponse = self.tapDetectedDuringThisStimulus
 
         }
@@ -112,8 +109,8 @@ class TaskViewController: SubViewController {
         
         if self.currentStimulusIndex < self.stimuli.count
         {
-            println(self.currentStimulusIndex)
-            var currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
+            print(self.currentStimulusIndex)
+            let currentStimulus : Stimulus = self.stimuli[self.currentStimulusIndex]
             self.playSound(currentStimulus.fileLocation!,volume: 1)
         }
         else
@@ -128,20 +125,28 @@ class TaskViewController: SubViewController {
         
         if absolutePath
         {
-            soundPath = NSURL(fileURLWithPath: soundFileName)!
+            soundPath = NSURL(fileURLWithPath: soundFileName)
         }
         else
         {
-            soundPath = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: ofType)!)!
+            soundPath = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(soundFileName, ofType: ofType)!)
         }
-            
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: soundPath, error: nil)
+        
+        do
+        {
+            self.audioPlayer = try AVAudioPlayer(contentsOfURL: soundPath)
+        }
+        catch
+        {
+            print(error)
+        }
+        
         self.audioPlayer.volume = volume
         self.audioPlayer.prepareToPlay()
         self.audioPlayer.play()
     }
         
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent)
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?)
     {
         if !self.tapDetectedDuringThisStimulus
         {
@@ -169,7 +174,7 @@ class TaskViewController: SubViewController {
     
     func quit()
     {
-        println("Quiting")
+        print("Quiting")
         self.timer.invalidate()
         self.superController!.subControllerFinished(self)
     }

@@ -50,7 +50,7 @@ class Stimulus : NSObject
             relevance = "isStandard"
         }
         
-        var result : Dictionary<String,AnyObject> = ["responseTimeMs":"1",
+        let result : Dictionary<String,AnyObject> = ["responseTimeMs":"1",
                                                     "relevance":relevance,
                                                     "playerResponse":self.receivedResponse != nil && self.receivedResponse! == false,
                                                     "vowelId":self.vowelID,

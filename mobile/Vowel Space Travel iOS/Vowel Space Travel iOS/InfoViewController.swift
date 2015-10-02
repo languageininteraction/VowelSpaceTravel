@@ -12,20 +12,20 @@ func createBitmapContext(pixelsWide: Int, pixelsHigh: Int) -> CGContextRef? {
     
     // A context without width or height doesn't make sense:
     if pixelsWide <= 0 || pixelsHigh <= 0 {
-        println("WARNING in createBitmapContext: Returning null because width and/or are smaller or equal to 0 (pixelsWide = /(pixelsWide) and pixelsHigh = /(pixelsHigh)).")
+        print("WARNING in createBitmapContext: Returning null because width and/or are smaller or equal to 0 (pixelsWide = /(pixelsWide) and pixelsHigh = /(pixelsHigh)).")
         return nil
     }
     
     let bitmapBytesPerRow = (pixelsWide * 4)
     let colorSpace = CGColorSpaceCreateDeviceRGB()
-    let bitmapInfo = CGBitmapInfo(CGImageAlphaInfo.PremultipliedLast.rawValue)
+    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
     let context = CGBitmapContextCreate(nil,
         pixelsWide,
         pixelsHigh,
         8, // bits per component
         bitmapBytesPerRow,
         colorSpace,
-        bitmapInfo)
+        bitmapInfo.rawValue)
     
     return context
 }
@@ -34,7 +34,7 @@ func createColoredVersionOfImage(sourceImage: CGImageRef, color: CGColorRef) -> 
     // Create a context with the proper size:
     let width = CGImageGetWidth(sourceImage)
     let height = CGImageGetHeight(sourceImage)
-    let context = createBitmapContext(width, height)
+    let context = createBitmapContext(width, pixelsHigh: height)
     
     // If context is NULL (e.g. because width or height is 0), return NULL:
     if context == nil {
@@ -51,8 +51,8 @@ func createColoredVersionOfImage(sourceImage: CGImageRef, color: CGColorRef) -> 
 }
 
 func createColoredVersionOfUIImage(sourceImage: UIImage, color: UIColor) -> UIImage? {
-    let coloredCGImage = createColoredVersionOfImage(sourceImage.CGImage, color.CGColor)
-    return UIImage(CGImage: coloredCGImage, scale: UIScreen.mainScreen().scale, orientation: UIImageOrientation.Up)
+    let coloredCGImage = createColoredVersionOfImage(sourceImage.CGImage!, color: color.CGColor)
+    return UIImage(CGImage: coloredCGImage!, scale: UIScreen.mainScreen().scale, orientation: UIImageOrientation.Up)
 }
 
 class InfoViewController: SubViewController, UIWebViewDelegate {
@@ -68,18 +68,18 @@ class InfoViewController: SubViewController, UIWebViewDelegate {
 		let frameWebView = CGRectMake(200, 0, size.width - 200 - 200, size.height); // todo
 		
 		webView.frame = frameWebView
-		webView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+		webView.autoresizingMask = UIViewAutoresizing.FlexibleHeight
 		
 		let path = NSBundle.mainBundle().pathForResource("htmlInfo", ofType: "html")!
 		var error: NSError? = nil
-		var htmlString = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: &error)
+        
+        do
+        {
+            var htmlString = try NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)
 		
-		if error != nil {
-			println("Error initializing htmlString: \(error)")
-		} else {
 			// A web view doesn't take the scale factor into account, so make sure that high resolution versions are used if available:
-			htmlString = htmlString?.stringByReplacingOccurrencesOfString(".png", withString: "@2x.png")
-			webView.loadHTMLString(htmlString! as String, baseURL: NSBundle.mainBundle().bundleURL)
+			htmlString = htmlString.stringByReplacingOccurrencesOfString(".png", withString: "@2x.png")
+			webView.loadHTMLString(htmlString as String, baseURL: NSBundle.mainBundle().bundleURL)
 			
 			// Make sure the webView is scrolled to the top:
 			let rect = CGRectMake(0, 0, webView.frame.size.width, webView.frame.size.height)
@@ -88,6 +88,10 @@ class InfoViewController: SubViewController, UIWebViewDelegate {
 			// Become the webView's delegate, so we can load requests in an external browser:
 			webView.delegate = self
 		}
+        catch
+        {
+            print(error)
+        }
 		
 		self.view.insertSubview(webView, atIndex: 0)
 		
@@ -103,9 +107,9 @@ class InfoViewController: SubViewController, UIWebViewDelegate {
 		let color2 = UIColor(red: 142.0/255.0, green: 207.0/255.0, blue: 230.0/255.0, alpha: 1)
 		gradientView.colors = [color1, color2]
 		self.view.insertSubview(gradientView, atIndex: 0)
-		gradientView.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+		gradientView.autoresizingMask = UIViewAutoresizing.FlexibleHeight
 
-        self.backButton.setImage(createColoredVersionOfUIImage(UIImage(named: "Cross 22x22")!, UIColor.whiteColor()), forState: UIControlState.Normal)
+        self.backButton.setImage(createColoredVersionOfUIImage(UIImage(named: "Cross 22x22")!, color: UIColor.whiteColor()), forState: UIControlState.Normal)
         self.backButton.frame = CGRectMake(15, 50, 54, 54) // todo make constants; copied from WoordWolk
         self.backButton.addTarget(self, action: "closeInfoScreen", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(self.backButton)

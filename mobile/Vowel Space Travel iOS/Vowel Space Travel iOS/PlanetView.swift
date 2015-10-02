@@ -28,7 +28,7 @@ class PlanetView : UIView
     var exampleWord : String = ""
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     init(frame: CGRect, exampleWord : String, hue : CGFloat, ringOpacity : CGFloat, waterOpacity : CGFloat, craterFrequency : CraterFrequency)
@@ -77,7 +77,7 @@ class PlanetView : UIView
     
     func drawBasePlanet(center: CGPoint)
     {
-        var path : UIBezierPath = createCircularPath(center, size: self.planetSize)
+        let path : UIBezierPath = createCircularPath(center, size: self.planetSize)
         drawFilledInPath(path, color: self.planetColor,position:CGPoint(x:0,y:0),scale: 1)
     }
     
@@ -85,7 +85,7 @@ class PlanetView : UIView
     {
         
         //Path converted from Inkscape SVG
-        var myBezier = UIBezierPath()
+        let myBezier = UIBezierPath()
         myBezier.moveToPoint(CGPoint(x: 180, y:1))
         myBezier.addCurveToPoint(CGPoint(x: 157, y: 166),
             controlPoint1: CGPoint(x: 180, y:1),
@@ -478,7 +478,7 @@ class PlanetView : UIView
     
     func drawOcean(opacity : CGFloat)
     {
-        var myBezier = UIBezierPath()
+        let myBezier = UIBezierPath()
         
         myBezier.moveToPoint(CGPoint(x: 1.14061, y:1.35928))
         myBezier.addCurveToPoint(CGPoint(x: 1.14061, y: 2.90615),
@@ -617,12 +617,12 @@ class PlanetView : UIView
     
     func drawFilledInPath(path : UIBezierPath, color : UIColor, position : CGPoint, scale : CGFloat)
     {
-        var shapeLayer = CAShapeLayer()
+        let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.CGPath
         shapeLayer.fillColor = color.CGColor
 
-        var scale = CATransform3DMakeScale(scale,scale,1)
-        var translate = CATransform3DMakeTranslation(position.x, position.y, 0)
+        let scale = CATransform3DMakeScale(scale,scale,1)
+        let translate = CATransform3DMakeTranslation(position.x, position.y, 0)
         shapeLayer.transform = CATransform3DConcat(scale, translate)
         
         self.layer.addSublayer(shapeLayer)
@@ -630,7 +630,7 @@ class PlanetView : UIView
     
     func drawExampleWord()
     {
-        var label : UILabel = UILabel();
+        let label : UILabel = UILabel();
         label.font = UIFont(name: "Muli", size: 23)
         label.frame = CGRectMake(0,100, 80,40)
         label.textAlignment = NSTextAlignment.Center

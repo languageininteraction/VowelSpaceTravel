@@ -18,7 +18,7 @@ class SuggestionView : UIView {
     var textColor = UIColor.whiteColor()
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     init(frame: CGRect, text: String) {
@@ -28,9 +28,9 @@ class SuggestionView : UIView {
         let triangleSize : CGFloat = self.bounds.height * 0.2
         let rectHeigth : CGFloat = self.bounds.height - triangleSize
         
-        var rectPath = UIBezierPath(roundedRect: CGRect(x: self.bounds.minX,y: self.bounds.minY,width: self.bounds.width,height: rectHeigth), cornerRadius: CGFloat(10)).CGPath
+        let rectPath = UIBezierPath(roundedRect: CGRect(x: self.bounds.minX,y: self.bounds.minY,width: self.bounds.width,height: rectHeigth), cornerRadius: CGFloat(10)).CGPath
         
-        var rect = CAShapeLayer()
+        let rect = CAShapeLayer()
         rect.path = rectPath
         rect.fillColor = self.fillColor.CGColor
         rect.strokeColor = self.strokeColor.CGColor
@@ -40,7 +40,7 @@ class SuggestionView : UIView {
         //Draw triangle
         let triangleLeft = self.bounds.minX + self.bounds.width / 10
         
-        var trianglePath = UIBezierPath()
+        let trianglePath = UIBezierPath()
         
         trianglePath.moveToPoint(CGPointMake(triangleLeft,rectHeigth))
         trianglePath.addLineToPoint(CGPointMake(triangleLeft+triangleSize,rectHeigth))
@@ -48,13 +48,13 @@ class SuggestionView : UIView {
         
         trianglePath.closePath()
         
-        var triangle = CAShapeLayer()
+        let triangle = CAShapeLayer()
         triangle.path = trianglePath.CGPath
         triangle.fillColor = self.fillColor.CGColor
         self.layer.addSublayer(triangle)
         
         //Draw the text
-        var suggestionText = UILabel(frame: self.bounds)
+        let suggestionText = UILabel(frame: self.bounds)
         suggestionText.textAlignment = NSTextAlignment.Center
         suggestionText.textColor = self.textColor
         suggestionText.text = text

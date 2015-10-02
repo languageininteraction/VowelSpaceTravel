@@ -25,7 +25,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         self.screenHeight = self.view.frame.size.height
         
         //Show the background image
-        var backgroundImageView = UIImageView(image: UIImage(named: "login_background"))
+        let backgroundImageView = UIImageView(image: UIImage(named: "login_background"))
         backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
         self.view.addSubview(backgroundImageView)
         
@@ -56,11 +56,8 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         loginButton.setImage(UIImage(named: "loginbutton"), forState: UIControlState.Normal)
         loginButton.addTarget(self, action: "loginButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(loginButton)
-
-        var labelWidth : CGFloat = 300;
-        var labelHeigth : CGFloat = 30;
         
-        var loginButtonText = UILabel();
+        let loginButtonText = UILabel();
         
         loginButtonText.frame = CGRectMake(0.5*(self.screenWidth!-buttonWidth)+15,0.5*(self.screenHeight!-buttonHeight-2)+buttonTop,buttonWidth,buttonHeight)
         loginButtonText.textAlignment = NSTextAlignment.Center
@@ -70,8 +67,8 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         self.view.addSubview(loginButtonText)
         
         //Show the text
-        var instructionText = UILabel()
-        var padding : CGFloat = 120
+        let instructionText = UILabel()
+        let padding : CGFloat = 120
         
         instructionText.frame = CGRectMake(padding,padding+10,screenWidth!-(padding*2),350)
         instructionText.textAlignment = NSTextAlignment.Center
@@ -89,7 +86,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         self.server = VSTServer(url: kWebserviceURL)
         self.server!.showAlert = self.showAlert
         
-        var uudid : String = UIDevice.currentDevice().identifierForVendor.UUIDString
+        let uudid : String = UIDevice.currentDevice().identifierForVendor!.UUIDString
         self.server!.createUserIfItDoesNotExistAndLogin(uudid,lastName: uudid)
         
     }
@@ -106,9 +103,9 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         self.login(username: "Wessel", password: "hunter2");
     }
     
-    func login(#username : String,password : String)
+    func login(username username : String,password : String)
     {
-        println("Loggin in");
+        print("Loggin in");
         self.zoomFromVowelTractOverViewToVowelSelection(nil)
     }
     
@@ -123,13 +120,13 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
             self.vowelSelectionViewController.currentGame = game!
         }
         
-        var oldTransform = vowelSelectionViewController.view.layer.transform;
-        var transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
-        var newTransform = CATransform3DTranslate(transformScale, 0, 60, 0)
+        let oldTransform = vowelSelectionViewController.view.layer.transform;
+        let transformScale = CATransform3DMakeScale(1.8, 1.8, 1)
+        let newTransform = CATransform3DTranslate(transformScale, 0, 60, 0)
         
         CATransaction.begin()
         
-        var zoomAnimation = CABasicAnimation(keyPath: "transform")
+        let zoomAnimation = CABasicAnimation(keyPath: "transform")
         zoomAnimation.speed = 0.1
         zoomAnimation.fromValue = NSValue(CATransform3D: oldTransform)
         zoomAnimation.toValue = NSValue(CATransform3D: newTransform)
@@ -143,7 +140,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     
     func showAlert(title : String,message : String)
     {
-        var alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
+        let alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "Close app", style : UIAlertActionStyle.Default,handler:
             {
                 action -> Void in
@@ -157,7 +154,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     func subControllerFinished(subController: SubViewController)
     {
         //This can only be the vowel selection view controller, and that almost always want to be restarted
-        var oldVowelSelectionViewController : VowelSelectionViewController = subController as! VowelSelectionViewController
+        let oldVowelSelectionViewController : VowelSelectionViewController = subController as! VowelSelectionViewController
         
         subController.view.removeFromSuperview()
         
@@ -172,9 +169,9 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     }
     
     //Motions can only be picked up here, because the vowel selection view controller is never officially presented
-    override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent)
+    override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent?)
     {
-        println("Detected shake")
+        print("Detected shake")
         
         if self.vowelSelectionViewController.currentGame.autoPilotMode && self.vowelSelectionViewController.currentGame.stage == GameStage.ShowingResult
         {
@@ -182,7 +179,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         }
         else if self.vowelSelectionViewController.currentGame.stage == GameStage.Playing
         {
-            println("Got inside")
+            print("Got inside")
             self.vowelSelectionViewController.taskViewController!.quit()
         }
     }

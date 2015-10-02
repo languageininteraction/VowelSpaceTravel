@@ -32,7 +32,7 @@ func addMixingWeightToConfidences(confidencesForVowelPairsByTargetVowelId : Dict
         confidenceValue.mixingWeigth = confidenceValue.inverted / summedInvertedConfidenceValuesPerTargetId[confidenceValue.targetVowelId]!
     }
     
-    println("Added confidences")
+    print("Added confidences")
 }
 
 func adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(vowel : VowelDefinition, allVowels : Dictionary<String,VowelDefinition>,confidencesForVowelPairsByTargetVowelId : Dictionary<Int,[ConfidenceForVowelPair]>) -> (place : Float, manner : Float, roundedness : Float)

@@ -19,7 +19,7 @@ class RootViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        var loginViewController = LoginViewController();
+        let loginViewController = LoginViewController();
         
         self.presentViewController(loginViewController, animated: false, completion: nil)
     }

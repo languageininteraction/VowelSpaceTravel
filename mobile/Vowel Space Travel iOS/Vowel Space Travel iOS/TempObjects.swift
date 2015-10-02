@@ -13,7 +13,7 @@ class TempStyledButton : UIButton
 {
     required init(coder aDecoder: NSCoder)
     {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     required override init(frame CGframe: CGRect)

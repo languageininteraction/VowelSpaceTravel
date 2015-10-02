@@ -50,14 +50,14 @@ class VSTServer : NSObject
     func createCredentialString() -> String
     {
         //Set up the credentials
-        var loggedIn : Bool = self.userID != nil
-        var username : String = loggedIn ? "\(self.userName!)" : kWebserviceUsername
+        let loggedIn : Bool = self.userID != nil
+        let username : String = loggedIn ? "\(self.userName!)" : kWebserviceUsername
         
-        println("Using credentials with un \(username) and password \(self.genericToken)")
+        print("Using credentials with un \(username) and password \(self.genericToken)")
         
         let loginString = NSString(format: "%@:%@", username, self.genericToken)
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        let base64LoginString = loginData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
     
         return base64LoginString
     }
@@ -66,63 +66,73 @@ class VSTServer : NSObject
     {
         //Create the request
         var jsonData : NSDictionary?
-        var request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+urlExtension)!)
+        let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+urlExtension)!)
         request.setValue("Basic \(self.createCredentialString())", forHTTPHeaderField : "Authorization")
         
         //Do the request
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, responseData: NSData!,error:NSError!) -> Void in
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:
+        {
             
-            if error == nil
-            {
-                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
-                
-                completionHandler(jsonData,error);
-
-            }
-            else
-            {
-                self.presentErrorMessage()
-            }
-            
-        })
+            (response: NSURLResponse?, responseData: NSData?, error: NSError?) -> Void in
         
+            do
+            {
+                jsonData = try NSJSONSerialization.JSONObjectWithData(responseData!,options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+            }
+            catch
+            {
+                print(error)
+            }
+                
+            completionHandler(jsonData,error);
+        
+        })
+
     }
     
     func HTTPPostToJSON(urlExtension: String, data : AnyObject, completionHandler: ((NSDictionary?, NSError?) -> Void))
     {
         //Create the request
         var jsonData : NSDictionary?
-        var request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+urlExtension)!)
+        let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+urlExtension)!)
         request.setValue("Basic \(self.createCredentialString())", forHTTPHeaderField : "Authorization")
         
         //Add the POST data
-        var jsonString = NSString(data: NSJSONSerialization.dataWithJSONObject(data, options: NSJSONWritingOptions(0), error: nil)!,encoding: NSASCIIStringEncoding)!
-        request.HTTPBody = jsonString.dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion:true)
-        request.HTTPMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        do
+        {
+            let jsonString = try NSString(data: NSJSONSerialization.dataWithJSONObject(data, options: NSJSONWritingOptions(rawValue: 0)),encoding: NSASCIIStringEncoding)!
+            
+            request.HTTPBody = jsonString.dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion:true)
+            request.HTTPMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
+        catch
+        {
+            print(error)
+        }
+    
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue())
+        {
+            (response: NSURLResponse?, responseData: NSData?, error: NSError?) -> Void in
         
-        //Do the request
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, responseData: NSData!,error:NSError!) -> Void in
-            
-            if error == nil
+            do
             {
-                jsonData = NSJSONSerialization.JSONObjectWithData(responseData,options: NSJSONReadingOptions.MutableContainers, error:nil) as! NSDictionary?
-                                
-                completionHandler(jsonData,error);
+                jsonData = try NSJSONSerialization.JSONObjectWithData(responseData!,options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+            }
+            catch
+            {
+                print(error)
+            }
                 
-            }
-            else
-            {
-                self.presentErrorMessage()
-            }
-            
-        })
+            completionHandler(jsonData,error);
+        
+        }
         
     }
     
     func createNewUser(firstName : String,lastName: String, email: String,token: String)
     {
-        println("Creating new user")
+        print("Creating new user")
         
         self.HTTPPostToJSON("players",data: ["firstName":firstName,"lastName":lastName, "token":token, "email":email])
         {
@@ -138,13 +148,13 @@ class VSTServer : NSObject
 
     func createUserIfItDoesNotExistAndLogin(firstName : String,lastName : String)
     {
-        println("Trying to log in")
+        print("Trying to log in")
         
         self.HTTPGetToJSON("players/search/findByFirstName?firstName=\(firstName)")
         {
             (jsonData,err) -> Void in
             
-            println(jsonData)
+            print(jsonData)
             
             if jsonData!.count == 0
             {
@@ -161,14 +171,14 @@ class VSTServer : NSObject
     
     func getUserIDFromResponseToSearchByFirstName(response : NSDictionary)
     {
-        var embeddedData : NSDictionary = response["_embedded"] as! NSDictionary
-        var allPlayers : NSArray = embeddedData["players"] as! NSArray
-        var foundPlayer : NSDictionary = allPlayers[0] as! NSDictionary
-        var linksForPlayers : NSDictionary = foundPlayer["_links"] as! NSDictionary
-        var basicLink : NSDictionary = linksForPlayers["self"] as! NSDictionary
-        var urlForThisPlayer : NSString = basicLink["href"] as! NSString
-        var userIDString : String = urlForThisPlayer.componentsSeparatedByString("/")[4] as! String
-        self.userID = userIDString.toInt()
+        let embeddedData : NSDictionary = response["_embedded"] as! NSDictionary
+        let allPlayers : NSArray = embeddedData["players"] as! NSArray
+        let foundPlayer : NSDictionary = allPlayers[0] as! NSDictionary
+        let linksForPlayers : NSDictionary = foundPlayer["_links"] as! NSDictionary
+        let basicLink : NSDictionary = linksForPlayers["self"] as! NSDictionary
+        let urlForThisPlayer : NSString = basicLink["href"] as! NSString
+        let userIDString : String = urlForThisPlayer.componentsSeparatedByString("/")[4]
+        self.userID = Int(userIDString)
     }
     
     func loadAvailableVowels()
@@ -178,14 +188,14 @@ class VSTServer : NSObject
         {
             (jsonData,err) -> Void in
             
-            var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+            let unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
             var idCounter : Int = 1
             
             //Get the basic info
             for vowel in unpackagedJsonData["vowels"] as! NSArray
             {
-                var discNotation : String = vowel["disc"] as! String
-                var currentVowel : VowelDefinition = VowelDefinition(id: idCounter, ipaNotation: discNotation)
+                let discNotation : String = vowel["disc"] as! String
+                let currentVowel : VowelDefinition = VowelDefinition(id: idCounter, ipaNotation: discNotation)
                 self.availableVowels.append(currentVowel)
 
                 idCounter++
@@ -197,7 +207,7 @@ class VSTServer : NSObject
                 {
                     (jsonData,err) -> Void in
                     
-                    var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                    let unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
                     
                     var counter = 0
                     var currentVowel : VowelDefinition
@@ -250,9 +260,9 @@ class VSTServer : NSObject
         //Turned off until logging in is fixed
         //assert(self.userLoggedInSuccesfully, "You have to be logged in to do this")
         
-        var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequest.multipleSpeakers, differentStartingSounds: stimuliRequest.differentStartingSounds);
+        let difficulty : String = self.translateSettingsToDifficultyString(stimuliRequest.multipleSpeakers, differentStartingSounds: stimuliRequest.differentStartingSounds);
         
-        var urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=\(kNumberOfStimuliInRound)&maxTargetCount=\(kMaxNumberOfTargetsInRound)&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
+        let urlExtensionToGetSoundFileUrls : String = "stimulus/sequence/"+stimuliRequest.selectedTask.rawValue+"/"+difficulty+"/2?maxSize=\(kNumberOfStimuliInRound)&maxTargetCount=\(kMaxNumberOfTargetsInRound)&target=\(stimuliRequest.selectedBaseVowel!.id)&standard=\(stimuliRequest.selectedTargetVowel!.id)"
         
         var stimuli = [Stimulus]()
         
@@ -262,11 +272,11 @@ class VSTServer : NSObject
                 
                 if jsonData != nil && jsonData!["_embedded"] != nil
                 {
-                    var unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                    let unpackagedJsonData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
                     
                     for stimulus in unpackagedJsonData["stimuli"] as! NSArray
                     {
-                        var newStimulus : Stimulus = Stimulus(sampleID: stimulus["sampleId"] as! Int,requiresResponse: stimulus["relevance"] as! String == "isTarget",
+                        let newStimulus : Stimulus = Stimulus(sampleID: stimulus["sampleId"] as! Int,requiresResponse: stimulus["relevance"] as! String == "isTarget",
                             relevance: stimulus["relevance"] as! String,
                             vowelID: stimulus["vowelId"] as! Int,
                             speakerLabel: stimulus["speakerLabel"] as! String,
@@ -279,7 +289,7 @@ class VSTServer : NSObject
                 else
                 {
                     //If this fails, try again until it does not
-                    println("Retry downloading the files")
+                    print("Retry downloading the files")
                     
                     self.getStimuliForSettings(stimuliRequest, completionHandler: completionHandler)
                 }
@@ -288,16 +298,16 @@ class VSTServer : NSObject
     
     func downloadSampleWithID(id : Int, fileSafePath : String)
     {
-        println("Downloading sample \(id)")
-        var urlExtensionToDownloadSample : String = "stimulus/audio/\(id)"
+        print("Downloading sample \(id)")
+        let urlExtensionToDownloadSample : String = "stimulus/audio/\(id)"
         
         let url = NSURL(string: self.url + urlExtensionToDownloadSample)
         let dataFromURL = NSData(contentsOfURL: url!)
         
         let fileManager = NSFileManager.defaultManager()
-        var result = fileManager.createFileAtPath(fileSafePath, contents: dataFromURL, attributes: nil)
+        fileManager.createFileAtPath(fileSafePath, contents: dataFromURL, attributes: nil)
         
-        println("Saved at \(fileSafePath)")
+        print("Saved at \(fileSafePath)")
     }
     
     func saveStimulusResults(stimuli : [Stimulus],stimuliRequestUsedToGenerateTheseStimuli : StimuliRequest)
@@ -309,7 +319,7 @@ class VSTServer : NSObject
             postData.append(stimulus.packageToDictionary())
         }
         
-        var difficulty : String = self.translateSettingsToDifficultyString(stimuliRequestUsedToGenerateTheseStimuli.multipleSpeakers, differentStartingSounds: stimuliRequestUsedToGenerateTheseStimuli.differentStartingSounds);
+        let difficulty : String = self.translateSettingsToDifficultyString(stimuliRequestUsedToGenerateTheseStimuli.multipleSpeakers, differentStartingSounds: stimuliRequestUsedToGenerateTheseStimuli.differentStartingSounds);
         
         self.HTTPPostToJSON("stimulus/response/"+stimuliRequestUsedToGenerateTheseStimuli.selectedTask.rawValue+"/"+difficulty+"/\(self.userID!)",data: postData)
             {
@@ -338,7 +348,7 @@ class VSTServer : NSObject
             playerIdToUse = self.userID!
         }
         
-        var urlExtensionToGetConfidenceValues : String = "confidence/search/findByPlayer?player=\(playerIdToUse)"
+        let urlExtensionToGetConfidenceValues : String = "confidence/search/findByPlayer?player=\(playerIdToUse)"
         
         self.HTTPGetToJSON(urlExtensionToGetConfidenceValues)
         {
@@ -346,14 +356,14 @@ class VSTServer : NSObject
 
             if (jsonData!["_embedded"] != nil)
             {
-                var embeddedData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
-                var confidences : NSArray = embeddedData["confidence"] as! NSArray
+                let embeddedData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
+                let confidences : NSArray = embeddedData["confidence"] as! NSArray
                 
                 var currentConfidenceObject : ConfidenceForVowelPair
                 
                 for confidence in confidences
                 {
-                    var targetVowelId : Int = confidence["targetId"] as! Int
+                    let targetVowelId : Int = confidence["targetId"] as! Int
                     
                     currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["targetId"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
                     self.confidencesForVowelPairsByTargetVowelId[targetVowelId]!.append(currentConfidenceObject)
@@ -389,27 +399,27 @@ class VSTServer : NSObject
     
     func getSuggestionForGame(completionHandler: ((GameSuggestion) -> Void))
     {
-        var urlExtensionToGetSuggestion : String = "suggestion/tasksuggestion/\(self.userID!)"
+        let urlExtensionToGetSuggestion : String = "suggestion/tasksuggestion/\(self.userID!)"
         
         self.HTTPGetToJSON(urlExtensionToGetSuggestion)
         {
             (jsonData,err) -> Void in
             
-            println(jsonData)
+            print(jsonData)
             
-            var targetVowelInfo : NSDictionary = jsonData!["targetVowel"] as! NSDictionary
-            var standardVowelInfo : NSDictionary = jsonData!["standardVowel"] as! NSDictionary
+            let targetVowelInfo : NSDictionary = jsonData!["targetVowel"] as! NSDictionary
+            let standardVowelInfo : NSDictionary = jsonData!["standardVowel"] as! NSDictionary
             
-            var targetVowelID : String = targetVowelInfo["disc"] as! String
-            var standardVowelID : String = standardVowelInfo["disc"] as! String
+            let targetVowelID : String = targetVowelInfo["disc"] as! String
+            let standardVowelID : String = standardVowelInfo["disc"] as! String
             
             var targetVowel : VowelDefinition?
             var standardVowel : VowelDefinition?
             
             for vowel in self.availableVowels
             {
-                println(vowel.ipaNotation)
-                println(targetVowelID)
+                print(vowel.ipaNotation)
+                print(targetVowelID)
                 
                 if vowel.ipaNotation == targetVowelID
                 {
@@ -421,8 +431,8 @@ class VSTServer : NSObject
                 }
             }
             
-            var task : Task = Task(rawValue: jsonData!["task"] as! String)!
-            var difficulty : String = jsonData!["difficulty"] as! String
+            let task : Task = Task(rawValue: jsonData!["task"] as! String)!
+            let difficulty : String = jsonData!["difficulty"] as! String
 
             var multipleSpeakers : Bool
             var differentStartingSounds : Bool
@@ -436,7 +446,7 @@ class VSTServer : NSObject
                 default : multipleSpeakers = false; differentStartingSounds = false; break;
             }
             
-            var gameSuggestion = GameSuggestion(targetVowel: targetVowel!, standardVowel: standardVowel!, task: task, multipleSpeakers: multipleSpeakers, differentStartingSounds:differentStartingSounds)
+            let gameSuggestion = GameSuggestion(targetVowel: targetVowel!, standardVowel: standardVowel!, task: task, multipleSpeakers: multipleSpeakers, differentStartingSounds:differentStartingSounds)
             
             completionHandler(gameSuggestion)
         }

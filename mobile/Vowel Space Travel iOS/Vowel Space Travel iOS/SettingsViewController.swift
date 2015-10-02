@@ -55,15 +55,14 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.view.backgroundColor = UIColor.whiteColor()
         
         //Show the background image
-        var backgroundImageView = UIImageView(image: UIImage(named: "control_panel_background"))
+        let backgroundImageView = UIImageView(image: UIImage(named: "control_panel_background"))
         backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
         self.view.addSubview(backgroundImageView)
         
         //Create the labels
-        var topLabelWidth : CGFloat = 700
-        var topLabelHeight : CGFloat = 50
-        var difficultyLabelLeft : CGFloat = 325
-        var difficultyLabelWidth : CGFloat = 120
+        let topLabelWidth : CGFloat = 700
+        let difficultyLabelLeft : CGFloat = 325
+        let difficultyLabelWidth : CGFloat = 120
  
         self.showCenterFieldLabel("Back", frame: CGRectMake(800,322,difficultyLabelWidth,50), fontSize: 12)
         
@@ -75,8 +74,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.showCenterFieldLabel("Word onset", frame: CGRectMake(difficultyLabelLeft,310,difficultyLabelWidth,50), fontSize: 14)
         self.showCenterFieldLabel("Mode", frame: CGRectMake(difficultyLabelLeft,490,difficultyLabelWidth,50), fontSize: 14)
 
-        var difficultyOptionLabel1Left : CGFloat = 445
-        var difficultyOptionLabel2Left : CGFloat = 555
+        let difficultyOptionLabel1Left : CGFloat = 445
+        let difficultyOptionLabel2Left : CGFloat = 555
         
         self.showCenterFieldLabel("Single", frame: CGRectMake(difficultyOptionLabel1Left,250,difficultyLabelWidth,50), fontSize: 12)
         self.showCenterFieldLabel("Multiple", frame: CGRectMake(difficultyOptionLabel2Left,250,difficultyLabelWidth,50), fontSize: 12)
@@ -88,10 +87,10 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.showCenterFieldLabel("Autopilot", frame: CGRectMake(difficultyOptionLabel2Left,530,difficultyLabelWidth,50), fontSize: 12)
         
         //Create the segmented control to select how many speakers you want
-        var speakerSegmentedControlDistanceFromTop : CGFloat = 210
-        var segmentedControlWidth : CGFloat = 225
-        var segmentedControlHeight : CGFloat = 50
-        var segmentedControlLeft : CGFloat = 450
+        let speakerSegmentedControlDistanceFromTop : CGFloat = 210
+        let segmentedControlWidth : CGFloat = 225
+        let segmentedControlHeight : CGFloat = 50
+        let segmentedControlLeft : CGFloat = 450
 
         self.singleOrMultipleSpeakerSegmentedControl = ReselectableSegmentedControl(items: ["",""])
         
@@ -115,7 +114,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.view.addSubview(self.singleOrMultipleSpeakerSegmentedControl)
         
         //Create the segmented control to select whether you want variation in the starting sound
-        var soundsSegmentedControlDistanceFromTop : CGFloat = 310
+        let soundsSegmentedControlDistanceFromTop : CGFloat = 310
         
         self.sameOrDifferentStartingSoundSegmentedControl = ReselectableSegmentedControl(items: ["",""])
 
@@ -138,7 +137,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         self.view.addSubview(self.sameOrDifferentStartingSoundSegmentedControl)
         
         //Create the autopilot segmented control
-        var autoPilotSegmentedControlDistanceFromTop : CGFloat = 490
+        let autoPilotSegmentedControlDistanceFromTop : CGFloat = 490
         
         self.autoPilotSegmentedControl = ReselectableSegmentedControl(items: ["",""])
         self.autoPilotSegmentedControl.selectedSegmentIndex = 0
@@ -154,7 +153,6 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         //Create the buttons
         let buttonWidth : CGFloat = 180
         let buttonHeight : CGFloat = 70
-        let buttonMargin : CGFloat = buttonWidth/2 + 25
         
         let readyButton = UIButton(frame: CGRectMake(410,605,buttonWidth,buttonHeight))
         readyButton.setImage(UIImage(named: "launch_button"), forState: UIControlState.Normal)
@@ -162,7 +160,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         
         self.view.addSubview(readyButton)
 
-        var readyButtonLabel : UILabel = UILabel();
+        let readyButtonLabel : UILabel = UILabel();
         readyButtonLabel.frame = CGRectMake(425,598,buttonWidth,buttonHeight)
         readyButtonLabel.textAlignment = NSTextAlignment.Center
         readyButtonLabel.text = "Launch"
@@ -170,7 +168,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         readyButtonLabel.font = UIFont(name: "Muli",size:20)
         self.view.addSubview(readyButtonLabel)
         
-        var backWindowButton = UIButton(frame: CGRectMake(750,60,220,220))
+        let backWindowButton = UIButton(frame: CGRectMake(750,60,220,220))
         backWindowButton.addTarget(self, action: "backWindowButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backWindowButton)
         
@@ -184,7 +182,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
 
     override func viewDidAppear(animated: Bool)
     {
-        println("\(self.currentGame!.stage.rawValue)")
+        print("\(self.currentGame!.stage.rawValue)")
         
         if (self.currentGame!.stage == GameStage.Playing)
         {
@@ -234,7 +232,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     {
         //Shows text, in the style of the text in the centerfield
         
-        var label : UILabel = UILabel();
+        let label : UILabel = UILabel();
         label.frame = frame
         label.text = text
         label.textColor = UIColor(hue: 0, saturation: 0, brightness: 0.3, alpha: 1)
@@ -290,11 +288,11 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     {
         if recognizer.state == UIGestureRecognizerState.Began
         {
-            var startLocation : CGPoint = recognizer.locationInView(self.view)
+            let startLocation : CGPoint = recognizer.locationInView(self.view)
             
             if kShowTouchLocation
             {
-                println(startLocation)
+                print(startLocation)
             }
         }
     }

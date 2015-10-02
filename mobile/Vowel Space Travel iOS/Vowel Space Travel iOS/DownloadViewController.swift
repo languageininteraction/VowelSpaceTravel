@@ -43,10 +43,10 @@ class DownloadViewController: SubViewController
         self.view.backgroundColor = UIColor.whiteColor()
         
         //Show the download label
-        var label = UILabel();
-        var labelWidth : CGFloat = 300;
-        var labelHeigth : CGFloat = 30;
-        var distanceAboveCenter : CGFloat = 100;
+        let label = UILabel();
+        let labelWidth : CGFloat = 300;
+        let labelHeigth : CGFloat = 30;
+        let distanceAboveCenter : CGFloat = 100;
         
         label.frame = CGRectMake(0.5*(self.screenWidth-labelWidth),0.5*(self.screenHeight-labelHeigth) - distanceAboveCenter,labelWidth,labelHeigth)
         label.textAlignment = NSTextAlignment.Center
@@ -99,7 +99,7 @@ class DownloadViewController: SubViewController
     
     func increaseProgressBar(progressToAdd: Float)
     {
-        var newProgress = self.downloadProgress + progressToAdd
+        let newProgress = self.downloadProgress + progressToAdd
         setProgressBar(newProgress)
         
         if self.downloadProgress >= 1

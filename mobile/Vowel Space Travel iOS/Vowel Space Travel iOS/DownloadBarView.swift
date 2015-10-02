@@ -12,7 +12,7 @@ import UIKit
 class DownloadBarView : UIView
 {
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     override init(frame : CGRect)
@@ -23,7 +23,7 @@ class DownloadBarView : UIView
 
     func drawFilledInPath(path : UIBezierPath, color : UIColor)
     {
-        var shapeLayer = CAShapeLayer()
+        let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.CGPath
         shapeLayer.fillColor = color.CGColor
         
@@ -32,12 +32,12 @@ class DownloadBarView : UIView
     
     func updatePercentage(percentage : CGFloat)
     {
-        var topLeft : CGPoint = CGPoint(x: self.frame.minX, y: self.frame.maxY-percentage*self.frame.height)
-        var topRight : CGPoint = CGPoint(x: self.frame.maxX, y:  self.frame.maxY-percentage*self.frame.height)
-        var bottomLeft : CGPoint = CGPoint(x: self.frame.minX, y:self.frame.maxY)
-        var bottomRight : CGPoint = CGPoint(x: self.frame.maxX, y: self.frame.maxY)
+        let topLeft : CGPoint = CGPoint(x: self.frame.minX, y: self.frame.maxY-percentage*self.frame.height)
+        let topRight : CGPoint = CGPoint(x: self.frame.maxX, y:  self.frame.maxY-percentage*self.frame.height)
+        let bottomLeft : CGPoint = CGPoint(x: self.frame.minX, y:self.frame.maxY)
+        let bottomRight : CGPoint = CGPoint(x: self.frame.maxX, y: self.frame.maxY)
         
-        var myBezier = UIBezierPath()
+        let myBezier = UIBezierPath()
         
         myBezier.moveToPoint(topLeft)
         myBezier.addLineToPoint(topRight)

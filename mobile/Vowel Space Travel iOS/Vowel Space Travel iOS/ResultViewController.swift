@@ -39,12 +39,12 @@ class ResultViewController: SubViewController {
         self.view.backgroundColor = UIColor.whiteColor()
         
         //Show the background image
-        var backgroundImageView = UIImageView(image: UIImage(named: "results_background"))
+        let backgroundImageView = UIImageView(image: UIImage(named: "results_background"))
         backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
         self.view.addSubview(backgroundImageView)
         
         //Display a label
-        var labelWidth : CGFloat = 600
+        let labelWidth : CGFloat = 600
         
         let proportionCorrect : CGFloat = CGFloat(self.nrOfCorrectAnswers) / CGFloat(self.exposedStimuli.count - 1)
         
@@ -54,8 +54,7 @@ class ResultViewController: SubViewController {
         
         if self.currentGame!.autoPilotMode
         {
-            var stopAutoPilotLabel = UILabel();
-            var stopAutoPilotLabelDistanceAboveCenter : CGFloat = 0
+            let stopAutoPilotLabel = UILabel();
             
             self.showCenterFieldLabel("Shake your device if you want to stop", frame: CGRectMake(0.5*(self.screenWidth!-labelWidth)-10,400,labelWidth,40), fontSize: 20)
             
@@ -87,7 +86,7 @@ class ResultViewController: SubViewController {
             againButton.addTarget(self, action: "againButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
             self.view.addSubview(againButton)
 
-            var backButtonLabel : UILabel = UILabel();
+            let backButtonLabel : UILabel = UILabel();
             backButtonLabel.frame = CGRectMake(backButtonLeft+buttonLabelOffsetLeft,buttonTop,backButtonWidth,buttonHeight-buttonLabelDecreaseHeight)
             backButtonLabel.textAlignment = NSTextAlignment.Center
             backButtonLabel.text = "Back to the menu"
@@ -95,7 +94,7 @@ class ResultViewController: SubViewController {
             backButtonLabel.font = UIFont(name: "Muli",size:16)
             self.view.addSubview(backButtonLabel)
 
-            var againButtonLabel : UILabel = UILabel();
+            let againButtonLabel : UILabel = UILabel();
             againButtonLabel.frame = CGRectMake(againButtonLeft+buttonLabelOffsetLeft,buttonTop,againButtonWidth,buttonHeight-buttonLabelDecreaseHeight)
             againButtonLabel.textAlignment = NSTextAlignment.Center
             againButtonLabel.text = "Again with the same settings"
@@ -129,7 +128,7 @@ class ResultViewController: SubViewController {
             
             if counter == 1
             {
-                println("Skipping one")
+                print("Skipping one")
                 continue
             }
             
@@ -177,7 +176,7 @@ class ResultViewController: SubViewController {
     {
         //Shows text, in the style of the text in the centerfield
         
-        var label : UILabel = UILabel();
+        let label : UILabel = UILabel();
         label.frame = frame
         label.text = text
         label.textColor = UIColor(hue: 0, saturation: 0, brightness: brightness, alpha: 1)
@@ -213,11 +212,11 @@ class ResultViewController: SubViewController {
     {
         if recognizer.state == UIGestureRecognizerState.Began
         {
-            var startLocation : CGPoint = recognizer.locationInView(self.view)
+            let startLocation : CGPoint = recognizer.locationInView(self.view)
             
             if kShowTouchLocation
             {
-                println(startLocation)
+                print(startLocation)
             }
         }
     }

@@ -66,7 +66,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         super.viewDidLoad()
 
         //Set the example words... is there a better place for this?
-        var exampleWordsForIpaNotation : [String : String] = ["i":"bean","E":"pet","1":"bay","I":"pit","{":"pat","2":"bike","3":"burn","4":"boy","U":"push","6":"brow","5":"boat","V":"putt","u":"boot","Q":"pop","$":"born",
+        let exampleWordsForIpaNotation : [String : String] = ["i":"bean","E":"pet","1":"bay","I":"pit","{":"pat","2":"bike","3":"burn","4":"boy","U":"push","6":"brow","5":"boat","V":"putt","u":"boot","Q":"pop","$":"born",
             "#":"bark"]
 
         self.availableVowels = self.loadAvailableVowels(exampleWordsForIpaNotation)
@@ -79,7 +79,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.view.backgroundColor = UIColor.whiteColor()
                 
         //Show the background image
-        var backgroundImageView = UIImageView(image: UIImage(named: "overview_background"))
+        let backgroundImageView = UIImageView(image: UIImage(named: "overview_background"))
         backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
         self.view.addSubview(backgroundImageView)
         
@@ -128,9 +128,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             "#" : CGRect(x: 670,y: 430,width: 100,height: 100)]
         
         //Show the vowelbuttons
-        let buttonWidth : CGFloat = 200
-        let buttonHeight : CGFloat = 70
-//        
+//
 //        vowelButtons = [String: UIButton]()
 //        var currentButton : UIButton
 //        
@@ -195,8 +193,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         //Display the labels
         self.instructionTitle = UILabel();
-        var instructionTitleWidth : CGFloat = 525;
-        var instructionTitleHeight : CGFloat = 30;
+        let instructionTitleWidth : CGFloat = 525;
+        let instructionTitleHeight : CGFloat = 30;
         
         self.instructionTitle.frame = CGRectMake(240,120,instructionTitleWidth,instructionTitleHeight)
         self.instructionTitle.textAlignment = NSTextAlignment.Center
@@ -206,8 +204,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         self.view.addSubview(instructionTitle)
 
-        var labelWidth : CGFloat = 500;
-        var labelHeight : CGFloat = 30;
+        let labelWidth : CGFloat = 500;
+        let labelHeight : CGFloat = 30;
         
         self.helpLabel = UILabel();
         self.helpLabel.textColor = UIColor.whiteColor()
@@ -298,7 +296,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //Create all views
         for (exampleWord,vowel) in self.availableVowels!
         {
-            var planetView = self.createPlanetViewBasedOnVowelAndConfidences(vowel)
+            let planetView = self.createPlanetViewBasedOnVowelAndConfidences(vowel)
             
             if self.currentGame.selectedBaseVowel! == vowel
             {
@@ -327,13 +325,13 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func drawPulsatingSelectionCircleAroundVowelView(view : PlanetView) -> CAShapeLayer
     {
-        var circlePositionCorrection : CGFloat = 3
-        var circle : CAShapeLayer = self.drawCircleAroundPoint(CGPoint(x: view.frame.midX-circlePositionCorrection,y: view.frame.midY-circlePositionCorrection))
+        let circlePositionCorrection : CGFloat = 3
+        let circle : CAShapeLayer = self.drawCircleAroundPoint(CGPoint(x: view.frame.midX-circlePositionCorrection,y: view.frame.midY-circlePositionCorrection))
 
         circle.anchorPoint = CGPoint(x: view.frame.midX/40,y: view.frame.midY/40)
         circle.frame = CGRectMake(0,0,40,40)
         
-        var pulsatingAnimation : CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
+        let pulsatingAnimation : CABasicAnimation = CABasicAnimation(keyPath: "transform.scale")
         pulsatingAnimation.duration = 0.6
         pulsatingAnimation.repeatCount = Float.infinity
         pulsatingAnimation.autoreverses = true
@@ -347,10 +345,10 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
     func drawCircleAroundPoint(point : CGPoint) -> CAShapeLayer
     {
-        var path = UIBezierPath(arcCenter: point,radius: 20,startAngle: CGFloat(0),endAngle: CGFloat(100),clockwise: true)
-        var shapeLayer = CAShapeLayer()
+        let path = UIBezierPath(arcCenter: point,radius: 20,startAngle: CGFloat(0),endAngle: CGFloat(100),clockwise: true)
+        let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.CGPath
-        println(shapeLayer.bounds)
+        print(shapeLayer.bounds)
         shapeLayer.fillColor = nil
         shapeLayer.strokeColor = UIColor.whiteColor().CGColor
         
@@ -364,11 +362,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func drawTravelIndicationLine(startPoint : CGPoint, endPoint : CGPoint)
     {
-        var path = UIBezierPath()
+        let path = UIBezierPath()
         path.moveToPoint(startPoint)
         path.addLineToPoint(endPoint)
 
-        var shapeLayer = CAShapeLayer()
+        let shapeLayer = CAShapeLayer()
         shapeLayer.path = path.CGPath
         shapeLayer.fillColor = nil
         shapeLayer.strokeColor = UIColor.whiteColor().CGColor
@@ -417,7 +415,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     func loadAvailableVowels(exampleWordsForIpaNotation : [String:String]) -> [String: VowelDefinition]
     {
         //self.server!.loadAvailableVowels()
-        var vowelsFromTheServer : [VowelDefinition] = self.server!.availableVowels
+        let vowelsFromTheServer : [VowelDefinition] = self.server!.availableVowels
         var currentExampleWord : String
         var availableVowels = [String: VowelDefinition]()
         
@@ -451,7 +449,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             
             case GameStage.SelectingVowels:
             
-                println("Selected vowel")
+                print("Selected vowel")
             
                 /*if !sender.selected
                 {
@@ -469,7 +467,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                 self.updateReadyButton()*/
             
             default:
-                println("Warning! You got in a gamestate you can't be in right now!")
+                print("Warning! You got in a gamestate you can't be in right now!")
             
         }
         */
@@ -480,7 +478,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //Sometimes randomly flip target and base vowel
         if arc4random()%2 == 0
         {
-            var saveTargetVowel : VowelDefinition? = self.currentGame.selectedTargetVowel
+            let saveTargetVowel : VowelDefinition? = self.currentGame.selectedTargetVowel
             self.currentGame.selectedTargetVowel = self.currentGame.selectedBaseVowel
             self.currentGame.selectedBaseVowel = saveTargetVowel
         }
@@ -507,7 +505,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         {
             case 0: self.currentGame.selectedTask = Task.Discrimination
             case 1: self.currentGame.selectedTask = Task.Identification
-            default: println("Warning! You've selected as task that does not exist")
+            default: print("Warning! You've selected as task that does not exist")
         }
         
         self.drawVowelViews()
@@ -530,14 +528,14 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     {
         if recognizer.state == UIGestureRecognizerState.Began
         {
-            var startLocation : CGPoint = recognizer.locationInView(self.view)
+            let startLocation : CGPoint = recognizer.locationInView(self.view)
             
             if kShowTouchLocation
             {
-                println(startLocation)
+                print(startLocation)
             }
                 
-            var startVowel : VowelDefinition? = self.findVowelForTouchLocation(startLocation)
+            let startVowel : VowelDefinition? = self.findVowelForTouchLocation(startLocation)
             
             if startVowel != nil
             {
@@ -557,7 +555,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         }
         else if recognizer.state == UIGestureRecognizerState.Changed
         {
-            var currentTouchLocation : CGPoint = recognizer.locationInView(self.view)
+            let currentTouchLocation : CGPoint = recognizer.locationInView(self.view)
             
             self.circleCurrentlyBeingDragged?.removeFromSuperlayer()
             self.travelIndicationLine?.removeFromSuperlayer()
@@ -589,8 +587,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         }
         else if recognizer.state == UIGestureRecognizerState.Ended
         {
-            var endLocation : CGPoint = recognizer.locationInView(self.view)
-            var endVowel : VowelDefinition? = self.findVowelForTouchLocation(endLocation)
+            let endLocation : CGPoint = recognizer.locationInView(self.view)
+            let endVowel : VowelDefinition? = self.findVowelForTouchLocation(endLocation)
             
             if self.currentVowelDraggingType != nil && endVowel != nil
             {
@@ -744,7 +742,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     self.resultViewController!.superController = self
                 
                 default:
-                    println("")
+                    print("")
             }
         })
     }
@@ -755,7 +753,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         {
             (gameSuggestion) -> Void in
 
-            var newGame : Game = Game()
+            let newGame : Game = Game()
             newGame.selectedBaseVowel = gameSuggestion.targetVowel
             newGame.selectedTargetVowel = gameSuggestion.standardVowel
             newGame.multipleSpeakers = gameSuggestion.multipleSpeakers
@@ -772,7 +770,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func createANewGameWithTheSameSettings(game : Game) -> Game
     {
-        var newGame : Game = Game()
+        let newGame : Game = Game()
         newGame.selectedBaseVowel = game.selectedBaseVowel!
         newGame.selectedTargetVowel = game.selectedTargetVowel!
         newGame.multipleSpeakers = game.multipleSpeakers
@@ -787,11 +785,11 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         //The things commented out here are the way it was originally done, when the planets showed 
         // the end state of the vowels
         
-        var featuresAdjustedForThisUser : (place : Float, manner : Float, roundedness : Float) = adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(self.availableVowels![vowel.exampleWord]!,self.availableVowels!, self.server!.confidencesForVowelPairsByTargetVowelId )
+        let featuresAdjustedForThisUser : (place : Float, manner : Float, roundedness : Float) = adjustFeaturesForVowelUsingOtherVowelsAndMixingWeights(self.availableVowels![vowel.exampleWord]!,allVowels: self.availableVowels!, confidencesForVowelPairsByTargetVowelId: self.server!.confidencesForVowelPairsByTargetVowelId )
         
-        var ringOpacity : CGFloat = CGFloat(featuresAdjustedForThisUser.roundedness)
+        let ringOpacity : CGFloat = CGFloat(featuresAdjustedForThisUser.roundedness)
         
-        var hue : CGFloat = CGFloat(featuresAdjustedForThisUser.manner)
+        let hue : CGFloat = CGFloat(featuresAdjustedForThisUser.manner)
         
         /*switch(vowel.manner!)
         {
@@ -802,7 +800,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
             case VowelManner.open_mid : hue = 0.6; break
             case VowelManner.near_open : hue = 0.7; break
             case VowelManner.open : hue = 0.8; break
-            default : println("Warning: your planet corresponds to a vowel with an unknown manner of articulation")
+            default : print("Warning: your planet corresponds to a vowel with an unknown manner of articulation")
         }*/
         
         var waterOpacity : CGFloat = CGFloat(1 - featuresAdjustedForThisUser.place * 2)
