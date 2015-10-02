@@ -144,11 +144,6 @@ public class StimulusController {
             @PathVariable("difficulty") Difficulty difficulty,
             @RequestBody List<Stimulus> results,
             Principal principal) {
-        System.out.println("difficulty:" + difficulty);
-        System.out.println("taskType:" + taskType);
-        System.out.println("player:" + player.getEmail());
-        System.out.println("stimulus: " + results.size());
-        System.out.println("principal:" + principal.getName());
         if (!principal.getName().equals(player.getEmail())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -162,13 +157,6 @@ public class StimulusController {
             }
         }
         for (Stimulus stimulus : results) {
-            System.out.println(stimulus.getPlayerResponse());
-            System.out.println(stimulus.getResponseDate());
-            System.out.println(stimulus.getResponseTimeMs());
-            System.out.println(stimulus.getWordSample());
-            System.out.println(stimulus.getRelevance());
-            System.out.println(stimulus.getSampleId());
-            System.out.println(stimulus.getVowelId());
             if (stimulus.getPlayerResponse() != null) {
                 final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
                 if (stimulus.getRelevance().equals(Stimulus.Relevance.isStandard)) {
