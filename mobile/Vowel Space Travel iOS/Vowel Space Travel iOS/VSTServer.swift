@@ -75,6 +75,12 @@ class VSTServer : NSObject
             
             (response: NSURLResponse?, responseData: NSData?, error: NSError?) -> Void in
         
+            if responseData == nil
+            {
+                self.presentErrorMessage()
+                return
+            }
+            
             do
             {
                 jsonData = try NSJSONSerialization.JSONObjectWithData(responseData!,options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
@@ -82,6 +88,7 @@ class VSTServer : NSObject
             catch
             {
                 print(error)
+                self.presentErrorMessage()
             }
                 
             completionHandler(jsonData,error);
@@ -109,12 +116,19 @@ class VSTServer : NSObject
         catch
         {
             print(error)
+            self.presentErrorMessage()
         }
     
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue())
         {
             (response: NSURLResponse?, responseData: NSData?, error: NSError?) -> Void in
-        
+
+            if responseData == nil
+            {
+                self.presentErrorMessage()
+                return
+            }            
+            
             do
             {
                 jsonData = try NSJSONSerialization.JSONObjectWithData(responseData!,options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
@@ -122,6 +136,7 @@ class VSTServer : NSObject
             catch
             {
                 print(error)
+                self.presentErrorMessage()
             }
                 
             completionHandler(jsonData,error);
@@ -348,7 +363,8 @@ class VSTServer : NSObject
             playerIdToUse = self.userID!
         }
         
-        let urlExtensionToGetConfidenceValues : String = "confidence/search/findByPlayer?player=\(playerIdToUse)"
+        let confidenceName : String = "score"
+        let urlExtensionToGetConfidenceValues : String = confidenceName+"/search/findByPlayer?player=\(playerIdToUse)"
         
         self.HTTPGetToJSON(urlExtensionToGetConfidenceValues)
         {
@@ -357,7 +373,7 @@ class VSTServer : NSObject
             if (jsonData!["_embedded"] != nil)
             {
                 let embeddedData : NSDictionary = jsonData!["_embedded"] as! NSDictionary
-                let confidences : NSArray = embeddedData["confidence"] as! NSArray
+                let confidences : NSArray = embeddedData[confidenceName] as! NSArray
                 
                 var currentConfidenceObject : ConfidenceForVowelPair
                 
