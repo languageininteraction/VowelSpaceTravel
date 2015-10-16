@@ -49,7 +49,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         //Create login button
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
-        let buttonTop : CGFloat = 200
+        let buttonTop : CGFloat = 250
         
         let loginButton = UIButton(frame: CGRectMake(0.5*(self.screenWidth!-buttonWidth),0.5*(self.screenHeight!-buttonHeight)+buttonTop,buttonWidth,buttonHeight))
 
@@ -65,15 +65,26 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         loginButtonText.text = "Start"
         loginButtonText.textColor = UIColor(hue: 0.87, saturation: 0.3, brightness: 0.3, alpha: 1)
         self.view.addSubview(loginButtonText)
-        
+
         //Show the text
-        let instructionText = UILabel()
+        let titleText = UILabel()
         let padding : CGFloat = 120
         
-        instructionText.frame = CGRectMake(padding,padding+10,screenWidth!-(padding*2),350)
+        titleText.frame = CGRectMake(padding,-50,screenWidth!-(padding*2),350)
+        titleText.textAlignment = NSTextAlignment.Center
+        titleText.font = UIFont(name: "Muli",size:35)
+        titleText.text = "Explore the vowels of English!"
+        titleText.textAlignment = NSTextAlignment.Center
+        titleText.numberOfLines = 0
+        titleText.textColor = UIColor.whiteColor()
+        self.view.addSubview(titleText)
+        
+        let instructionText = UILabel()
+        
+        instructionText.frame = CGRectMake(padding,padding+60,screenWidth!-(padding*2),350)
         instructionText.textAlignment = NSTextAlignment.Center
         instructionText.font = UIFont(name: "Muli",size:28)
-        instructionText.text = "In this app, you will learn to distinguish and recognize vowels in English. Each vowel is represented by a planet. The better get at keeping these vowels apart, the more distinct the planets will look.\n\n Good luck finding your way around the English \n vowel space!"
+        instructionText.text = "When learning a language you will not always be familiar with all the sounds in the new language. Here you can explore your knowledge of vowels in the British English vowel space, and learn to distinguish and recognize them. We represent each vowel with a planet: the better you become at keeping the vowels apart, the more distinct the planets will look!"
         instructionText.textAlignment = NSTextAlignment.Center
         instructionText.numberOfLines = 0
         //instructionText.backgroundColor = UIColor.blackColor()
@@ -140,6 +151,8 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     
     func showAlert(title : String,message : String)
     {
+        print("Showing alert")
+        
         let alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "Close app", style : UIAlertActionStyle.Default,handler:
             {
