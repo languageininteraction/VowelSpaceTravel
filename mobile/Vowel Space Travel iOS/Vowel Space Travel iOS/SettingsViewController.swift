@@ -168,7 +168,8 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
         readyButtonLabel.font = UIFont(name: "Muli",size:20)
         self.view.addSubview(readyButtonLabel)
         
-        let backWindowButton = UIButton(frame: CGRectMake(750,60,220,220))
+        let backWindowButton = UIButton(frame: CGRectMake(750,60,220,300))
+        //backWindowButton.backgroundColor = UIColor.redColor()
         backWindowButton.addTarget(self, action: "backWindowButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(backWindowButton)
         
