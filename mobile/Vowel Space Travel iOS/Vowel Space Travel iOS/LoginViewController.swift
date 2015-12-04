@@ -117,10 +117,10 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
     func login(username username : String,password : String)
     {
         print("Loggin in");
-        self.zoomFromVowelTractOverViewToVowelSelection(nil)
+        self.zoomFromVowelTractOverViewToVowelSelection(nil,speed: 0.05)
     }
     
-    func zoomFromVowelTractOverViewToVowelSelection(game : Game?)
+    func zoomFromVowelTractOverViewToVowelSelection(game : Game?,speed : Float)
     {
         self.vowelSelectionViewController = VowelSelectionViewController();
         self.vowelSelectionViewController.superController = self
@@ -136,9 +136,14 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         let newTransform = CATransform3DTranslate(transformScale, 0, 60, 0)
         
         CATransaction.begin()
+ 
+        CATransaction.setCompletionBlock(
+        {
+            self.vowelSelectionViewController.fadeInUI()
+        })
         
         let zoomAnimation = CABasicAnimation(keyPath: "transform")
-        zoomAnimation.speed = 0.1
+        zoomAnimation.speed = speed
         zoomAnimation.fromValue = NSValue(CATransform3D: oldTransform)
         zoomAnimation.toValue = NSValue(CATransform3D: newTransform)
         vowelSelectionViewController.view.layer.addAnimation(zoomAnimation, forKey: "to new transform")
@@ -177,7 +182,7 @@ class LoginViewController: UIViewController,PassControlToSubControllerProtocol {
         }
         else
         {            
-            self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame)
+            self.zoomFromVowelTractOverViewToVowelSelection(oldVowelSelectionViewController.currentGame,speed: 0.6)
         }
     }
     
