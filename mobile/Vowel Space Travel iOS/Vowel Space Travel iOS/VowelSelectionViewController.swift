@@ -161,16 +161,19 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.readyButton = UIButton(frame: CGRectMake(575,475,25,30))
         self.readyButton.setImage(UIImage(named: "startButton"), forState: UIControlState.Normal)
         self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.readyButton.alpha = 0
         self.view.addSubview(readyButton)
 
         self.infoButton = UIButton(frame: CGRectMake(265,475,25,30))
         self.infoButton.setImage(UIImage(named: "infobutton"), forState: UIControlState.Normal)
         self.infoButton.addTarget(self, action: "infoButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.infoButton.alpha = 0
         self.view.addSubview(infoButton)
 
         self.helpButton = UIButton(frame: CGRectMake(295,475,25,30))
         self.helpButton.setImage(UIImage(named: "question_button"), forState: UIControlState.Normal)
         self.helpButton.addTarget(self, action: "helpButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.helpButton.alpha = 0
         self.view.addSubview(helpButton)
         
 //        let infoButton = TempStyledButton(frame: CGRectMake(self.screenWidth!-buttonWidth-distanceFromRight,0.5*(self.screenHeight!-buttonHeight)+150,buttonWidth,buttonHeight))
@@ -189,6 +192,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
        
         self.taskSegmentedControl!.frame =  CGRect(x: 425,y: 475,width: 75,height: 30)
         self.taskSegmentedControl!.addTarget(self, action: "taskSegmentedControlPressed:", forControlEvents: UIControlEvents.ValueChanged)
+        self.taskSegmentedControl!.alpha = 0
         self.view.addSubview(self.taskSegmentedControl!)
         
         //Display the labels
@@ -201,6 +205,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.instructionTitle.font = UIFont(name: "Muli",size:15)
         self.instructionTitle.textColor = UIColor.whiteColor()
         self.instructionTitle.text = "The suggested vowels are circled, drag to change."
+        self.instructionTitle.alpha = 0
         
         self.view.addSubview(instructionTitle)
 
@@ -213,6 +218,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.helpLabel.font = UIFont(name: "Muli",size:8)
         self.helpLabel.frame = CGRectMake(299,500,labelWidth,labelHeight)
         self.helpLabel.text = "Help"
+        self.helpLabel.alpha = 0
         
         self.aboutLabel = UILabel();
         self.aboutLabel.textColor = UIColor.whiteColor()
@@ -220,14 +226,16 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.aboutLabel.font = UIFont(name: "Muli",size:8)
         self.aboutLabel.frame = CGRectMake(267,500,labelWidth,labelHeight)
         self.aboutLabel.text = "About"
-
+        self.aboutLabel.alpha = 0
+        
         self.taskDescription = UILabel();
         self.taskDescription.textColor = UIColor.whiteColor()
         
         self.taskDescription.font = UIFont(name: "Muli",size:8)
         self.taskDescription.frame = CGRectMake(420,500,labelWidth,labelHeight)
         self.taskDescription.text = "Distinguish      Recognize"
-
+        self.taskDescription.alpha = 0
+        
         self.view.addSubview(self.aboutLabel)
         self.view.addSubview(self.helpLabel)
         self.view.addSubview(self.taskDescription)
@@ -238,6 +246,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.playLabel.font = UIFont(name: "Muli",size:8)
         self.playLabel.frame = CGRectMake(545,500,labelWidth,labelHeight)
         self.playLabel.text = "Prepare for takeoff"
+        self.playLabel.alpha = 0
         
         self.view.addSubview(playLabel)
         
@@ -429,6 +438,24 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         return availableVowels
     }
 
+    func fadeInUI()
+    {
+        UIView.animateWithDuration(0.75, animations:
+            {
+                self.aboutLabel.alpha = 1
+                self.helpLabel.alpha = 1
+                self.instructionTitle.alpha = 1
+                self.playLabel.alpha = 1
+                self.taskDescription.alpha = 1
+                
+                self.taskSegmentedControl!.alpha = 1
+                self.infoButton.alpha = 1
+                self.helpButton.alpha = 1
+                self.readyButton.alpha = 1
+                
+            })
+    }
+    
     //Depricated
     func vowelButtonPressed(sender : UIButton)
     {
