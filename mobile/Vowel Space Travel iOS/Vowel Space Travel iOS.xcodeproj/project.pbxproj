@@ -341,6 +341,7 @@
 		49C653AB1ACE9CB300CA2803 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Radboud University";
 				TargetAttributes = {

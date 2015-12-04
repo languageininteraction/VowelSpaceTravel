@@ -97,7 +97,7 @@ class VSTServer : NSObject
 
     }
     
-    func HTTPPostToJSON(urlExtension: String, data : AnyObject, completionHandler: ((NSDictionary?, NSError?) -> Void))
+    func HTTPPostToJSON(urlExtension: String, data : AnyObject, processResponse : Bool = true, completionHandler: ((NSDictionary?, NSError?) -> Void))
     {
         //Create the request
         var jsonData : NSDictionary?
@@ -123,6 +123,11 @@ class VSTServer : NSObject
         {
             (response: NSURLResponse?, responseData: NSData?, error: NSError?) -> Void in
 
+            if !processResponse
+            {
+                return
+            }
+            
             if responseData == nil
             {
                 self.presentErrorMessage()
@@ -336,15 +341,19 @@ class VSTServer : NSObject
         
         let difficulty : String = self.translateSettingsToDifficultyString(stimuliRequestUsedToGenerateTheseStimuli.multipleSpeakers, differentStartingSounds: stimuliRequestUsedToGenerateTheseStimuli.differentStartingSounds);
         
-        self.HTTPPostToJSON("stimulus/response/"+stimuliRequestUsedToGenerateTheseStimuli.selectedTask.rawValue+"/"+difficulty+"/\(self.userID!)",data: postData)
-            {
-                (jsonData,err) -> Void in
+        print("Saving stimulus results")
+        
+        self.HTTPPostToJSON("stimulus/response/"+stimuliRequestUsedToGenerateTheseStimuli.selectedTask.rawValue+"/"+difficulty+"/\(self.userID!)",data: postData,processResponse: false)
+        {
+            (jsonData,err) -> Void in
+            
+            print("Saving stimulus results callback")
         }
         
     }
     
     func loadAllConfidenceValuesForCurrentUserID(allVowels : Dictionary<String,VowelDefinition>,completionHandler: ((Dictionary<Int,[ConfidenceForVowelPair]>,NSError?) -> Void))
-    {
+    {        
         //Make sure there is at least a key for every targetID
         for (exampleWord, vowel) in allVowels
         {
@@ -441,10 +450,16 @@ class VSTServer : NSObject
                 {
                     targetVowel = vowel
                 }
-                else if vowel.ipaNotation == standardVowelID
+                
+                if vowel.ipaNotation == standardVowelID
                 {
                     standardVowel = vowel
                 }
+            }
+            
+            if targetVowel == standardVowel
+            {
+                standardVowel = self.availableVowels[0]
             }
             
             let task : Task = Task(rawValue: jsonData!["task"] as! String)!
