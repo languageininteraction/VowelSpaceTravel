@@ -19,9 +19,9 @@ class RootViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let loginViewController = LoginViewController();
+        let instructionViewController = InstructionViewController();
         
-        self.presentViewController(loginViewController, animated: false, completion: nil)
+        self.presentViewController(instructionViewController, animated: false, completion: nil)
     }
     
     override func didReceiveMemoryWarning()

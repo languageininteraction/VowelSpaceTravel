@@ -46,7 +46,7 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+                
         //Remember the screen sizes
         self.screenWidth = self.view.frame.size.width
         self.screenHeight = self.view.frame.size.height
@@ -183,10 +183,13 @@ class SettingsViewController: SubViewController, UIPopoverControllerDelegate {
 
     override func viewDidAppear(animated: Bool)
     {
-        print("\(self.currentGame!.stage.rawValue)")
-        
         if (self.currentGame!.stage == GameStage.Playing)
         {
+            //Temporarily hide the content of this screen
+            let image = UIImageView(frame : CGRect(x: 0,y: 0,width: self.screenWidth!,height: self.screenHeight!))
+            image.backgroundColor = kBackgroundColor;
+            self.view.addSubview(image)
+            
             self.readyButtonPressed()
         }
     
