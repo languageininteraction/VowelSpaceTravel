@@ -33,6 +33,8 @@ class VSTServer : NSObject
     
     var userName : String?
     var userID : Int?
+    var email : String?
+    var password : String?
     var genericToken : String = kWebserviceUserPassword
     var userLoggedInSuccesfully : Bool = false
     
@@ -51,11 +53,12 @@ class VSTServer : NSObject
     {
         //Set up the credentials
         let loggedIn : Bool = self.userID != nil
-        let username : String = loggedIn ? "\(self.userName!)" : kWebserviceUsername
+        let username : String = loggedIn ? "\(self.email!)" : kWebserviceUsername
+        let password : String = loggedIn ? "\(self.password!)" : self.genericToken
         
-        print("Using credentials with un \(username) and password \(self.genericToken)")
+        print("Using credentials with un \(username) and password \(password)")
         
-        let loginString = NSString(format: "%@:%@", username, self.genericToken)
+        let loginString = NSString(format: "%@:%@", username, password)
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
         let base64LoginString = loginData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
     
@@ -154,23 +157,23 @@ class VSTServer : NSObject
     {
         print("Creating new user")
         
-        self.HTTPPostToJSON("players",data: ["firstName":firstName,"lastName":lastName, "token":token, "email":email])
+        self.HTTPPostToJSON("players",data: ["firstName":firstName,"lastName":lastName, "token":token, "email":email],processResponse: false)
         {
             (jsonData,err) -> Void in
             
-            self.HTTPGetToJSON("players/search/findByFirstName?firstName=\(firstName)")
+            self.HTTPGetToJSON("players/search/findByEmail?email=\(email)")
             {
                     (response,err) -> Void in
-                    self.getUserIDFromResponseToSearchByFirstName(response!)
+                    self.getUserIDFromResponseToSearchByEmail(response!)
             }
         }
     }
 
-    func createUserIfItDoesNotExistAndLogin(firstName : String,lastName : String)
+    func logIn(email : String,password : String, completionHandler: Void -> Void)
     {
         print("Trying to log in")
         
-        self.HTTPGetToJSON("players/search/findByFirstName?firstName=\(firstName)")
+        self.HTTPGetToJSON("players/search/findByEmail?email=\(email)")
         {
             (jsonData,err) -> Void in
             
@@ -178,18 +181,20 @@ class VSTServer : NSObject
             
             if jsonData!.count == 0
             {
-                self.createNewUser(firstName,lastName : lastName, email : firstName,token : self.genericToken)
+                print("User not found")
             }
             else
             {
-                self.getUserIDFromResponseToSearchByFirstName(jsonData!)
+                print("Found a user")
+                self.getUserIDFromResponseToSearchByEmail(jsonData!)
+                self.email = email
+                self.password = password
+                completionHandler()
             }
-            
-            self.userName = firstName
         }
     }
     
-    func getUserIDFromResponseToSearchByFirstName(response : NSDictionary)
+    func getUserIDFromResponseToSearchByEmail(response : NSDictionary)
     {
         let embeddedData : NSDictionary = response["_embedded"] as! NSDictionary
         let allPlayers : NSArray = embeddedData["players"] as! NSArray
