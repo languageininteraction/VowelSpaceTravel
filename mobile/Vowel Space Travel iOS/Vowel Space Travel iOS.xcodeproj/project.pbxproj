@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		819EDC221C1AC6A200352D92 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819EDC211C1AC6A200352D92 /* LoginViewController.swift */; };
+		819EDC241C1AC84800352D92 /* login_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 819EDC231C1AC84800352D92 /* login_background.png */; };
+		819EDC261C1AD39100352D92 /* register_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 819EDC251C1AD39100352D92 /* register_background.png */; };
+		819EDC281C1AD3A300352D92 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819EDC271C1AD3A300352D92 /* RegisterViewController.swift */; };
+		819EDC2A1C1B2C6100352D92 /* backbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 819EDC291C1B2C6100352D92 /* backbutton.png */; };
 		81BDA21A1BBEB0CC00F40700 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49F1AD7E480000437CF /* Constants.swift */; };
 		81BDA21B1BBEB0D200F40700 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C653BA1ACE9CB400CA2803 /* RootViewController.swift */; };
-		81BDA21C1BBEB0D200F40700 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* LoginViewController.swift */; };
+		81BDA21C1BBEB0D200F40700 /* InstructionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A4991AD7B4D0000437CF /* InstructionViewController.swift */; };
 		81BDA21D1BBEB0D200F40700 /* VowelSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */; };
 		81BDA21E1BBEB0D200F40700 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */; };
 		81BDA2201BBEB0D200F40700 /* DownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */; };
@@ -32,7 +37,7 @@
 		81BDA2311BBEB11500F40700 /* Muli.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 499603BB1B737272004C0D71 /* Muli.ttf */; };
 		81BDA2321BBEB11500F40700 /* infobutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45381BB40CB300AA797C /* infobutton.png */; };
 		81BDA2331BBEB11500F40700 /* question_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC453A1BB40CCC00AA797C /* question_button.png */; };
-		81BDA2341BBEB11500F40700 /* login_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45311BB3EF2100AA797C /* login_background.png */; };
+		81BDA2341BBEB11500F40700 /* instruction_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45311BB3EF2100AA797C /* instruction_background.png */; };
 		81BDA2351BBEB11500F40700 /* loginbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8160464C1B8EEA2C00DF664A /* loginbutton.png */; };
 		81BDA2361BBEB11500F40700 /* control_panel_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 81EC45341BB3EFD100AA797C /* control_panel_background.png */; };
 		81BDA2371BBEB11500F40700 /* startButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 496FCD031B735B5100F08A8F /* startButton.png */; };
@@ -81,7 +86,7 @@
 		496FCD031B735B5100F08A8F /* startButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = startButton.png; sourceTree = "<group>"; };
 		498003501B627490009AC7C1 /* overview_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = overview_background.png; sourceTree = "<group>"; };
 		499603BB1B737272004C0D71 /* Muli.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Muli.ttf; sourceTree = "<group>"; };
-		4996A4991AD7B4D0000437CF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4996A4991AD7B4D0000437CF /* InstructionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionViewController.swift; sourceTree = "<group>"; };
 		4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VowelSelectionViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4996A49D1AD7C9CE000437CF /* TempObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempObjects.swift; sourceTree = "<group>"; };
 		4996A49F1AD7E480000437CF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -109,6 +114,11 @@
 		81182D0D1B85C28E0055A277 /* results_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = results_background.png; sourceTree = "<group>"; };
 		81182D1D1B85EC470055A277 /* ReselectableSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReselectableSegmentedControl.swift; sourceTree = "<group>"; };
 		8160464C1B8EEA2C00DF664A /* loginbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginbutton.png; sourceTree = "<group>"; };
+		819EDC211C1AC6A200352D92 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		819EDC231C1AC84800352D92 /* login_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_background.png; sourceTree = "<group>"; };
+		819EDC251C1AD39100352D92 /* register_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register_background.png; sourceTree = "<group>"; };
+		819EDC271C1AD3A300352D92 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		819EDC291C1B2C6100352D92 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
 		81E535C91BD0F49500EE65E3 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		81E535CA1BD0F49500EE65E3 /* Opensans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Opensans.ttf; sourceTree = "<group>"; };
 		81EAC36E1B87560000D06CAA /* DownloadBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBarView.swift; sourceTree = "<group>"; };
@@ -122,7 +132,7 @@
 		81EC45241BB3EAEC00AA797C /* segmented_control_foreground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = segmented_control_foreground.png; sourceTree = "<group>"; };
 		81EC452C1BB3EDBC00AA797C /* taskSegmentedControlSelectedv3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = taskSegmentedControlSelectedv3.png; sourceTree = "<group>"; };
 		81EC452E1BB3EE2100AA797C /* taskSegmentedControlv3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = taskSegmentedControlv3.png; sourceTree = "<group>"; };
-		81EC45311BB3EF2100AA797C /* login_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_background.png; sourceTree = "<group>"; };
+		81EC45311BB3EF2100AA797C /* instruction_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = instruction_background.png; sourceTree = "<group>"; };
 		81EC45341BB3EFD100AA797C /* control_panel_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = control_panel_background.png; sourceTree = "<group>"; };
 		81EC45361BB4041000AA797C /* splash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = splash.jpg; sourceTree = "<group>"; };
 		81EC45381BB40CB300AA797C /* infobutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infobutton.png; sourceTree = "<group>"; };
@@ -174,9 +184,12 @@
 				499603BB1B737272004C0D71 /* Muli.ttf */,
 				81E535C91BD0F49500EE65E3 /* OpenSans-Semibold.ttf */,
 				81E535CA1BD0F49500EE65E3 /* Opensans.ttf */,
+				819EDC291C1B2C6100352D92 /* backbutton.png */,
 				81EC45381BB40CB300AA797C /* infobutton.png */,
 				81EC453A1BB40CCC00AA797C /* question_button.png */,
-				81EC45311BB3EF2100AA797C /* login_background.png */,
+				81EC45311BB3EF2100AA797C /* instruction_background.png */,
+				819EDC231C1AC84800352D92 /* login_background.png */,
+				819EDC251C1AD39100352D92 /* register_background.png */,
 				8160464C1B8EEA2C00DF664A /* loginbutton.png */,
 				81EC45341BB3EFD100AA797C /* control_panel_background.png */,
 				496FCD031B735B5100F08A8F /* startButton.png */,
@@ -274,7 +287,9 @@
 			isa = PBXGroup;
 			children = (
 				49C653BA1ACE9CB400CA2803 /* RootViewController.swift */,
-				4996A4991AD7B4D0000437CF /* LoginViewController.swift */,
+				4996A4991AD7B4D0000437CF /* InstructionViewController.swift */,
+				819EDC211C1AC6A200352D92 /* LoginViewController.swift */,
+				819EDC271C1AD3A300352D92 /* RegisterViewController.swift */,
 				4996A49B1AD7BA43000437CF /* VowelSelectionViewController.swift */,
 				49AEA13D1ADFBEF5001A82A1 /* SettingsViewController.swift */,
 				49CD8F0C1ACED40500DD3A5F /* DownloadViewController.swift */,
@@ -386,8 +401,9 @@
 				81BDA24E1BBEC9A000F40700 /* Main.storyboard in Resources */,
 				81BDA2311BBEB11500F40700 /* Muli.ttf in Resources */,
 				81BDA2321BBEB11500F40700 /* infobutton.png in Resources */,
+				819EDC2A1C1B2C6100352D92 /* backbutton.png in Resources */,
 				81BDA2331BBEB11500F40700 /* question_button.png in Resources */,
-				81BDA2341BBEB11500F40700 /* login_background.png in Resources */,
+				81BDA2341BBEB11500F40700 /* instruction_background.png in Resources */,
 				81BDA2351BBEB11500F40700 /* loginbutton.png in Resources */,
 				81BDA2361BBEB11500F40700 /* control_panel_background.png in Resources */,
 				81BDA2371BBEB11500F40700 /* startButton.png in Resources */,
@@ -411,8 +427,10 @@
 				81BDA2491BBEB11600F40700 /* click.aiff in Resources */,
 				81BDA24A1BBEB11600F40700 /* click.wav in Resources */,
 				81BDA24B1BBEB11600F40700 /* click.m4a in Resources */,
+				819EDC241C1AC84800352D92 /* login_background.png in Resources */,
 				81BDA24C1BBEB11600F40700 /* bag_sp_1.wav in Resources */,
 				81BDA24D1BBEB11600F40700 /* babe_sp_1.wav in Resources */,
+				819EDC261C1AD39100352D92 /* register_background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +451,8 @@
 				81BDA2301BBEB0F500F40700 /* AppDelegate.swift in Sources */,
 				81BDA2281BBEB0E900F40700 /* VSTServer.swift in Sources */,
 				81BDA2291BBEB0E900F40700 /* Vowel.swift in Sources */,
+				819EDC281C1AD3A300352D92 /* RegisterViewController.swift in Sources */,
+				819EDC221C1AC6A200352D92 /* LoginViewController.swift in Sources */,
 				81BDA22A1BBEB0E900F40700 /* Game.swift in Sources */,
 				81BDA22B1BBEB0E900F40700 /* Stimulus.swift in Sources */,
 				81BDA22C1BBEB0E900F40700 /* TempObjects.swift in Sources */,
@@ -444,7 +464,7 @@
 				81BDA2261BBEB0E000F40700 /* PlanetView.swift in Sources */,
 				81BDA2271BBEB0E000F40700 /* DownloadBarView.swift in Sources */,
 				81BDA21B1BBEB0D200F40700 /* RootViewController.swift in Sources */,
-				81BDA21C1BBEB0D200F40700 /* LoginViewController.swift in Sources */,
+				81BDA21C1BBEB0D200F40700 /* InstructionViewController.swift in Sources */,
 				81BDA21D1BBEB0D200F40700 /* VowelSelectionViewController.swift in Sources */,
 				81BDA21E1BBEB0D200F40700 /* SettingsViewController.swift in Sources */,
 				81BDA2201BBEB0D200F40700 /* DownloadViewController.swift in Sources */,
