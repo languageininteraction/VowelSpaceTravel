@@ -6,11 +6,12 @@
 //  Copyright (c) 2015 Radboud University. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
 let kDevelopmentMode = true
 let kSpeedUpDownload = kDevelopmentMode ? true : false
-let kOnlyOneStimulus = kDevelopmentMode ? true : false
+let kOnlyOneStimulus = kDevelopmentMode ? false : false
 let kShowTouchLocation = kDevelopmentMode ? false : false
 let kShowPlanetsForExampleUser = kDevelopmentMode ? false : false
 
@@ -29,3 +30,5 @@ let kMaxNumberOfTargetsInRound : Int = 6
 
 let kCachedStimuliLocation : String = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomainMask.UserDomainMask,true)[0] + "/Caches/"
 let kSoundFileExtension = ".wav"
+
+let kBackgroundColor : UIColor = UIColor(hue: 0.83, saturation: 0.2, brightness: 0.57, alpha: 1)

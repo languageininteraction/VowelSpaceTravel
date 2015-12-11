@@ -37,7 +37,7 @@ class TaskViewController: SubViewController {
         self.screenHeight = self.view.frame.size.height;
         
         //Make the background white
-        self.view.backgroundColor = UIColor(hue: 0.83, saturation: 0.2, brightness: 0.57, alpha: 1)
+        self.view.backgroundColor = kBackgroundColor;
         
         //Display a label
         self.label = UILabel();
