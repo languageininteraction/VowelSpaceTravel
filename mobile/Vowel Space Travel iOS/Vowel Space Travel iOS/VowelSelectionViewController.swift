@@ -83,28 +83,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
         self.view.addSubview(backgroundImageView)
         
-        //Set the suggested vowels
-        self.server!.getSuggestionForGame()
-        {
-            (gameSuggestion) -> Void in
-            
-            self.suggestedBaseVowel = gameSuggestion.targetVowel //This is because of a mix-up in terminology
-            self.suggestedTargetVowel = gameSuggestion.standardVowel
-            
-            //Preselect the suggestions
-            if self.currentGame.selectedBaseVowel == nil || self.currentGame.selectedTargetVowel == nil
-            {
-                self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
-                self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
-                self.currentGame.multipleSpeakers = gameSuggestion.multipleSpeakers
-                self.currentGame.differentStartingSounds = gameSuggestion.differentStartingSounds
-            }
-            
-            //Get the confidences for vowel combinations
-            self.updateConfidencesAndDrawVowelViews()
-            
-        }
-        
         self.planetLocationsForIpaNotation = ["i" : CGRect(x: 350,y: 140,width: 100,height: 100),
                                             "E" : CGRect(x: 305,y: 250,width: 100,height: 100),
                                             "1" : CGRect(x: 370,y: 210,width: 100,height: 100),
@@ -158,7 +136,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
 //        self.updateVowelButtonColors()
         
         //Create the static buttons
-        self.readyButton = UIButton(frame: CGRectMake(575,475,25,30))
+        self.readyButton = UIButton(frame: CGRectMake(575,478,23,27))
         self.readyButton.setImage(UIImage(named: "startButton"), forState: UIControlState.Normal)
         self.readyButton.addTarget(self, action: "readyButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.readyButton.alpha = 0
@@ -204,7 +182,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.instructionTitle.textAlignment = NSTextAlignment.Center
         self.instructionTitle.font = UIFont(name: "Muli",size:15)
         self.instructionTitle.textColor = UIColor.whiteColor()
-        self.instructionTitle.text = "The suggested vowels are circled, drag to change."
+        self.instructionTitle.text = "Circles indicate suggested mission, drag to change."
         self.instructionTitle.alpha = 0
         
         self.view.addSubview(instructionTitle)
@@ -233,7 +211,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         self.taskDescription.font = UIFont(name: "Muli",size:8)
         self.taskDescription.frame = CGRectMake(420,500,labelWidth,labelHeight)
-        self.taskDescription.text = "Distinguish      Recognize"
+        self.taskDescription.text = "Distinguish Recognize"
         self.taskDescription.alpha = 0
         
         self.view.addSubview(self.aboutLabel)
@@ -265,6 +243,29 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         //Add the pan gestures
         self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))
+        
+        //Set the suggested vowels
+        self.server!.getSuggestionForGame()
+            {
+                (gameSuggestion) -> Void in
+                
+                self.suggestedBaseVowel = gameSuggestion.targetVowel //This is because of a mix-up in terminology
+                self.suggestedTargetVowel = gameSuggestion.standardVowel
+                
+                //Preselect the suggestions
+                if self.currentGame.selectedBaseVowel == nil || self.currentGame.selectedTargetVowel == nil
+                {
+                    self.currentGame.selectedBaseVowel = self.suggestedBaseVowel!
+                    self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
+                    self.currentGame.multipleSpeakers = gameSuggestion.multipleSpeakers
+                    self.currentGame.differentStartingSounds = gameSuggestion.differentStartingSounds
+                }
+                
+                //Get the confidences for vowel combinations
+                self.updateConfidencesAndDrawVowelViews()
+                
+        }
+        
     }
     
     override func didReceiveMemoryWarning()
@@ -280,6 +281,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                 (confidencesForVowelPairsByTargetVowelId,err) -> Void in
                 
                 addMixingWeightToConfidences(confidencesForVowelPairsByTargetVowelId)
+                print("Drawing updated confidences")
                 self.drawVowelViews()
         }
     }
@@ -672,6 +674,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     {
         self.resultViewController!.currentGame = self.currentGame
         self.resultViewController!.exposedStimuli = stimuli
+        self.resultViewController!.server = self.server
         self.presentViewController(self.resultViewController!, animated: false, completion: nil)
     }
     
@@ -736,8 +739,6 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     self.taskViewController!.superController = self
                 
                 case self.resultViewController!:
-                    //Save the results online
-                    self.server?.saveStimulusResults(self.resultViewController!.exposedStimuli,stimuliRequestUsedToGenerateTheseStimuli: self.currentGame)
                     
                     //View flow
                     if self.currentGame.stage == GameStage.Finished
@@ -767,6 +768,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     //Reset the result view for later use
                     self.resultViewController = ResultViewController()
                     self.resultViewController!.superController = self
+                    self.resultViewController!.server = self.server
                 
                 default:
                     print("")

@@ -68,7 +68,7 @@ class InstructionViewController: UIViewController,PassControlToSubControllerProt
         instructionText.frame = CGRectMake(padding,padding+60,screenWidth!-(padding*2),350)
         instructionText.textAlignment = NSTextAlignment.Center
         instructionText.font = UIFont(name: "Muli",size:28)
-        instructionText.text = "When learning a language you will not always be familiar with all the sounds in the new language. Here you can explore your knowledge of vowels in the British English vowel space, and learn to distinguish and recognize them. We represent each vowel with a planet: the better you become at keeping the vowels apart, the more distinct the planets will look!"
+        instructionText.text = "When learning a language you will not always be familiar with all the sounds in that language. Here you can explore your knowledge of vowels in the British English vowel space, and learn to distinguish and recognize them. We represent each vowel with a planet: the better you become at keeping the vowels apart, the more distinct the planets will look!"
         instructionText.textAlignment = NSTextAlignment.Center
         instructionText.numberOfLines = 0
         //instructionText.backgroundColor = UIColor.blackColor()
@@ -139,17 +139,27 @@ class InstructionViewController: UIViewController,PassControlToSubControllerProt
         self.view.addSubview(vowelSelectionViewController.view)
     }
     
-    func showAlert(title : String,message : String)
-    {
-        print("Showing alert")
-        
+    func showAlert(title : String,message : String, closeAfteReading : Bool)
+    {        
         let alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Close app", style : UIAlertActionStyle.Default,handler:
-            {
-                action -> Void in
-                exit(0)
+        
+        if closeAfteReading
+        {
+            alertController.addAction(UIAlertAction(title: "Close app", style : UIAlertActionStyle.Default,handler:
+                {
+                    action -> Void in
+                    exit(0)
             })
-        )
+            )
+        }
+        else
+        {
+            alertController.addAction(UIAlertAction(title: "OK", style : UIAlertActionStyle.Default,handler:
+                {
+                    action -> Void in
+            })
+            )
+        }
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
@@ -158,6 +168,7 @@ class InstructionViewController: UIViewController,PassControlToSubControllerProt
     {
         if subController == self.loginViewController
         {
+            subController.view.removeFromSuperview()
             self.zoomFromVowelTractOverViewToVowelSelection(nil,speed: 0.05)
         }
         else if subController == self.vowelSelectionViewController

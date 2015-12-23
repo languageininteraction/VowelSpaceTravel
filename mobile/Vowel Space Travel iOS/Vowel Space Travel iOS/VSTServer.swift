@@ -40,7 +40,7 @@ class VSTServer : NSObject
     
     var latestResponse : NSArray?
     
-    var showAlert : ((String,String) -> ())?
+    var showAlert : ((String,String,Bool) -> ())?
     
     init(url: String)
     {
@@ -69,7 +69,8 @@ class VSTServer : NSObject
     {
         //Create the request
         var jsonData : NSDictionary?
-        let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+urlExtension)!)
+        var cleanedUrlExtension : String = urlExtension.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+cleanedUrlExtension)!)
         request.setValue("Basic \(self.createCredentialString())", forHTTPHeaderField : "Authorization")
         
         //Do the request
@@ -80,7 +81,7 @@ class VSTServer : NSObject
         
             if responseData == nil
             {
-                self.presentErrorMessage()
+                self.presentConnectionErrorMessage()
                 return
             }
             
@@ -91,7 +92,7 @@ class VSTServer : NSObject
             catch
             {
                 print(error)
-                self.presentErrorMessage()
+                self.presentConnectionErrorMessage()
             }
                 
             completionHandler(jsonData,error);
@@ -119,7 +120,7 @@ class VSTServer : NSObject
         catch
         {
             print(error)
-            self.presentErrorMessage()
+            self.presentConnectionErrorMessage()
         }
     
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue())
@@ -128,12 +129,13 @@ class VSTServer : NSObject
 
             if !processResponse
             {
+                completionHandler(jsonData,error)
                 return
             }
             
             if responseData == nil
             {
-                self.presentErrorMessage()
+                self.presentConnectionErrorMessage()
                 return
             }            
             
@@ -144,7 +146,7 @@ class VSTServer : NSObject
             catch
             {
                 print(error)
-                self.presentErrorMessage()
+                self.presentConnectionErrorMessage()
             }
                 
             completionHandler(jsonData,error);
@@ -172,24 +174,48 @@ class VSTServer : NSObject
     func logIn(email : String,password : String, completionHandler: Void -> Void)
     {
         print("Trying to log in")
+        self.email = email
+        self.password = password
         
         self.HTTPGetToJSON("players/search/findByEmail?email=\(email)")
         {
             (jsonData,err) -> Void in
             
             print(jsonData)
+            print(err)
             
-            if jsonData!.count == 0
+            if err != nil
+            {
+                self.presentAuthenticationErrorMessage()
+            }
+            else if jsonData!.count == 0
             {
                 print("User not found")
+                self.presentAuthenticationErrorMessage()
             }
             else
             {
                 print("Found a user")
+
                 self.getUserIDFromResponseToSearchByEmail(jsonData!)
-                self.email = email
-                self.password = password
-                completionHandler()
+                
+                //Final check credentials
+                print("Final credential check")
+                self.HTTPGetToJSON("players/search/findByEmail?email=\(email)")
+                {
+                    (jsonData,err) -> Void in
+
+                    print(err)
+                    
+                    if err != nil
+                    {
+                        self.presentAuthenticationErrorMessage()
+                    }
+                    else
+                    {
+                        completionHandler()
+                    }
+                }
             }
         }
     }
@@ -206,9 +232,20 @@ class VSTServer : NSObject
         self.userID = Int(userIDString)
     }
     
+    func checkWhetherEmailIsInDatabase(email : String, completionHandler: ((Bool, NSError?) -> Void))
+    {
+        self.userID = nil
+        self.HTTPGetToJSON("players/search/findByEmail?email=\(email)")
+        {
+            (jsonData,err) -> Void in
+            completionHandler(jsonData!.count != 0,err)
+        }
+    }
+    
     func loadAvailableVowels()
     {
         var urlExtensionToGetVowels : String = "vowels?page=0&size=30"
+        print("loading vowels")
         self.HTTPGetToJSON(urlExtensionToGetVowels)
         {
             (jsonData,err) -> Void in
@@ -335,7 +372,7 @@ class VSTServer : NSObject
         print("Saved at \(fileSafePath)")
     }
     
-    func saveStimulusResults(stimuli : [Stimulus],stimuliRequestUsedToGenerateTheseStimuli : StimuliRequest)
+    func saveStimulusResults(stimuli : [Stimulus],stimuliRequestUsedToGenerateTheseStimuli : StimuliRequest,completionHandler: (NSError?) -> Void)
     {
         var postData = [Dictionary<String,AnyObject>]()
         
@@ -346,13 +383,11 @@ class VSTServer : NSObject
         
         let difficulty : String = self.translateSettingsToDifficultyString(stimuliRequestUsedToGenerateTheseStimuli.multipleSpeakers, differentStartingSounds: stimuliRequestUsedToGenerateTheseStimuli.differentStartingSounds);
         
-        print("Saving stimulus results")
-        
         self.HTTPPostToJSON("stimulus/response/"+stimuliRequestUsedToGenerateTheseStimuli.selectedTask.rawValue+"/"+difficulty+"/\(self.userID!)",data: postData,processResponse: false)
         {
             (jsonData,err) -> Void in
             
-            print("Saving stimulus results callback")
+            completionHandler(err)
         }
         
     }
@@ -380,6 +415,7 @@ class VSTServer : NSObject
         let confidenceName : String = "score"
         let urlExtensionToGetConfidenceValues : String = confidenceName+"/search/findByPlayer?player=\(playerIdToUse)"
         
+        print("loading confidences")
         self.HTTPGetToJSON(urlExtensionToGetConfidenceValues)
         {
             (jsonData,err) -> Void in
@@ -431,12 +467,14 @@ class VSTServer : NSObject
     {
         let urlExtensionToGetSuggestion : String = "suggestion/tasksuggestion/\(self.userID!)"
         
+        print("suggestion")
         self.HTTPGetToJSON(urlExtensionToGetSuggestion)
         {
             (jsonData,err) -> Void in
             
-            print(jsonData)
-            
+            print("data")
+            print(err)
+
             let targetVowelInfo : NSDictionary = jsonData!["targetVowel"] as! NSDictionary
             let standardVowelInfo : NSDictionary = jsonData!["standardVowel"] as! NSDictionary
             
@@ -489,9 +527,14 @@ class VSTServer : NSObject
         
     }
     
-    func presentErrorMessage()
+    func presentAuthenticationErrorMessage()
     {
-        self.showAlert!("Problem connecting to the server","An internet connection is required for this app.")
+        self.showAlert!("Incorrect credentials","It looks like either your email or password is not in our database. Please try again.",false)
+    }
+    
+    func presentConnectionErrorMessage()
+    {
+        self.showAlert!("Problem connecting to the server","An internet connection is required for this app.",true)
     }
     
 }

@@ -42,6 +42,11 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
         
         self.emailTextField = self.createTextField(textFieldLeft, y: textFieldFirstRow, placeHolder: "Email address")
         self.passwordTextField = self.createTextField(textFieldLeft, y: textFieldSecondRow, placeHolder: "Password", hidden: true)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        self.emailTextField.text = defaults.valueForKey("email") as? String
+        self.emailTextField.keyboardType = UIKeyboardType.EmailAddress
+        
         self.view.addSubview(emailTextField)
         self.view.addSubview(passwordTextField)
         
@@ -88,6 +93,8 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
     {
         self.server!.logIn(self.emailTextField.text!, password: self.passwordTextField.text!)
         {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setValue(self.emailTextField.text!,forKey: "email")
             self.superController!.subControllerFinished(self)            
         }
     }
@@ -109,6 +116,8 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
         textField.textColor = UIColor.whiteColor()
         textField.delegate = self
         textField.secureTextEntry = hidden
+        textField.autocorrectionType = UITextAutocorrectionType.No
+        textField.autocapitalizationType = UITextAutocapitalizationType.None
         
         //textField.backgroundColor = UIColor.redColor()
         
@@ -150,7 +159,7 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
     }
     
     func subControllerFinished(subController: SubViewController)
-    {
+    {        
         subController.view.removeFromSuperview()
     }
     

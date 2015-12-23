@@ -56,9 +56,10 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         self.view.addSubview(self.lastNameTextField)
         
         self.emailTextField = self.createTextField(secondColumnLeft, y: secondRowTop, large: true, placeHolder: "Email address")
+        self.emailTextField.keyboardType = UIKeyboardType.EmailAddress
         self.view.addSubview(self.emailTextField)
 
-        self.passwordTextField = self.createTextField(firstColumnLeft, y: thirdRowTop, large: false, placeHolder: "Password", hidden: true)
+        self.passwordTextField = self.createTextField(firstColumnLeft, y: thirdRowTop, large: false, placeHolder: "Choose password", hidden: true)
         self.view.addSubview(self.passwordTextField)
         
         self.repeatPasswordTextField = self.createTextField(thirdColumnLeft, y: thirdRowTop, large: false, placeHolder: "Repeat password", hidden: true)
@@ -112,6 +113,8 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         textField.textColor = UIColor.whiteColor()
         textField.delegate = self
         textField.secureTextEntry = hidden
+        textField.autocorrectionType = UITextAutocorrectionType.No
+        textField.autocapitalizationType = UITextAutocapitalizationType.None
         
         return textField
     }
@@ -159,7 +162,6 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
     func registerButtonPressed()
     {
         self.register()
-        self.superController!.subControllerFinished(self)
     }
     
     func register()
@@ -168,9 +170,35 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         let lastName : String = self.lastNameTextField.text!
         let email : String = self.emailTextField.text!
         let password : String = self.passwordTextField.text!
-        //let repeatPassword : String = self.repeatPasswordTextField.text!
+        let repeatPassword : String = self.repeatPasswordTextField.text!
         
-        self.server!.createNewUser(firstName,lastName : lastName, email : email,token : password)
+        if [firstName,lastName,email,password,repeatPassword].contains("")
+        {
+            self.showAlert("Empty fields",message: "Please make sure all input fields are filled.")
+        }
+        else if (password != repeatPassword)
+        {
+            self.showAlert("Passwords don't match",message: "Please make sure the two passwords match.")
+        }
+        else
+        {
+            self.server!.checkWhetherEmailIsInDatabase(email)
+            {
+                (inDatabase,err) -> Void in
+                
+                print("In database \(inDatabase)")
+                
+                if inDatabase
+                {
+                    self.showAlert("Email address already in database", message: "We already found this email address in our database, please use another one.")
+                }
+                else
+                {
+                    self.server!.createNewUser(firstName,lastName : lastName, email : email,token : password)
+                    self.superController!.subControllerFinished(self)
+                }
+            }
+        }
     }
     
     func handlePan(recognizer : UIPanGestureRecognizer)
@@ -184,6 +212,19 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
                 print(startLocation)
             }
         }
+    }
+    
+    func showAlert(title : String,message : String)
+    {
+        let alertController : UIAlertController = UIAlertController(title: title,message: message,preferredStyle : UIAlertControllerStyle.Alert)
+        
+        alertController.addAction(UIAlertAction(title: "OK", style : UIAlertActionStyle.Default,handler:
+            {
+                action -> Void in
+        })
+        )
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
 }

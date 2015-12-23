@@ -64,6 +64,17 @@
 		81BDA24C1BBEB11600F40700 /* bag_sp_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49E8B7141B0607F9006CD1BE /* bag_sp_1.wav */; };
 		81BDA24D1BBEB11600F40700 /* babe_sp_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 49E8B7121B0607BA006CD1BE /* babe_sp_1.wav */; };
 		81BDA24E1BBEC9A000F40700 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 49C653DC1ACE9FF100CA2803 /* Main.storyboard */; };
+		81E4D3ED1C2AA5E50088B35D /* VST_icoon__152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E31C2AA5E40088B35D /* VST_icoon__152x152.png */; };
+		81E4D3EE1C2AA5E50088B35D /* VST_icoon__512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E41C2AA5E50088B35D /* VST_icoon__512x512.png */; };
+		81E4D3EF1C2AA5E50088B35D /* VST_icoon_40x40.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E51C2AA5E50088B35D /* VST_icoon_40x40.png */; };
+		81E4D3F01C2AA5E50088B35D /* VST_icoon_50x50.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E61C2AA5E50088B35D /* VST_icoon_50x50.png */; };
+		81E4D3F11C2AA5E50088B35D /* VST_icoon_72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E71C2AA5E50088B35D /* VST_icoon_72x72.png */; };
+		81E4D3F21C2AA5E50088B35D /* VST_icoon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E81C2AA5E50088B35D /* VST_icoon_76x76.png */; };
+		81E4D3F31C2AA5E50088B35D /* VST_icoon_80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3E91C2AA5E50088B35D /* VST_icoon_80x80.png */; };
+		81E4D3F41C2AA5E50088B35D /* VST_icoon_100x100.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3EA1C2AA5E50088B35D /* VST_icoon_100x100.png */; };
+		81E4D3F51C2AA5E50088B35D /* VST_icoon_144x144.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3EB1C2AA5E50088B35D /* VST_icoon_144x144.png */; };
+		81E4D3F61C2AA5E50088B35D /* VST_icoon_1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 81E4D3EC1C2AA5E50088B35D /* VST_icoon_1024x1024.png */; };
+		81E4D3F71C2AA8420088B35D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49C653C31ACE9CB400CA2803 /* Images.xcassets */; };
 		81E535BE1BD0E3AE00EE65E3 /* htmlInfo.html in Resources */ = {isa = PBXBuildFile; fileRef = 81EC453D1BB42E5C00AA797C /* htmlInfo.html */; };
 		81E535CB1BD0F4D800EE65E3 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81E535C91BD0F49500EE65E3 /* OpenSans-Semibold.ttf */; };
 		81E535CC1BD0F4D800EE65E3 /* Opensans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81E535CA1BD0F49500EE65E3 /* Opensans.ttf */; };
@@ -119,6 +130,16 @@
 		819EDC251C1AD39100352D92 /* register_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = register_background.png; sourceTree = "<group>"; };
 		819EDC271C1AD3A300352D92 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		819EDC291C1B2C6100352D92 /* backbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backbutton.png; sourceTree = "<group>"; };
+		81E4D3E31C2AA5E40088B35D /* VST_icoon__152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon__152x152.png; sourceTree = "<group>"; };
+		81E4D3E41C2AA5E50088B35D /* VST_icoon__512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon__512x512.png; sourceTree = "<group>"; };
+		81E4D3E51C2AA5E50088B35D /* VST_icoon_40x40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_40x40.png; sourceTree = "<group>"; };
+		81E4D3E61C2AA5E50088B35D /* VST_icoon_50x50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_50x50.png; sourceTree = "<group>"; };
+		81E4D3E71C2AA5E50088B35D /* VST_icoon_72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_72x72.png; sourceTree = "<group>"; };
+		81E4D3E81C2AA5E50088B35D /* VST_icoon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_76x76.png; sourceTree = "<group>"; };
+		81E4D3E91C2AA5E50088B35D /* VST_icoon_80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_80x80.png; sourceTree = "<group>"; };
+		81E4D3EA1C2AA5E50088B35D /* VST_icoon_100x100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_100x100.png; sourceTree = "<group>"; };
+		81E4D3EB1C2AA5E50088B35D /* VST_icoon_144x144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_144x144.png; sourceTree = "<group>"; };
+		81E4D3EC1C2AA5E50088B35D /* VST_icoon_1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = VST_icoon_1024x1024.png; sourceTree = "<group>"; };
 		81E535C91BD0F49500EE65E3 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		81E535CA1BD0F49500EE65E3 /* Opensans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Opensans.ttf; sourceTree = "<group>"; };
 		81EAC36E1B87560000D06CAA /* DownloadBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadBarView.swift; sourceTree = "<group>"; };
@@ -181,6 +202,16 @@
 		4996A4A11AD7E4B1000437CF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				81E4D3E31C2AA5E40088B35D /* VST_icoon__152x152.png */,
+				81E4D3E41C2AA5E50088B35D /* VST_icoon__512x512.png */,
+				81E4D3E51C2AA5E50088B35D /* VST_icoon_40x40.png */,
+				81E4D3E61C2AA5E50088B35D /* VST_icoon_50x50.png */,
+				81E4D3E71C2AA5E50088B35D /* VST_icoon_72x72.png */,
+				81E4D3E81C2AA5E50088B35D /* VST_icoon_76x76.png */,
+				81E4D3E91C2AA5E50088B35D /* VST_icoon_80x80.png */,
+				81E4D3EA1C2AA5E50088B35D /* VST_icoon_100x100.png */,
+				81E4D3EB1C2AA5E50088B35D /* VST_icoon_144x144.png */,
+				81E4D3EC1C2AA5E50088B35D /* VST_icoon_1024x1024.png */,
 				499603BB1B737272004C0D71 /* Muli.ttf */,
 				81E535C91BD0F49500EE65E3 /* OpenSans-Semibold.ttf */,
 				81E535CA1BD0F49500EE65E3 /* Opensans.ttf */,
@@ -395,13 +426,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81E4D3F71C2AA8420088B35D /* Images.xcassets in Resources */,
 				81E535CB1BD0F4D800EE65E3 /* OpenSans-Semibold.ttf in Resources */,
+				81E4D3EF1C2AA5E50088B35D /* VST_icoon_40x40.png in Resources */,
 				81E535CC1BD0F4D800EE65E3 /* Opensans.ttf in Resources */,
 				81E535BE1BD0E3AE00EE65E3 /* htmlInfo.html in Resources */,
 				81BDA24E1BBEC9A000F40700 /* Main.storyboard in Resources */,
 				81BDA2311BBEB11500F40700 /* Muli.ttf in Resources */,
 				81BDA2321BBEB11500F40700 /* infobutton.png in Resources */,
 				819EDC2A1C1B2C6100352D92 /* backbutton.png in Resources */,
+				81E4D3ED1C2AA5E50088B35D /* VST_icoon__152x152.png in Resources */,
 				81BDA2331BBEB11500F40700 /* question_button.png in Resources */,
 				81BDA2341BBEB11500F40700 /* instruction_background.png in Resources */,
 				81BDA2351BBEB11500F40700 /* loginbutton.png in Resources */,
@@ -410,17 +444,25 @@
 				81BDA2381BBEB11500F40700 /* overview_background.png in Resources */,
 				81BDA2391BBEB11500F40700 /* playmode_segmented_control_foreground.png in Resources */,
 				81BDA23A1BBEB11500F40700 /* segmented_control_background.png in Resources */,
+				81E4D3F21C2AA5E50088B35D /* VST_icoon_76x76.png in Resources */,
 				81BDA23B1BBEB11500F40700 /* segmented_control_foreground.png in Resources */,
 				81BDA23C1BBEB11500F40700 /* taskSegmentedControl.png in Resources */,
 				81BDA23D1BBEB11500F40700 /* taskSegmentedControlSelectedv3.png in Resources */,
+				81E4D3F11C2AA5E50088B35D /* VST_icoon_72x72.png in Resources */,
+				81E4D3F31C2AA5E50088B35D /* VST_icoon_80x80.png in Resources */,
 				81BDA23E1BBEB11500F40700 /* taskSegmentedControlv3.png in Resources */,
 				81BDA23F1BBEB11600F40700 /* taskSegmentedControlSelected.png in Resources */,
 				81BDA2401BBEB11600F40700 /* LiL logo diapositief 1000x194.png in Resources */,
 				81BDA2411BBEB11600F40700 /* LiL logo diapositief 1000x194@2x.png in Resources */,
+				81E4D3F61C2AA5E50088B35D /* VST_icoon_1024x1024.png in Resources */,
+				81E4D3EE1C2AA5E50088B35D /* VST_icoon__512x512.png in Resources */,
 				81BDA2421BBEB11600F40700 /* back_button.png in Resources */,
 				81BDA2431BBEB11600F40700 /* launch_button.png in Resources */,
+				81E4D3F01C2AA5E50088B35D /* VST_icoon_50x50.png in Resources */,
 				81BDA2441BBEB11600F40700 /* splash.jpg in Resources */,
+				81E4D3F51C2AA5E50088B35D /* VST_icoon_144x144.png in Resources */,
 				81BDA2451BBEB11600F40700 /* retry_button.png in Resources */,
+				81E4D3F41C2AA5E50088B35D /* VST_icoon_100x100.png in Resources */,
 				81BDA2461BBEB11600F40700 /* Cross 22x22.png in Resources */,
 				81BDA2471BBEB11600F40700 /* Cross 22x22@2x.png in Resources */,
 				81BDA2481BBEB11600F40700 /* results_background.png in Resources */,
@@ -592,6 +634,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				INFOPLIST_FILE = "Vowel Space Travel iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -606,6 +649,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				INFOPLIST_FILE = "Vowel Space Travel iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

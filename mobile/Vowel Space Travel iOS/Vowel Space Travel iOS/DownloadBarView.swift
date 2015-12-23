@@ -44,7 +44,7 @@ class DownloadBarView : UIView
         myBezier.addLineToPoint(bottomRight)
         myBezier.addLineToPoint(bottomLeft)
         
-        self.drawFilledInPath(myBezier, color: UIColor(hue: 0.7, saturation: 1, brightness: 0.65, alpha: 1))
+        self.drawFilledInPath(myBezier, color: UIColor(hue: 0.83, saturation: 0.3, brightness: 0.55, alpha: 1))
         
     }
 }

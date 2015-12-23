@@ -9,9 +9,9 @@
 import UIKit
 import Foundation
 
-let kDevelopmentMode = true
+let kDevelopmentMode = false
 let kSpeedUpDownload = kDevelopmentMode ? true : false
-let kOnlyOneStimulus = kDevelopmentMode ? false : false
+let kOnlyOneStimulus = kDevelopmentMode ? true : false
 let kShowTouchLocation = kDevelopmentMode ? false : false
 let kShowPlanetsForExampleUser = kDevelopmentMode ? false : false
 
@@ -22,7 +22,7 @@ let kWebserviceUserPassword = kDevelopmentMode ? "1234" : "1234"
 let kFeedbackSoundVolume : Float = 0.2
 
 let kTimeBeforeStimuli : Double = 1
-let kTimeBetweenStimuli : Double = 2
+let kTimeBetweenStimuli : Double = 1.8
 let kTimeBetweenStimuliWhenShowingTheExample : Double = 4
 let kPauseBetweenRounds : Double = 6
 let kNumberOfStimuliInRound : Int = 15

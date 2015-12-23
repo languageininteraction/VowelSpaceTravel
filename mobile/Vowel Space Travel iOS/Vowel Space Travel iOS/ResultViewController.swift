@@ -26,6 +26,8 @@ class ResultViewController: SubViewController {
 
     var timer : NSTimer = NSTimer()
     
+    var server : VSTServer?
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -106,6 +108,12 @@ class ResultViewController: SubViewController {
 
         //Add the pan gestures
         self.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan:"))        
+        
+        //While done showing everything, secretly save the results
+        self.server?.saveStimulusResults(self.exposedStimuli,stimuliRequestUsedToGenerateTheseStimuli: self.currentGame!)
+        {
+            _ in
+        }
         
     }
     

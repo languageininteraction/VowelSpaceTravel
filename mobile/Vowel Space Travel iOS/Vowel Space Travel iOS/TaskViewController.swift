@@ -44,7 +44,7 @@ class TaskViewController: SubViewController {
         
         label.frame = CGRectMake(0,0,screenWidth!,screenHeight!)
         label.textAlignment = NSTextAlignment.Center
-        label.text = "Target"
+        label.text = "Target vowel"
         label.textColor = UIColor.whiteColor()
         label.font = UIFont(name: "Muli", size: 30)
         
