@@ -42,17 +42,10 @@ class Stimulus : NSObject
     }
     
     func packageToDictionary() -> Dictionary<String,AnyObject>
-    {        
-        var relevance : String = self.relevance
-        
-        if relevance == "isIrelevant"
-        {
-            relevance = "isStandard"
-        }
-        
+    {
         let result : Dictionary<String,AnyObject> = ["responseTimeMs":"1",
-                                                    "relevance":relevance,
-                                                    "playerResponse":self.receivedResponse != nil && self.receivedResponse! == false,
+                                                    "relevance":self.relevance,
+                                                    "playerResponse":self.receivedResponse != nil && self.receivedResponse! == true,
                                                     "vowelId":self.vowelID,
                                                     "sampleId":self.sampleID,
                                                     "speakerLabel":self.speakerLabel,
