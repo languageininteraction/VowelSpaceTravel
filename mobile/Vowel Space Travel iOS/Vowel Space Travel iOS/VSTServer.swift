@@ -69,7 +69,7 @@ class VSTServer : NSObject
     {
         //Create the request
         var jsonData : NSDictionary?
-        var cleanedUrlExtension : String = urlExtension.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let cleanedUrlExtension : String = urlExtension.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         let request : NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: self.url+cleanedUrlExtension)!)
         request.setValue("Basic \(self.createCredentialString())", forHTTPHeaderField : "Authorization")
         
@@ -228,7 +228,8 @@ class VSTServer : NSObject
         let linksForPlayers : NSDictionary = foundPlayer["_links"] as! NSDictionary
         let basicLink : NSDictionary = linksForPlayers["self"] as! NSDictionary
         let urlForThisPlayer : NSString = basicLink["href"] as! NSString
-        let userIDString : String = urlForThisPlayer.componentsSeparatedByString("/")[4]
+        let separatedURL : NSArray = urlForThisPlayer.componentsSeparatedByString("/")
+        let userIDString : String = separatedURL[separatedURL.count-1] as! String
         self.userID = Int(userIDString)
     }
     
