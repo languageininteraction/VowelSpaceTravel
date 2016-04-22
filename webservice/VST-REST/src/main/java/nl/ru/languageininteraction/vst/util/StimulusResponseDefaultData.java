@@ -163,16 +163,18 @@ public class StimulusResponseDefaultData {
         List<Vowel> remainingVowels = new ArrayList(allVowels);
         for (Vowel targetVowel : allVowels) {
             remainingVowels.remove(targetVowel);
-            for (Vowel standarVowel : remainingVowels) {
+            for (Vowel standardVowel : remainingVowels) {
                 //allVowels.remove(standarVowel);
-                Confidence confidence = new Confidence(stimulusResultRepository, player, task, difficulty, targetVowel, standarVowel);
+                Confidence confidence = new Confidence(stimulusResultRepository, player, task, difficulty, targetVowel, standardVowel);
                 confidenceRepository.save(confidence);
-                confidence = new Confidence(stimulusResultRepository, player, task, difficulty, standarVowel, targetVowel);
+                confidence = new Confidence(stimulusResultRepository, player, task, difficulty, standardVowel, targetVowel);
                 confidenceRepository.save(confidence);
                 
-                Score score = new Score(confidenceRepository,player,standarVowel,targetVowel);
+                List<Confidence> retrievedConfidences= confidenceRepository.findByPlayerAndTargetVowelAndStandardVowel(player,standardVowel,targetVowel);
+                Score score = new Score(retrievedConfidences,player,standardVowel,targetVowel);
                 scoreRepository.save(score);
-                score = new Score(confidenceRepository,player,targetVowel,standarVowel);
+                retrievedConfidences= confidenceRepository.findByPlayerAndTargetVowelAndStandardVowel(player,targetVowel,standardVowel);
+                score = new Score(retrievedConfidences,player,targetVowel,standardVowel);
                 scoreRepository.save(score);
             }
         }

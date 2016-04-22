@@ -156,6 +156,7 @@ public class StimulusController {
                 targetVowel = vowelRepository.findOne(stimulus.getVowelId());
             }
         }
+        standardVowels.removeIf(null);
         for (Stimulus stimulus : results) {
             if (stimulus.getPlayerResponse() != null) {
                 final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
@@ -169,15 +170,19 @@ public class StimulusController {
         }
         // update and save all confidence values
         for (Vowel standardVowel : standardVowels) {
+            if(standardVowel.getId() != targetVowel.getId()){
             confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, targetVowel, standardVowel);
             confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, targetVowel, standardVowel));
             confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, standardVowel, targetVowel);
             confidenceRepository.save(new Confidence(responseRepository, player, taskType, difficulty, standardVowel, targetVowel));
             
             scoreRepository.deleteByPlayerAndTargetVowelAndStandardVowel(player, targetVowel, standardVowel);
-            scoreRepository.save(new Score(confidenceRepository,player,targetVowel,standardVowel));
+            List<Confidence> retrievedConfidences= confidenceRepository.findByPlayerAndTargetVowelAndStandardVowel(player,targetVowel,standardVowel);
+            scoreRepository.save(new Score(retrievedConfidences,player,targetVowel,standardVowel));
             scoreRepository.deleteByPlayerAndTargetVowelAndStandardVowel(player, standardVowel, targetVowel);
-            scoreRepository.save(new Score(confidenceRepository,player,standardVowel,targetVowel));
+            retrievedConfidences= confidenceRepository.findByPlayerAndTargetVowelAndStandardVowel(player,standardVowel,targetVowel);
+            scoreRepository.save(new Score(retrievedConfidences,player,standardVowel,targetVowel));
+            }
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
