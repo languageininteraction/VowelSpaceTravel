@@ -19,13 +19,11 @@
 package nl.ru.languageininteraction.vst.model;
 
 import java.util.List;
-import java.util.Random;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
 import nl.ru.languageininteraction.vst.util.TaskScoreCalculator;
 
 /**
@@ -77,8 +75,8 @@ public class Score {
     }
 
     private void calculateScore(List<Confidence> retrievedConfidences) {
-        final double identificationWeight = 0.3;
-        final double discriminationWeight = 1 - identificationWeight;
+        final double discriminationWeight = 1.0; // lower if perfect discrimination ability should not yet achieve the max score
+        final double identificationWeight = 1 - discriminationWeight;
         TaskScoreCalculator identificationCalculator = new TaskScoreCalculator();
         TaskScoreCalculator discriminationCalculator = new TaskScoreCalculator();
         
@@ -89,11 +87,11 @@ public class Score {
             {    
                 discriminationCalculator.setScore(element.getPerformance(),element.getDifficulty());
             }
-            discriminationCalculator.inheritFromCalculator(identificationCalculator);
+            // performance on the harder identification task is a lowerbound estimate for how well someone can do discrimination
+            // therefore identification scores are propagated through to discrimination iff they are higher.
+            discriminationCalculator.inheritFromCalculator(identificationCalculator); 
             score = identificationCalculator.getTaskScore() * identificationWeight +
                      discriminationCalculator.getTaskScore() * discriminationWeight;
-            if (score<0.9)
-                System.out.println(score);
         }
     }
    
