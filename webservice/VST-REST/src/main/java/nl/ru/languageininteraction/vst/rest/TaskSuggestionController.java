@@ -90,15 +90,15 @@ public class TaskSuggestionController {
     private TaskSuggestion selectNewVowelPairAndSettings(Player player) {
 
         /*List<Score> scores = scoreRepository.findByPlayer(player);
-        Double scoreTotal = 0.0;
-        for (Score score : scores) {
-            scoreTotal += score.getScore();
-        }
-        Double identificationProb = scoreTotal / 120;
-        if (new Random().nextDouble() < identificationProb) {
-            return selectNewIdentificationTask(player);
-        } else {*/
-            return selectNewDiscriminationTask(player);
+         Double scoreTotal = 0.0;
+         for (Score score : scores) {
+         scoreTotal += score.getScore();
+         }
+         Double identificationProb = scoreTotal / 120;
+         if (new Random().nextDouble() < identificationProb) {
+         return selectNewIdentificationTask(player);
+         } else {*/
+        return selectNewDiscriminationTask(player);
        // }
 
         //throw new UnsupportedOperationException("Unsupported");
@@ -118,16 +118,25 @@ public class TaskSuggestionController {
         }
 
         if (data.size() < window) {
-            return new TaskSuggestion(data.get(0));
+            return new TaskSuggestion(data.get(0).getTask(),
+                    data.get(0).getDifficulty(),
+                    data.get(0).getTargetVowel(),
+                    data.get(0).getStandardVowels().get(0));
         }
 
         List<StimulusResponse> referenceData = getRecentDataWindow(referencePoint, window, lastResponse, player);
         if ((referenceData.size() < window) || detected_improvement(player, data, referenceData)) {
-            return new TaskSuggestion(data.get(0));
+            return new TaskSuggestion(data.get(0).getTask(),
+                    data.get(0).getDifficulty(),
+                    data.get(0).getTargetVowel(),
+                    data.get(0).getStandardVowels().get(0));
         } else if (lastResponse.getDifficulty() == Difficulty.easy) {
             return selectNewVowelPairAndSettings(player);
         } else {
-            TaskSuggestion task = new TaskSuggestion(data.get(0));
+            TaskSuggestion task = new TaskSuggestion(data.get(0).getTask(),
+                    data.get(0).getDifficulty(),
+                    data.get(0).getTargetVowel(),
+                    data.get(0).getStandardVowels().get(0));
             task.lowerDifficulty();
             return task;
         }
@@ -230,7 +239,10 @@ public class TaskSuggestionController {
             if (response != null) {
                 currentVowels.remove(next.getTargetVowel());
             } else {
-                return new TaskSuggestion(next);
+                return new TaskSuggestion(next.getTask(),
+                    next.getDifficulty(),
+                    next.getTargetVowel(),
+                    null);
             }
         }
 
@@ -276,13 +288,16 @@ public class TaskSuggestionController {
             response = responseRepository.findFirstByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsAndResponseDateGreaterThan(player,
                     next.getTask(), Difficulty.veryhard, next.getTargetVowel(), next.getStandardVowel(), sessionDate);
             if (response == null) {
-                return new TaskSuggestion(next);
+                return new TaskSuggestion(next.getTask(),
+                    next.getDifficulty(),
+                    next.getTargetVowel(),
+                    next.getStandardVowel());
             }
             currentVowelPairs.remove(new VowelPair(next.getTargetVowel(), next.getStandardVowel()));
         }
         // referenceDate = new Date();
         if (currentVowelPairs.isEmpty()) {
-            return new TaskSuggestion(vowelPairs,Task.discrimination);// return selectNewIdentificationTask(player);
+            return new TaskSuggestion(vowelPairs, Task.discrimination);// return selectNewIdentificationTask(player);
         } else {
             return new TaskSuggestion(currentVowelPairs, Task.discrimination);
         }

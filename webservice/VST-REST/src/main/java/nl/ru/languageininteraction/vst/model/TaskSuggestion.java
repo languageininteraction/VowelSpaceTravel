@@ -60,7 +60,7 @@ public class TaskSuggestion {
         }
     }
 
-    public TaskSuggestion(Confidence confObject) {
+   /* public TaskSuggestion(Confidence confObject) {
         this.task = confObject.getTask();
         this.difficulty = confObject.getDifficulty();
         this.targetVowel = confObject.getTargetVowel();
@@ -90,6 +90,7 @@ public class TaskSuggestion {
             }
         }
     }
+    */
 
     public Task getTask() {
         return task;
