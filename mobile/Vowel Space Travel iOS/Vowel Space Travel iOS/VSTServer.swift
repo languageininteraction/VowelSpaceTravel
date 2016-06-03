@@ -432,7 +432,7 @@ class VSTServer : NSObject
                 {
                     let targetVowelId : Int = confidence["targetId"] as! Int
                     
-                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["targetId"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
+                    currentConfidenceObject = ConfidenceForVowelPair(raw: confidence["score"] as! Float, targetVowelId: targetVowelId, standardVowelId: confidence["standardId"] as! Int)
                     self.confidencesForVowelPairsByTargetVowelId[targetVowelId]!.append(currentConfidenceObject)
                     
                 }
@@ -476,11 +476,24 @@ class VSTServer : NSObject
             print("data")
             print(err)
 
+            print(jsonData!["task"])
+            let task : Task = Task(rawValue: jsonData!["task"] as! String)!
+            
             let targetVowelInfo : NSDictionary = jsonData!["targetVowel"] as! NSDictionary
-            let standardVowelInfo : NSDictionary = jsonData!["standardVowel"] as! NSDictionary
+            let standardVowelInfo : NSDictionary
+            let standardVowelID : String
+            
+            if task == Task.Discrimination
+            {
+                standardVowelInfo = jsonData!["standardVowel"] as! NSDictionary
+                standardVowelID = standardVowelInfo["disc"] as! String
+            }
+            else
+            {
+                standardVowelID = "6" //Because we need something here
+            }
             
             let targetVowelID : String = targetVowelInfo["disc"] as! String
-            let standardVowelID : String = standardVowelInfo["disc"] as! String
             
             var targetVowel : VowelDefinition?
             var standardVowel : VowelDefinition?
@@ -506,7 +519,6 @@ class VSTServer : NSObject
                 standardVowel = self.availableVowels[0]
             }
             
-            let task : Task = Task(rawValue: jsonData!["task"] as! String)!
             let difficulty : String = jsonData!["difficulty"] as! String
 
             var multipleSpeakers : Bool
