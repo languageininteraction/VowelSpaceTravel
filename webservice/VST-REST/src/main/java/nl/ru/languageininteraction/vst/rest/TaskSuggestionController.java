@@ -57,7 +57,6 @@ public class TaskSuggestionController {
     private final double confidenceTreshold = 0.8;
     private final int referencePoint = 2;
     private final int window = 30;
-    // private Date referenceDate = null;
     @Autowired
     ConfidenceRepository confidenceRepository;
     @Autowired
@@ -80,30 +79,48 @@ public class TaskSuggestionController {
         return new ResponseEntity<>(wrapped, HttpStatus.OK);
     }
 
+    /**
+     * Determines if there has been any practice with any vowel pair in this
+     * session.
+     *
+     * @param player
+     * @return
+     */
     private boolean noCurrentVowelPair(Player player) {
-        //StimulusResponse latestResponse = responseRepository.findTop10ByPlayerOrderByResponseDateDesc(player).get(0);
         Date sessionDate = getSessionDate();
         List<StimulusResponse> recentData = responseRepository.findFirstByPlayerAndResponseDateGreaterThan(player, sessionDate);
         return recentData.isEmpty();
     }
 
+    /**
+     * Determines which task and vowel pairs should be suggested
+     *
+     * @param player
+     * @return
+     */
     private TaskSuggestion selectNewVowelPairAndSettings(Player player) {
+        // Reenable to start suggesting Identification tasks in addition to discrimination tasks.
+        List<Score> scores = scoreRepository.findByPlayer(player);
+        Double scoreTotal = 0.0;
+        for (Score score : scores) {
+            scoreTotal += score.getScore();
+        }
+        Double identificationProb = scoreTotal / 120;
+        if (new Random().nextDouble() < identificationProb) {
+            return selectNewIdentificationTask(player);
+        } else {
+            return selectNewDiscriminationTask(player);
+        }
 
-        /*List<Score> scores = scoreRepository.findByPlayer(player);
-         Double scoreTotal = 0.0;
-         for (Score score : scores) {
-         scoreTotal += score.getScore();
-         }
-         Double identificationProb = scoreTotal / 120;
-         if (new Random().nextDouble() < identificationProb) {
-         return selectNewIdentificationTask(player);
-         } else {*/
-        return selectNewDiscriminationTask(player);
-       // }
-
-        //throw new UnsupportedOperationException("Unsupported");
+        // return selectNewDiscriminationTask(player);
     }
 
+    /**
+     * Determines the settings appropriate for this player and vowel pair
+     *
+     * @param player
+     * @return
+     */
     private TaskSuggestion determineSettingsforVowelPair(Player player) {
         StimulusResponse lastResponse = responseRepository.findFirstByPlayerOrderByResponseDateDesc(player);
         if (lastResponse == null || lastResponse.getTask() == Task.identification) {
@@ -142,6 +159,15 @@ public class TaskSuggestionController {
         }
     }
 
+    /**
+     * Extracts a recent number of responses from the database.
+     *
+     * @param page
+     * @param windowlength
+     * @param response
+     * @param player
+     * @return
+     */
     private List<StimulusResponse> getRecentDataWindow(int page, int windowlength, StimulusResponse response, Player player) {
         List<StimulusResponse> data;
         if (response.getTask() == Task.discrimination) {
@@ -169,7 +195,6 @@ public class TaskSuggestionController {
     }
 
     private Date getSessionDate() {
-        // if (referenceDate == null) {
         Calendar c = Calendar.getInstance();
 
         // set the calendar to start of today
@@ -180,12 +205,18 @@ public class TaskSuggestionController {
 
         // and get that as a Date
         return c.getTime();
-        //  }
-        //  else
-        //      return referenceDate;
-
     }
 
+    /**
+     * Compares data on most recent number of responses to earlier responses to
+     * determine if the user has improved or not. (based on statistical
+     * significance at alpha level 0.05)
+     *
+     * @param player
+     * @param currentData
+     * @param referenceData
+     * @return
+     */
     private boolean detected_improvement(Player player, List<StimulusResponse> currentData, List<StimulusResponse> referenceData) {
         int totalCurr = currentData.size();
         int totalRef = referenceData.size();
@@ -193,21 +224,35 @@ public class TaskSuggestionController {
         int positiveRef = positiveCount(referenceData);
         double zScore = getZScore(positiveCurr, positiveRef, totalCurr, totalRef);
         double pValue = 1 - new NormalDistribution(null, 0, 1).cumulativeProbability(zScore);
-        //double tresholdValue = new NormalDistribution(null, 0, 1).inverseCumulativeProbability(0.95);
         double alpha = 0.05;
         return (pValue < alpha);
     }
 
+    /**
+     * Generates a Z-score based on the means of two variables, each with a
+     * variable count
+     *
+     * @param X1
+     * @param X2
+     * @param n1
+     * @param n2
+     * @return
+     */
     public double getZScore(double X1, double X2, double n1, double n2) {
         double p = (X1 + X2) * 1.0 / (n1 + n2);
         double sError = Math.sqrt(p * (1 - p) * ((1 / n1) + (1 / n2)));
         return ((X1 / n1) - (X2 / n2)) / sError;
     }
 
+    /**
+     * Goes through a list of data to determine how many responses were correct.
+     *
+     * @param data
+     * @return
+     */
     private int positiveCount(List<StimulusResponse> data) {
         Iterator<StimulusResponse> iterator = data.iterator();
         int correct = 0;
-        String std = data.get(0).getStandardVowels().get(0).getDisc();
         while (iterator.hasNext()) {
             StimulusResponse next = iterator.next();
             if (next.getRelevance() == Stimulus.Relevance.isIrelevant) {
@@ -221,6 +266,13 @@ public class TaskSuggestionController {
         return correct;
     }
 
+    /**
+     * Suggests a new identification task based on the performance on previous
+     * identification tasks (random, if none exist).
+     *
+     * @param player
+     * @return
+     */
     private TaskSuggestion selectNewIdentificationTask(Player player) {
         List<Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.identification, Difficulty.veryhard);
         List<Vowel> allVowels = vowelRepository.findAll();
@@ -228,7 +280,6 @@ public class TaskSuggestionController {
         if (confList.isEmpty()) {
             return new TaskSuggestion(allVowels, Task.identification);
         }
-
         Date sessionDate = getSessionDate();
         Iterator<Confidence> iterator = confList.iterator();
         while (iterator.hasNext()) {
@@ -240,20 +291,25 @@ public class TaskSuggestionController {
                 currentVowels.remove(next.getTargetVowel());
             } else {
                 return new TaskSuggestion(next.getTask(),
-                    next.getDifficulty(),
-                    next.getTargetVowel(),
-                    null);
+                        next.getDifficulty(),
+                        next.getTargetVowel(),
+                        null);
             }
         }
-
         if (currentVowels.isEmpty()) {
             return new TaskSuggestion(allVowels, Task.identification);
         } else {
             return new TaskSuggestion(currentVowels, Task.identification);
         }
-
     }
 
+    /**
+     * Suggests a new discrimination task based on the performance on previous
+     * discrimination tasks (random, if none exist).
+     *
+     * @param player
+     * @return
+     */
     private TaskSuggestion selectNewDiscriminationTask(Player player) {
         List<Confidence> confList = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.discrimination, Difficulty.veryhard);
         //List<Confidence> confListIdentification = confidenceRepository.findByPlayerAndTaskAndDifficultyOrderByLowerBoundAsc(player, Task.identification, Difficulty.veryhard);
@@ -269,11 +325,9 @@ public class TaskSuggestionController {
             }
         }
         List<VowelPair> currentVowelPairs = new ArrayList(vowelPairs);
-
         if (confList.isEmpty()) {
             return new TaskSuggestion(vowelPairs, Task.discrimination);
         }
-
         Date sessionDate = getSessionDate();
         Iterator<Confidence> iterator = confList.iterator();
         while (iterator.hasNext()) {
@@ -289,15 +343,16 @@ public class TaskSuggestionController {
                     next.getTask(), Difficulty.veryhard, next.getTargetVowel(), next.getStandardVowel(), sessionDate);
             if (response == null) {
                 return new TaskSuggestion(next.getTask(),
-                    next.getDifficulty(),
-                    next.getTargetVowel(),
-                    next.getStandardVowel());
+                        next.getDifficulty(),
+                        next.getTargetVowel(),
+                        next.getStandardVowel());
             }
             currentVowelPairs.remove(new VowelPair(next.getTargetVowel(), next.getStandardVowel()));
         }
-        // referenceDate = new Date();
         if (currentVowelPairs.isEmpty()) {
-            return new TaskSuggestion(vowelPairs, Task.discrimination);// return selectNewIdentificationTask(player);
+            // Shoul return a new identification task, but identification task have been disabled currently.
+            return selectNewIdentificationTask(player);
+            //return new TaskSuggestion(vowelPairs, Task.discrimination);
         } else {
             return new TaskSuggestion(currentVowelPairs, Task.discrimination);
         }
