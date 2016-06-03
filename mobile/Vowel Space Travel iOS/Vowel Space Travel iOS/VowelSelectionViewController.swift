@@ -259,6 +259,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     self.currentGame.selectedTargetVowel = self.suggestedTargetVowel!
                     self.currentGame.multipleSpeakers = gameSuggestion.multipleSpeakers
                     self.currentGame.differentStartingSounds = gameSuggestion.differentStartingSounds
+                    self.currentGame.selectedTask = gameSuggestion.task
+                    
+                    if gameSuggestion.task == Task.Identification
+                    {
+                        self.taskSegmentedControl!.selectedSegmentIndex = 1
+                    }
                 }
                 
                 //Get the confidences for vowel combinations
