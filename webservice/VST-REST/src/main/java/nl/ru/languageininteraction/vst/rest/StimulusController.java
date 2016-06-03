@@ -21,6 +21,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
@@ -139,7 +140,7 @@ public class StimulusController {
                 targetVowel = vowelRepository.findOne(stimulus.getVowelId());
             }
         }
-        standardVowels.removeIf(null);
+        standardVowels.removeIf(Objects::isNull);
         for (Stimulus stimulus : results) {
             if (stimulus.getPlayerResponse() != null) {
                 final StimulusResponse stimulusResponse = new StimulusResponse(player, taskType, difficulty, targetVowel, stimulus.getRelevance(), stimulus.getPlayerResponse(), stimulus.getResponseTimeMs());
