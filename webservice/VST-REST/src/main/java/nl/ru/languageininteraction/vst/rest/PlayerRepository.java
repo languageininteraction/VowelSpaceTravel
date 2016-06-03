@@ -27,7 +27,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @since Apr 2, 2015 5:41:33 PM (creation date)
  * @author Peter Withers <p.withers@psych.ru.nl>
  */
-@RepositoryRestResource(collectionResourceRel = "players", path = "players")
+@RepositoryRestResource(collectionResourceRel = "players", exported = false, path = "players")
 public interface PlayerRepository extends PagingAndSortingRepository<Player, Long> {
 
     Player findById(@Param("id") long id);
