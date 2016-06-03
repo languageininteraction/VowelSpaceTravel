@@ -77,23 +77,6 @@ public class StimulusController {
     VowelRepository vowelRepository;
     @Autowired
     ScoreRepository scoreRepository;
-//    @RequestMapping(method = RequestMethod.GET)
-//    @ResponseBody
-//    public ResponseEntity getLinks() {
-//        Resources<Stimulus> wrapped = new Resources<>(null, linkTo(StimulusController.class).withSelfRel());
-//        wrapped.add(linkTo(methodOn(StimulusController.class).getStimulusSequence(null, null, null, null, null,null)).withSelfRel());
-//        return new ResponseEntity<>(wrapped, HttpStatus.OK);
-//    }
-//    public StimulusController(EntityLinks entityLinks) {
-////        this.entityLinks = entityLinks;
-//        entityLinks.linkFor(ControllerLinkBuilder.methodOn(StimulusController.class).getStimulusSequence(discrimination, null, size).withRel("stimulus"));
-//    }
-//    @RequestMapping(value = "/", method = GET)
-//    @ResponseBody
-//    public ResponseEntity getStimulusSequence() {
-//    Resources<Stimulus> wrapped = new Resources<>(words, linkTo(StimulusController.class).withSelfRel());
-//        return new ResponseEntity<>(wrapped, HttpStatus.OK);
-//    }
 
     @RequestMapping(value = "/audio/{sampleId}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
     @ResponseBody
@@ -168,7 +151,7 @@ public class StimulusController {
                 responseRepository.save(stimulusResponse);
             }
         }
-        // update and save all confidence values
+        // update and save all confidence values and update scores accordingly
         for (Vowel standardVowel : standardVowels) {
             if(standardVowel.getId() != targetVowel.getId()){
             confidenceRepository.deleteByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowel(player, taskType, difficulty, targetVowel, standardVowel);

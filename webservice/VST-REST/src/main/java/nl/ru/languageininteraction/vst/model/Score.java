@@ -90,6 +90,9 @@ public class Score {
             // performance on the harder identification task is a lowerbound estimate for how well someone can do discrimination
             // therefore identification scores are propagated through to discrimination iff they are higher.
             discriminationCalculator.inheritFromCalculator(identificationCalculator); 
+            // score is a weighted average of the task scores. Note that since identification scores are propagated through, so with a 
+            // discriminationweight of 1, the identification task score only affects the total score when it is higher than the discrimination
+            // score
             score = identificationCalculator.getTaskScore() * identificationWeight +
                      discriminationCalculator.getTaskScore() * discriminationWeight;
         }

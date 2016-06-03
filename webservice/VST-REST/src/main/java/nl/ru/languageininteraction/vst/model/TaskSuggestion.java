@@ -60,38 +60,6 @@ public class TaskSuggestion {
         }
     }
 
-   /* public TaskSuggestion(Confidence confObject) {
-        this.task = confObject.getTask();
-        this.difficulty = confObject.getDifficulty();
-        this.targetVowel = confObject.getTargetVowel();
-        this.standardVowel = null;
-        if (task == Task.discrimination) {
-            if (new Random().nextBoolean()) {
-                this.standardVowel = confObject.getStandardVowel();
-            } else {
-                this.targetVowel = confObject.getStandardVowel();
-                this.standardVowel = confObject.getTargetVowel();
-            }
-        }
-
-    }
-
-    public TaskSuggestion(StimulusResponse response) {
-        this.task = response.getTask();
-        this.difficulty = response.getDifficulty();
-        this.targetVowel = response.getTargetVowel();
-        this.standardVowel = null;
-        if (task == Task.discrimination) {
-            if (new Random().nextBoolean()) {
-                this.standardVowel = response.getStandardVowels().get(0);
-            } else {
-                this.targetVowel = response.getStandardVowels().get(0);
-                this.standardVowel = response.getTargetVowel();
-            }
-        }
-    }
-    */
-
     public Task getTask() {
         return task;
     }

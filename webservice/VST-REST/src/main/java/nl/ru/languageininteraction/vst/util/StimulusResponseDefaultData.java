@@ -19,7 +19,6 @@ package nl.ru.languageininteraction.vst.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import nl.ru.languageininteraction.vst.model.Confidence;
 import nl.ru.languageininteraction.vst.model.Difficulty;
 import nl.ru.languageininteraction.vst.model.Player;
@@ -164,7 +163,6 @@ public class StimulusResponseDefaultData {
         for (Vowel targetVowel : allVowels) {
             remainingVowels.remove(targetVowel);
             for (Vowel standardVowel : remainingVowels) {
-                //allVowels.remove(standarVowel);
                 Confidence confidence = new Confidence(stimulusResultRepository, player, task, difficulty, targetVowel, standardVowel);
                 confidenceRepository.save(confidence);
                 confidence = new Confidence(stimulusResultRepository, player, task, difficulty, standardVowel, targetVowel);

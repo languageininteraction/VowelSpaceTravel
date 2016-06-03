@@ -79,7 +79,7 @@ public class TaskScoreCalculator {
 
     public void setScore(double performance, Difficulty difficulty) {
         Double rawScore = performance >= 0.5 ? (performance - 0.5) * 2 : 0;  // deduct chance level from perfomance, then multiply to get a score between 0..1
-        Double normScore = 2 / (1 + Math.exp(-(rawScore * 6))) - 1;
+        Double normScore = 2 / (1 + Math.exp(-(rawScore * 6))) - 1; // nonlinear relationship between performance and score, so that increases in skill early on are more noticable
 
         switch (difficulty) {
             case easy:

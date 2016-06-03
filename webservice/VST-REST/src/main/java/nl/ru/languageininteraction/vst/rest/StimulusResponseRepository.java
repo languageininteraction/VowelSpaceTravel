@@ -26,7 +26,6 @@ import nl.ru.languageininteraction.vst.model.Stimulus;
 import nl.ru.languageininteraction.vst.model.StimulusResponse;
 import nl.ru.languageininteraction.vst.model.Task;
 import nl.ru.languageininteraction.vst.model.Vowel;
-import org.springframework.data.domain.Page;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -62,20 +61,7 @@ public interface StimulusResponseRepository extends PagingAndSortingRepository<S
             @Param("difficulty") Difficulty difficulty,
             @Param("targetVowel") Vowel targetVowel,
             @Param("responseDate") Date responseDate);
-    
- /*    List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
-            Player player,
-            Task task,
-            Difficulty difficulty,
-            Vowel v1,
-            Vowel s1,
-            Player player1,
-            Task task1,
-            Difficulty difficulty1,
-            Vowel v2,
-            Vowel s2);
-           // Pageable pageable);*/
-     
+        
     List<StimulusResponse> findByPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrPlayerAndTaskAndDifficultyAndTargetVowelAndStandardVowelsOrderByResponseDateDesc(
             Player player,
             Task task,

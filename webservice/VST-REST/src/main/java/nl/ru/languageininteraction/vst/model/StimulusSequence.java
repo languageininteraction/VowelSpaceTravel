@@ -84,15 +84,11 @@ public class StimulusSequence extends ResourceSupport {
     /**
      * discrimination
      *
-     * // todo: this should take input of a vowel pair (because the selection
-     * of this vowel pair is yet to be defined)
-     *
-     * // todo: add parameters of difficulty level, number of speakers in
-     * stimuli selection and requireSameStartingConsonent
-     *
      * @param maxSize
+     * @param maxTargetCount
      * @param targetVowel
      * @param standardVowel
+     * @param difficulty
      * @return {sequence of samples with a single target vowel and single
      * standard vowel} a, a, a, e, a, e, e
      */
@@ -108,7 +104,6 @@ public class StimulusSequence extends ResourceSupport {
         final List<WordSample> foundByTarget = filterByDifficulty(givenSample, foundByVowelId, difficulty);
         final List<WordSample> foundByStandard = filterByDifficulty(givenSample, sampleRepository.findByVowelId(standardVowel.getId()), difficulty);
         final ArrayList<Stimulus> stimulusList = new ArrayList<>();
-//        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
         final IntStream randomTargetInts = new Random().ints(0, foundByTarget.size());
         final PrimitiveIterator.OfInt targetRandomIterator = randomTargetInts.iterator();
         final IntStream randomStandardInts = new Random().ints(0, foundByStandard.size());
@@ -147,12 +142,6 @@ public class StimulusSequence extends ResourceSupport {
     /**
      * identification
      *
-     * // todo: this should take input of a vowel pair (because the selection
-     * of this vowel pair is yet to be defined)
-     *
-     * // todo: add parameters of difficulty level, number of speakers in
-     * stimuli selection and requireSameStartingConsonent
-     *
      * @param maxSize
      * @param maxTargetCount
      * @param targetVowel
@@ -172,10 +161,7 @@ public class StimulusSequence extends ResourceSupport {
         for (Vowel vowel : allVowels) {
             foundByStandard.addAll(filterByDifficulty(givenSample, sampleRepository.findByVowelId(vowel.getId()), difficulty)); 
         }
-        
-       // final List<WordSample> foundByStandard = filterByDifficulty(givenSample, sampleRepository.findByVowelId(standardVowel.getId()), difficulty);
         final ArrayList<Stimulus> stimulusList = new ArrayList<>();
-//        final int availableCount = (maxSize < (int) sampleRepository.count()) ? maxSize : (int) sampleRepository.count();
         final IntStream randomTargetInts = new Random().ints(0, foundByTarget.size());
         final PrimitiveIterator.OfInt targetRandomIterator = randomTargetInts.iterator();
         final IntStream randomStandardInts = new Random().ints(0, foundByStandard.size());
