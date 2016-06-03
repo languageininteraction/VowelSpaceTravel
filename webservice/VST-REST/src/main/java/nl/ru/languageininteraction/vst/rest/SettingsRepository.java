@@ -32,7 +32,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface SettingsRepository extends PagingAndSortingRepository<Settings, Long> {
 
     List<Settings> findByPlayer(@Param("player") Player player);
-//    List<Settings> findAll();
 
     Settings findById(@Param("id") long id);
 }

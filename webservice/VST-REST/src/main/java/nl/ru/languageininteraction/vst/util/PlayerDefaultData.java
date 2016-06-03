@@ -18,7 +18,6 @@
 package nl.ru.languageininteraction.vst.util;
 
 import nl.ru.languageininteraction.vst.model.Player;
-import nl.ru.languageininteraction.vst.model.Settings;
 import nl.ru.languageininteraction.vst.rest.ConsonantRepository;
 import nl.ru.languageininteraction.vst.rest.PlayerRepository;
 import nl.ru.languageininteraction.vst.rest.SettingsRepository;

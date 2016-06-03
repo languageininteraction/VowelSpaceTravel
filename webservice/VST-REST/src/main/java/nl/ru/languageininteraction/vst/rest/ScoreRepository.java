@@ -35,8 +35,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 public interface ScoreRepository extends PagingAndSortingRepository<Score, Long>{
 
     public List<Score> findAll();
-
-    //public void deleteByPlayerAndTargetVowelAndStandardVowel(Player player, Vowel targetVowel, Vowel standardVowel);
     
     @RestResource(exported = false)
     public void deleteByPlayerAndTargetVowelAndStandardVowel(

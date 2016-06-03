@@ -19,13 +19,12 @@
 package nl.ru.languageininteraction.vst.model;
 
 import java.util.List;
-import java.util.Random;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import nl.ru.languageininteraction.vst.rest.ConfidenceRepository;
+import nl.ru.languageininteraction.vst.util.TaskScoreCalculator;
 
 /**
  * @since Sep 16, 2015 2:35:45 PM (creation date)
@@ -49,13 +48,12 @@ public class Score {
     public Score() {
     }
     
-    public Score(ConfidenceRepository confidenceRepository,Player player, Vowel targetVowel, Vowel standardVowel)
+    public Score(List<Confidence> retrievedConfidences,Player player, Vowel targetVowel, Vowel standardVowel)
     {
         this.player = player;
         //score = new Random().nextDouble();
         this.standardVowel = standardVowel;
         this.targetVowel = targetVowel;
-        List<Confidence> retrievedConfidences= confidenceRepository.findByPlayerAndTargetVowelAndStandardVowel(player,targetVowel,standardVowel);
         calculateScore(retrievedConfidences);
         // TODO: add code to calculate score from confidence values.
     }
@@ -77,8 +75,8 @@ public class Score {
     }
 
     private void calculateScore(List<Confidence> retrievedConfidences) {
-        final double identificationWeight = 0.3;
-        final double discriminationWeight = 1 - identificationWeight;
+        final double discriminationWeight = 1.0; // lower if perfect discrimination ability should not yet achieve the max score
+        final double identificationWeight = 1 - discriminationWeight;
         TaskScoreCalculator identificationCalculator = new TaskScoreCalculator();
         TaskScoreCalculator discriminationCalculator = new TaskScoreCalculator();
         
@@ -89,83 +87,17 @@ public class Score {
             {    
                 discriminationCalculator.setScore(element.getPerformance(),element.getDifficulty());
             }
-            discriminationCalculator.inheritFromCalculator(identificationCalculator);
+            // performance on the harder identification task is a lowerbound estimate for how well someone can do discrimination
+            // therefore identification scores are propagated through to discrimination iff they are higher.
+            discriminationCalculator.inheritFromCalculator(identificationCalculator); 
+            // score is a weighted average of the task scores. Note that since identification scores are propagated through, so with a 
+            // discriminationweight of 1, the identification task score only affects the total score when it is higher than the discrimination
+            // score
             score = identificationCalculator.getTaskScore() * identificationWeight +
                      discriminationCalculator.getTaskScore() * discriminationWeight;
-            if (score<0.9)
-                System.out.println(score);
         }
     }
    
-    class TaskScoreCalculator {
-        
-        double easyScore;
-        double mediumScore;
-        double veryhardScore;
-        double hardScore;
-        final double weight = 0.25;
-        double taskScore;
-
-        public double getTaskScore() {
-            calculateScore();
-            return taskScore;
-        }
-        double task;
-        
-        public TaskScoreCalculator()
-        {
-            easyScore = 0;
-            mediumScore = 0;
-            hardScore = 0;
-            veryhardScore = 0;
-        }
-                     
-        public void inheritFromCalculator(TaskScoreCalculator calculator)
-        {
-            if(calculator.veryhardScore > veryhardScore)
-                veryhardScore = calculator.veryhardScore;
-            if(calculator.hardScore > hardScore )
-                hardScore = calculator.hardScore;
-            if(calculator.mediumScore > mediumScore )
-                mediumScore = calculator.mediumScore;
-            if(calculator.easyScore > easyScore )
-                easyScore = calculator.easyScore;
-        }
-        
-        private void inheritScore()
-        {
-            if(veryhardScore > hardScore)
-                hardScore = veryhardScore;
-            if(hardScore > mediumScore)
-                mediumScore = hardScore;
-            if(mediumScore > easyScore)
-                easyScore = mediumScore;      
-        }
-        
-        public void calculateScore()
-        {
-            inheritScore();
-            taskScore = weight * easyScore + weight * mediumScore + weight * hardScore + weight * veryhardScore;
-        }
-        
-        public void setScore(double performance, Difficulty difficulty) {
-            Double rawScore =  performance >= 0.5 ? (performance - 0.5) *2 : 0;  // deduct chance level from perfomance, then multiply to get a score between 0..1
-            Double normScore = 2/(1+Math.exp(-(rawScore*6)))-1;
-            
-            switch(difficulty)
-            {
-                case easy:
-                    easyScore = normScore; break;
-                case medium:
-                    mediumScore = normScore; break;
-                case hard:
-                    hardScore = normScore; break;
-                case veryhard:
-                    veryhardScore = normScore; break;
-            }
-                    
-        }
-
-    }
+   
     
 }
