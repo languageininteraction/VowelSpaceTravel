@@ -9,13 +9,13 @@
 import UIKit
 import Foundation
 
-let kDevelopmentMode = false
+let kDevelopmentMode = true
 let kSpeedUpDownload = kDevelopmentMode ? true : false
 let kOnlyOneStimulus = kDevelopmentMode ? true : false
 let kShowTouchLocation = kDevelopmentMode ? false : false
 let kShowPlanetsForExampleUser = kDevelopmentMode ? false : false
 
-let kWebserviceURL = kDevelopmentMode ? "http://applejack.science.ru.nl:8080/" : "http://applejack.science.ru.nl/vowelspacetravel/"
+let kWebserviceURL = kDevelopmentMode ? "http://applejack.science.ru.nl/vowelspacetravel/" : "http://applejack.science.ru.nl/vowelspacetravel/"
 let kWebserviceUsername = kDevelopmentMode ? "jane@bsmoth.none" : "jane@bsmoth.none"
 let kWebserviceUserPassword = kDevelopmentMode ? "1234" : "1234"
 
