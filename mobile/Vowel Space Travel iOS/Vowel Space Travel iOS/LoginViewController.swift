@@ -21,6 +21,8 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
     
     var emailTextField : UITextField = UITextField()
     var passwordTextField : UITextField = UITextField()
+
+    var numberOfActiveTextFields : Int = 0
     
     override func viewDidLoad()
     {
@@ -126,16 +128,21 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool
     {
-        if textField.frame.minY > 300
-        {
-            self.moveWholeViewUp()
-        }
+        self.numberOfActiveTextFields++
+        
+        self.moveWholeViewUp()
         return true
     }
     
     func textFieldShouldEndEditing(textField: UITextField) -> Bool
     {
-        self.moveWholeViewDown()
+        self.numberOfActiveTextFields--
+                
+        if (self.numberOfActiveTextFields == 0)
+        {
+            self.moveWholeViewDown()
+        }
+        
         return true
     }    
     
@@ -147,7 +154,7 @@ class LoginViewController: SubViewController, PassControlToSubControllerProtocol
     
     func moveWholeViewUp()
     {
-        UIView.animateWithDuration(1, animations: {self.view.frame.origin.y = -200})
+        UIView.animateWithDuration(1, animations: {self.view.frame.origin.y = -100})
     }
     
     func moveWholeViewDown()
