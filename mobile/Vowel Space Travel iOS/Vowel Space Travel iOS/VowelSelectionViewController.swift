@@ -704,11 +704,12 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
     
     func subControllerFinished(subController: SubViewController)
     {
-
+        drawRectangleToHideTransitions(self.view)
+        
         subController.dismissViewControllerAnimated(false, completion:
         {
             () -> Void in
-            
+
             switch subController
             {
                 case self.settingsViewController!:
@@ -761,6 +762,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                         }
                         else
                         {
+                            drawRectangleToHideTransitions(self.settingsViewController!.view)
                             self.createANewGameBasedOnServerSuggestionsAndGoToSettingsView()
                         }
                     }
@@ -768,6 +770,8 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
                     {
                         self.currentGame = self.createANewGameWithTheSameSettings(self.currentGame)
                         self.currentGame.stage = GameStage.Playing
+
+                        drawRectangleToHideTransitions(self.settingsViewController!.view)
                         self.goToSettingsView()
                     }
                 
