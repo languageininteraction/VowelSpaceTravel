@@ -161,7 +161,7 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         
         //Create the task selection segmented control
         self.taskSegmentedControl = UISegmentedControl(items: ["",""])
-        self.taskSegmentedControl!.selectedSegmentIndex = 0
+        self.taskSegmentedControl!.selectedSegmentIndex = self.currentGame.selectedTask == Task.Discrimination ? 0 : 1
  
         //Custom appearance of the segmented control
         self.taskSegmentedControl!.setBackgroundImage(UIImage(named: "taskSegmentedControlv3"), forState: UIControlState.Normal, barMetrics: UIBarMetrics.Default)
@@ -309,6 +309,21 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.vowelViews = [String:PlanetView]()
         var travelIndicationLineStartPoint : CGPoint = CGPoint(x: 0,y: 0)
         var travelIndicationLineEndPoint : CGPoint = CGPoint(x: 0,y: 0)
+        
+        if (self.currentGame.selectedBaseVowel == self.currentGame.selectedTargetVowel)
+        {
+            let firstVowel : VowelDefinition = Array(self.availableVowels!.values)[0]
+            let secondVowel : VowelDefinition = Array(self.availableVowels!.values)[1]
+            
+            if self.currentGame.selectedTargetVowel == firstVowel
+            {
+                self.currentGame.selectedTargetVowel = secondVowel
+            }
+            else
+            {
+                self.currentGame.selectedTargetVowel = firstVowel
+            }
+        }
         
         //Create all views
         for (exampleWord,vowel) in self.availableVowels!
@@ -546,11 +561,21 @@ class VowelSelectionViewController: SubViewController, PassControlToSubControlle
         self.drawVowelViews()
     }
 
+    func increaseRect(rect: CGRect, byPercentage percentage: CGFloat) -> CGRect
+    {
+        let startWidth = CGRectGetWidth(rect)
+        let startHeight = CGRectGetHeight(rect)
+        let adjustmentWidth = (startWidth * percentage) / 2.0
+        let adjustmentHeight = (startHeight * percentage) / 2.0
+        return CGRectInset(rect, -adjustmentWidth, -adjustmentHeight)
+    }
+    
     func findVowelForTouchLocation(touchLocation : CGPoint) -> VowelDefinition?
     {
         for (exampleWord,vowelView) in self.vowelViews
         {
-            if CGRectContainsPoint(vowelView.frame, touchLocation)
+            //Also looking for drags released somewhat near the planet
+            if CGRectContainsPoint(self.increaseRect(vowelView.frame,byPercentage: 2), touchLocation)
             {
                 return self.availableVowels![exampleWord]
             }
