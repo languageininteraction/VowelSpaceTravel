@@ -49,9 +49,9 @@ public class PlayerDefaultData {
 
     public void insertPlayer() {
 //        final Settings settings = new Settings();
-        final Player player1 = new Player("Jane", "Smith", "jane@bsmoth.none", "1234", null);
+        final Player player1 = new Player("Jane", "Smith", "jane@bsmoth.none", "1234", null,false,null);
         playerRepository.save(player1);
-        final Player player2 = new Player("Fred", "Blogs", "fred@blogs.none", "1234", null);
+        final Player player2 = new Player("Fred", "Blogs", "fred@blogs.none", "1234", null,false,null);
         playerRepository.save(player2);
     }
 }

@@ -40,7 +40,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @since May 19, 2015 3:01:11 PM (creation date)
- * @author Peter Withers <p.withers@psych.ru.nl>
+ * @author Peter Withers {@literal <p.withers@psych.ru.nl>}
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {Application.class})

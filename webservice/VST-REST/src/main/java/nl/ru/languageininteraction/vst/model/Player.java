@@ -43,6 +43,8 @@ public class Player {
     @Column(unique = true)
     private String email;
     private String token; // user password that has been hashed in the mobile app
+    private String nativeLanguage;
+    private boolean canUseDataForResearch;
 
     @OneToOne
     private Settings settings;
@@ -50,12 +52,14 @@ public class Player {
     public Player() {
     }
 
-    public Player(String firstName, String lastName, String email, String token, Settings settings) {
+    public Player(String firstName, String lastName, String email, String token, String nativeLanguage, boolean canUseDataForResearch,Settings settings) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.token = token;
         this.settings = settings;
+        this.nativeLanguage = nativeLanguage;
+        this.canUseDataForResearch = canUseDataForResearch;
     }
 
     public long getId() {
@@ -63,7 +67,7 @@ public class Player {
     }
 
     public String getFirstName() {
-        return firstName;
+        return null;//firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -71,15 +75,20 @@ public class Player {
     }
 
     public String getLastName() {
-        return lastName;
+        return null;//lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public String getEmail() {
+    
+    @JsonIgnore
+    public String getHiddenEmail() {
         return email;
+    }
+    
+    public String getEmail() {
+        return null; //email;
     }
 
     public void setEmail(String email) {
@@ -112,5 +121,21 @@ public class Player {
 
     public List<StimulusResponse> getStimulusResults() {
         return stimulusResults;
+    }
+    
+    public String getNativeLanguage() {
+        return nativeLanguage;
+    }
+
+    public void setNativeLanguage(String nativeLanguage) {
+        this.nativeLanguage = nativeLanguage;
+    }
+
+    public Boolean getCanUseDataForResearch() {
+        return canUseDataForResearch;
+    }
+
+    public void setCanUseDataForResearch(Boolean canUseDataForResearch) {
+        this.canUseDataForResearch = canUseDataForResearch;
     }
 }

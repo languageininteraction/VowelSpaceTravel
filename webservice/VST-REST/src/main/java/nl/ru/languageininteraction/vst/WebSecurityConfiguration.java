@@ -49,7 +49,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
         return (String username) -> {
             Player player = accountRepository.findByEmail(username);
             if (player != null) {
-                return new User(player.getEmail(), player.getHiddenToken(), true, true, true, true, AuthorityUtils.createAuthorityList("ROLE_USER"));
+                return new User(player.getHiddenEmail(), player.getHiddenToken(), true, true, true, true, AuthorityUtils.createAuthorityList("ROLE_USER"));
             } else {
                 throw new UsernameNotFoundException("No player found with email '" + username + "'");
             }

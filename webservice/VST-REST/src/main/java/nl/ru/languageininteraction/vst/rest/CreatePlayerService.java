@@ -65,7 +65,7 @@ public class CreatePlayerService {
     @RequestMapping(value = "/createuser", method = RequestMethod.POST)
     public String createuser(@RequestBody Player player) {
 
-        if (player.getEmail() == null || player.getEmail().isEmpty()) {
+        if (player.getHiddenEmail() == null || player.getHiddenEmail().isEmpty()) {
             throw new IllegalArgumentException("The 'email' parameter is required");
         }
         if (player.getHiddenToken() == null || player.getHiddenToken().isEmpty()) {
