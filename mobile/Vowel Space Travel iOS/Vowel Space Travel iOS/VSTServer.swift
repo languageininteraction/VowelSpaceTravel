@@ -155,11 +155,11 @@ class VSTServer : NSObject
         
     }
     
-    func createNewUser(firstName : String,lastName: String, email: String,token: String)
+    func createNewUser(email: String,token: String,nativeLanguage: String,allowsUseForResearch: Bool)
     {
         print("Creating new user")
         
-        self.HTTPPostToJSON("players",data: ["firstName":firstName,"lastName":lastName, "token":token, "email":email],processResponse: false)
+        self.HTTPPostToJSON("players",data: ["firstName":"unknown","lastName":"unknown", "token":token, "email":email, "nativeLanguage": nativeLanguage, "canUseDataForResearch": allowsUseForResearch ],processResponse: false)
         {
             (jsonData,err) -> Void in
             
