@@ -128,7 +128,7 @@ public class StimulusController {
             @PathVariable("difficulty") Difficulty difficulty,
             @RequestBody List<Stimulus> results,
             Principal principal) {
-        if (!principal.getName().equals(player.getEmail())) {
+        if (!principal.getName().equals(player.getHiddenEmail())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         HashSet<Vowel> standardVowels = new HashSet<>();

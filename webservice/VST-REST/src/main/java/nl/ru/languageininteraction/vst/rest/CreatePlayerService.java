@@ -73,6 +73,6 @@ public class CreatePlayerService {
         }
 
         participantRepository.save(player);
-        return "Created: " + player.getEmail();
+        return "Created: " + player.getHiddenEmail();
     }
 }
