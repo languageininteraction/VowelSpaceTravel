@@ -14,6 +14,8 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
     var screenWidth : CGFloat?
     var screenHeight : CGFloat?
     
+    var numberOfActiveTextFields : Int = 0
+    
     var largeTextFieldWidth : CGFloat = 450
     var smallTextFieldWidth : CGFloat = 260
     
@@ -24,6 +26,10 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
     var emailTextField : UITextField = UITextField()
     var passwordTextField : UITextField = UITextField()
     var repeatPasswordTextField : UITextField = UITextField()
+    var nativeLanguageTextField : UITextField = UITextField()
+
+    var radioButtonSelectedImage : UIImageView?
+    var allowDataUse : Bool?
     
     var server : VSTServer?
     
@@ -40,50 +46,79 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         backgroundImageView.frame = CGRect(x: 0,y: 0,width: self.screenWidth!,height: screenHeight!)
         self.view.addSubview(backgroundImageView)
         
-        let firstRowTop : CGFloat = 105
-        let secondRowTop : CGFloat = 275
-        let thirdRowTop : CGFloat = 455
-        let fourthRowTop : CGFloat = 625
+        let firstRowTop : CGFloat = 75
+        let secondRowTop : CGFloat = 250
+        let thirdRowTop : CGFloat = 420
+        let fourthRowTop : CGFloat = 540
+        let fifthRowTop : CGFloat = 645
         
         let firstColumnLeft : CGFloat = 150
         let secondColumnLeft : CGFloat = 300
         let thirdColumnLeft : CGFloat = 600
-        
-        self.firstNameTextField = self.createTextField(firstColumnLeft, y: firstRowTop, large: false, placeHolder: "First name")
-        self.view.addSubview(self.firstNameTextField)
 
-        self.lastNameTextField = self.createTextField(thirdColumnLeft, y: firstRowTop, large: false, placeHolder: "Last name")
-        self.view.addSubview(self.lastNameTextField)
+// VST team decided they don't need these fields, so they will probably not return
+//        self.firstNameTextField = self.createTextField(firstColumnLeft, y: firstRowTop, large: false, placeHolder: "First name")
+//        self.view.addSubview(self.firstNameTextField)
+//
+//        self.lastNameTextField = self.createTextField(thirdColumnLeft, y: firstRowTop, large: false, placeHolder: "Last name")
+//        self.view.addSubview(self.lastNameTextField)
         
-        self.emailTextField = self.createTextField(secondColumnLeft, y: secondRowTop, large: true, placeHolder: "Email address")
+        self.emailTextField = self.createTextField(secondColumnLeft, y: firstRowTop, large: true, placeHolder: "Email address")
         self.emailTextField.keyboardType = UIKeyboardType.EmailAddress
         self.view.addSubview(self.emailTextField)
 
-        self.passwordTextField = self.createTextField(firstColumnLeft, y: thirdRowTop, large: false, placeHolder: "Choose password", hidden: true)
+        self.passwordTextField = self.createTextField(firstColumnLeft, y: secondRowTop, large: false, placeHolder: "Choose password", hidden: true)
         self.view.addSubview(self.passwordTextField)
         
-        self.repeatPasswordTextField = self.createTextField(thirdColumnLeft, y: thirdRowTop, large: false, placeHolder: "Repeat password", hidden: true)
+        self.repeatPasswordTextField = self.createTextField(thirdColumnLeft, y: secondRowTop, large: false, placeHolder: "Repeat password", hidden: true)
         self.view.addSubview(self.repeatPasswordTextField)
+
+        self.nativeLanguageTextField = self.createTextField(secondColumnLeft, y: thirdRowTop, large: true, placeHolder: "Your best language")
+        self.view.addSubview(self.nativeLanguageTextField)
+        
+        let allowDataUseLabel = UILabel()
+        
+        allowDataUseLabel.frame = CGRectMake(firstColumnLeft,fourthRowTop,500,80)
+        allowDataUseLabel.font = UIFont(name: "Muli",size:15)
+        allowDataUseLabel.numberOfLines = 0
+        allowDataUseLabel.textAlignment = NSTextAlignment.Center
+        allowDataUseLabel.text = "I allow my anonymized data to be used in scientific \n analyses of vowel-learning behaviour"
+        allowDataUseLabel.textColor = UIColor.whiteColor()
+        self.view.addSubview(allowDataUseLabel)
         
         let buttonWidth : CGFloat = 200
         let buttonHeight : CGFloat = 70
         
-        let registerButton = UIButton(frame: CGRectMake(thirdColumnLeft,fourthRowTop,buttonWidth,buttonHeight))
+        let yesButton = UIButton(frame: CGRectMake(620,fourthRowTop,buttonWidth,buttonHeight))
+        yesButton.setTitle("yes", forState: UIControlState.Normal)
+        yesButton.titleLabel!.font = UIFont(name: "Muli",size:25)
+        yesButton.titleLabel!.textColor = UIColor.whiteColor()
+        yesButton.addTarget(self, action: "yesRadioButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(yesButton)
+        
+        let noButton = UIButton(frame: CGRectMake(800,fourthRowTop,buttonWidth,buttonHeight))
+        noButton.setTitle("no", forState: UIControlState.Normal)
+        noButton.titleLabel!.font = UIFont(name: "Muli",size:25)
+        noButton.titleLabel!.textColor = UIColor.whiteColor()
+        noButton.addTarget(self, action: "noRadioButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(noButton)
+        
+        let registerButton = UIButton(frame: CGRectMake(thirdColumnLeft,fifthRowTop,buttonWidth,buttonHeight))
         
         registerButton.setImage(UIImage(named: "loginbutton"), forState: UIControlState.Normal)
         registerButton.addTarget(self, action: "registerButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(registerButton)
         
-        let registerButtonText = UILabel();
+        let registerButtonText = UILabel()
         
-        registerButtonText.frame = CGRectMake(thirdColumnLeft+3,fourthRowTop-2,buttonWidth,buttonHeight)
+        registerButtonText.frame = CGRectMake(thirdColumnLeft+3,fifthRowTop-2,buttonWidth,buttonHeight)
         registerButtonText.textAlignment = NSTextAlignment.Center
         registerButtonText.font = UIFont(name: "Muli",size:25)
         registerButtonText.text = "Register"
         registerButtonText.textColor = UIColor(hue: 0.87, saturation: 0.3, brightness: 0.3, alpha: 1)
         self.view.addSubview(registerButtonText)
 
-        let backButton = UIButton(frame: CGRectMake(firstColumnLeft,fourthRowTop,buttonWidth,buttonHeight))
+        let backButton = UIButton(frame: CGRectMake(firstColumnLeft,fifthRowTop,buttonWidth,buttonHeight))
         
         backButton.setImage(UIImage(named: "backbutton"), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "backButtonPressed", forControlEvents: UIControlEvents.TouchUpInside)
@@ -91,7 +126,7 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         
         let backButtonText = UILabel();
         
-        backButtonText.frame = CGRectMake(firstColumnLeft,fourthRowTop,buttonWidth,buttonHeight)
+        backButtonText.frame = CGRectMake(firstColumnLeft,fifthRowTop,buttonWidth,buttonHeight)
         backButtonText.textAlignment = NSTextAlignment.Center
         backButtonText.font = UIFont(name: "Muli",size:25)
         backButtonText.text = "Back"
@@ -123,14 +158,26 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
     {
         if textField.frame.minY > 300
         {
-            self.moveWholeViewUp()
+            self.moveWholeViewUp(300)
         }
+        else if textField.frame.minY > 100
+        {
+            self.moveWholeViewUp(100)
+        }
+        
+        self.numberOfActiveTextFields++
         return true
     }
     
     func textFieldShouldEndEditing(textField: UITextField) -> Bool
     {
-        self.moveWholeViewDown()
+        
+        self.numberOfActiveTextFields--
+        
+        if (self.numberOfActiveTextFields == 0)
+        {
+            self.moveWholeViewDown()            
+        }
         return true
     }
     
@@ -140,9 +187,9 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         return true
     }
     
-    func moveWholeViewUp()
+    func moveWholeViewUp(amount : CGFloat)
     {
-        UIView.animateWithDuration(1, animations: {self.view.frame.origin.y = -200})
+        UIView.animateWithDuration(1, animations: {self.view.frame.origin.y = -amount})
     }
 
     func moveWholeViewDown()
@@ -152,10 +199,33 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
             UIView.animateWithDuration(1, animations: {self.view.frame.origin.y = 0})
         }
     }
+
+    func yesRadioButtonPressed()
+    {
+        if self.radioButtonSelectedImage == nil
+        {
+            self.radioButtonSelectedImage = UIImageView(image: UIImage(named: "radioButtonSelected"))
+            self.view.addSubview(radioButtonSelectedImage!)
+        }
+        self.radioButtonSelectedImage!.frame = CGRect(x: 656,y: 571,width: 15,height: 15)
+        
+        self.allowDataUse = true
+    }
+    
+    func noRadioButtonPressed()
+    {
+        if self.radioButtonSelectedImage == nil
+        {
+            self.radioButtonSelectedImage = UIImageView(image: UIImage(named: "radioButtonSelected"))
+            self.view.addSubview(radioButtonSelectedImage!)
+        }
+        self.radioButtonSelectedImage!.frame = CGRect(x: 834,y: 571,width: 15,height: 15)
+        
+        self.allowDataUse = false
+    }
     
     func backButtonPressed()
     {
-        print("back button")
         self.superController!.subControllerFinished(self)
     }
     
@@ -163,7 +233,7 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
     {
         self.register()
     }
-    
+
     func register()
     {
         let firstName : String = self.firstNameTextField.text!
@@ -171,8 +241,9 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
         let email : String = self.emailTextField.text!
         let password : String = self.passwordTextField.text!
         let repeatPassword : String = self.repeatPasswordTextField.text!
+        let nativeLanguage : String = self.nativeLanguageTextField.text!
         
-        if [firstName,lastName,email,password,repeatPassword].contains("")
+        if [email,password,repeatPassword,nativeLanguage].contains("") || self.allowDataUse == nil
         {
             self.showAlert("Empty fields",message: "Please make sure all input fields are filled.")
         }
@@ -194,7 +265,7 @@ class RegisterViewController: SubViewController, UITextFieldDelegate
                 }
                 else
                 {
-                    self.server!.createNewUser(firstName,lastName : lastName, email : email,token : password)
+                    self.server!.createNewUser(email,token : password,nativeLanguage: nativeLanguage,allowsUseForResearch: self.allowDataUse!)
                     self.superController!.subControllerFinished(self)
                 }
             }
