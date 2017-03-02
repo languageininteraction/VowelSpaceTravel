@@ -40,6 +40,8 @@ public class Score {
     @ManyToOne
     private Player player;
     private Double score;
+    private Double discriminationScore;
+    private Double identificationScore;
     @ManyToOne
     private Vowel targetVowel;
     @ManyToOne
@@ -73,6 +75,14 @@ public class Score {
     public long getStandardId() {
         return standardVowel.getId();
     }
+    
+    public Double getDiscriminationScore() {
+        return discriminationScore;
+    }
+
+    public Double getIdentificationScore() {
+        return identificationScore;
+    }
 
     private void calculateScore(List<Confidence> retrievedConfidences) {
         final double discriminationWeight = 1.0; // lower if perfect discrimination ability should not yet achieve the max score
@@ -89,12 +99,15 @@ public class Score {
             }
             // performance on the harder identification task is a lowerbound estimate for how well someone can do discrimination
             // therefore identification scores are propagated through to discrimination iff they are higher.
+            discriminationScore = discriminationCalculator.getTaskScore();
             discriminationCalculator.inheritFromCalculator(identificationCalculator); 
             // score is a weighted average of the task scores. Note that since identification scores are propagated through, so with a 
             // discriminationweight of 1, the identification task score only affects the total score when it is higher than the discrimination
             // score
             score = identificationCalculator.getTaskScore() * identificationWeight +
                      discriminationCalculator.getTaskScore() * discriminationWeight;
+            
+            identificationScore = identificationCalculator.getTaskScore();
         }
     }
    
